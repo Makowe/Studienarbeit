@@ -1,0 +1,93 @@
+\input{ads/header}
+\input{ads/glossary}
+
+\begin{document}
+    \StopCensoring
+
+    \setpagestylehead
+    % Deckblatt
+    \begin{spacing}{1}
+        \input{ads/deckblatt}
+    \end{spacing}
+    \newpage
+
+    \pagenumbering{Roman}
+    % Unterschriftenblatt
+    %\includepdf[scale=1,clip,trim=0cm 1.5cm 0cm %2.5cm,pages={1},pagecommand={}]{ads/unterschriftenblatt}
+    %\input{ads/formblatt}
+    %\newpage
+    
+    % Sperrvermerk
+   	%\input{ads/sperrvermerk}
+   	%\newpage
+
+    % Selbstständigkeitserklärung
+    \input{ads/selbststaendigkeitserkl}
+    \newpage
+
+    % Abstract
+    \input{ads/abstract}
+    \newpage
+
+    \pagestyle{plain}		% nur Seitenzahlen im Fuß
+
+    %\RedeclareSectionCommand[beforeskip=\kapitelabstand]{chapter} 
+    % Inhaltsverzeichnis
+    \begin{spacing}{1.1}
+        \begingroup
+            % auskommentieren für Seitenzahlen unter Inhaltsverzeichnis
+            % \renewcommand*{\chapterpagestyle}{empty}
+            % \pagestyle{plain}
+                
+                
+            %\setcounter{tocdepth}{1}
+            %für die Anzeige von Unterkapiteln im Inhaltsverzeichnis
+            %\setcounter{tocdepth}{2}
+            \pdfbookmark{\contentsname}{toc}
+            \tableofcontents
+            \clearpage
+        \endgroup
+    \end{spacing}
+    \newpage
+
+    % Abkürzungsverzeichnis
+    \cleardoublepage
+    \addchap{\langabkverz}
+
+    \begin{acronym}[LOREMIPSUM] % Die Angabe in eckigen Klammern legt die Breite der linken Spalte fest! => ggf. anpassen
+        \IfFileExists{{ads/sortedAcronyms}}{\input{ads/sortedAcronyms}}{\input{ads/acronyms}}
+    \end{acronym}
+
+    % Abbildungsverzeichnis
+    \cleardoublepage
+    \listoffigures
+
+    % Tabellenverzeichnis
+    \cleardoublepage
+    \listoftables
+
+    % Listingsverzeichnis
+    \cleardoublepage
+    \lstlistoflistings
+
+    \label{endOfRomanNumbering}
+    \cleardoublepage
+
+    %begin of new numbering
+    \setpagestylecontent
+
+    % Inhalt
+	\include{chapter/1.tex}
+	\include{chapter/2.tex}
+	\include{chapter/3.tex}
+	\include{chapter/4.tex}
+	\include{chapter/5.tex}
+	\include{chapter/6.tex}
+	
+	\printbibliography
+	
+    \label{endOfArabicNumbering}
+    \clearpage
+
+    \input{ads/appendix}
+\end{document}

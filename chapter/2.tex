@@ -1,0 +1,166 @@
+%!TEX root = ../dokumentation.tex
+
+\chapter{Grundlagen}
+	\section{Aussagenlogik}
+
+Mit der Aussagenlogik können viele logische Zusammenhänge formal beschrieben werden. Eine Aussage stellt eine Behauptung auf, die entweder wahr oder falsch sein kann, aber nicht beides. Beispiele für Aussagen sind: "Die Sonne scheint" und "Die Temperatur beträgt mindestens 20 °C". Solche Aussagen werden mit einzelnen Großbuchstaben $A, B, C, ...$ dargestellt und als Atome bezeichnet. Die Menge aller Atom-Symbole $\Sigma$ wird als Signatur bezeichnet. 
+
+Atome können mithilfe von Junktoren verknüpft werden, um Zusammenhänge von Aussagen darzustellen. Das Ergebnis dieser Verknüpfung ist eine Formel. Ist ein Atom $C$ nur dann wahr, wenn sowohl $A$ als auch $B$ wahr sind, kann man dies mit folgender Formel ausdrücken:
+$$C=A \wedge B$$
+Weitere Junktoren sind $\vee$ (logisches Oder), $\to$ (wenn, dann), $\leftrightarrow$ (genau dann, wenn) und $\neg$ (Negierung).
+
+Weitere Symbole, die in der Aussagenlogik verwendet werden, sind das Symbol $\top$ für wahr und das Symbol $\bot$ für falsch. 
+
+Folgende Tabelle zeigt, wie sich aus den Wahrheitswerten zweier Atome die Wahrheitswerte einer Formel ergeben.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{| c | c || c | c | c | c | c |}
+		\hline
+		&& Negierung & Konjunktion & Disjunktion & Implikation & Äquivalenz \\
+		$A$ & $B$ & $\neg A$ & $A \wedge B$ & $A \vee B$ & $A \to B$ & $A \leftrightarrow B$ \\
+		\hline
+		wahr & wahr & falsch & wahr & wahr & wahr & wahr \\
+		wahr & falsch & falsch & falsch & wahr & falsch & falsch \\
+		falsch & wahr & wahr & falsch & wahr & wahr & falsch \\
+		falsch & falsch & wahr & falsch & falsch & wahr & falsch \\
+		\hline
+	\end{tabular}
+	\caption{Übersicht der Wahrheitswerte von Junktoren}
+	\label{table:Junktoren}
+\end{table}
+
+Formeln lassen sich rekursiv konstruieren und können dadurch beliebig weit verschachtelt werden. Die Konstruktionsregeln sind folgendermaßen definiert:
+\begin{enumerate}
+	\item Alle Symbole in $\Sigma$ sowie die Symbole $\top$ und $\bot$ sind Formeln.
+	\item Wenn $F$ eine Formel ist, dann sind auch $\neg F$ und $(F)$ eine Formel.
+	\item Wenn $F$ und $G$ Formeln sind, dann sind auch $F \vee G$, $F \wedge G$, $F \to G$ und $F \leftrightarrow G$ Formeln.
+\end{enumerate}
+Wie bei mathematischen Operatoren z.B. Addition und Multiplikation, haben auch in der Logik die Operatoren eine Präzedenz. Sie beschreibt, wie stark die Operatoren binden, also in welcher Reihenfolge sie aufgelöst werden.In der Literatur wird meistens folgende Rangfolge eingesetzt:
+$$\neg \quad \wedge \quad \vee \quad \to \quad \leftrightarrow$$
+Die Negation bindet am stärksten und wird als erstes aufgelöst. Das Symbol für die Äquivalenz wird als letztes aufgelöst. Klammern können zusätzlich eingefügt werden, sie binden noch schwächer.
+Zwei Junktoren der gleichen Präzedenz werden von links nach rechts aufgelöst. Das heißt die beiden folgenden Formeln beschreiben den gleichen Zusammenhang.
+\begin{align*}
+	&& A\to B\to C && ((A\to B)\to C)
+\end{align*}
+\subsection{Interpretation}
+
+Eine Interpretation I ist eine Abbildung, bei der jedem Atom einer der beiden Wahrheitswerte wahr oder falsch zugeordnet wird. 
+
+$$I: \Sigma\to\{\top,\bot\}$$
+
+Unter einer Interpretation $I$ ist dann auch jede Formel entweder wahr oder falsch.
+
+Die Auflösung einer Formel $F_0$ findet rekursiv statt. $F_0$ habe eine der beiden Zusammensetzungen, wobei $F_1$ und $F_2$ auch Teilformeln von $F_0$ sind und $\oplus$ ein zweistelliger Junktor ist:
+$$F=\neg F_1 \quad\quad\text{oder}\quad\quad F=F_1 \oplus F_2$$ 
+\begin{enumerate}
+	\item Wenn eine Teilformeln $F_i$ ein Atom ist, dann ist der Wahrheitswert bekannt, da er von der Interpretation vorgegeben wird.
+	\item Wenn die Wahrheitswerte aller Teilformeln $F_i$ bekannt sind, kann mit Tabelle \ref{table:Junktoren} bestimmt werden, ob die ganze Formel $F_0$ wahr oder falsch ist.
+	\item Wenn nicht die Wahrheitswerte aller Teilformeln bekannt sind, werden die Wahrheitswerte bestimmt. Dazu werden für jedes $F_i$ die selben Schritte durchgeführt wie für $F_0$. 
+	\item Sobald die Wahrheitswerte aller Teilformeln bekannt sind, wird Schritt 2 wiederholt. Die Auflösung ist abgeschlossen.
+\end{enumerate}
+
+
+\subsection{Äquivalenz von Formeln}
+Zwei Formeln werden äquivalent genannt, wenn sie für jede Interpretation den gleichen Wahrheitswert besitzen.
+
+Mit Äquivalenzumformungen kann aus einer Formel $F$ eine Formel $F'$ hergeleitet werden, die äquivalent zu $F$ ist. Ein Beispiel für eine Äquivalenzumformung ist die doppelte Negation. Wenn $F$ eine Formel ist, dann ist $\neg\neg F$ äquivalent zu $F$. Doppelte Negationen können in jeder beliebigen Position einer Formel eingefügt und entfernt werden, da die Negation am stärksten bindet.
+
+\subsection{Normalformen}\label{section:Normalformen}
+
+	\section{Prädikatenlogik erster Stufe}
+		\subsection{Begriffe}
+Prädikat, Funktion, Term, Konstante, Variable
+Quantor
+
+Die Prädikatenlogik erster Stufe ist eine Erweiterung zur Aussagenlogik. Um die drei Aussagen "`Albert ist ein Mensch"', "`Bernhard ist ein Mensch"' und "`Cäsar ist ein Mensch"' in der Aussagenlogik dazustellen, müsste man drei Atome $A, B$ und $C$ einführen. Anstatt Aussagen, gibt es in der Prädikatenlogik Prädikate. Um das genannte Beispiel in der Prädikatenlogik zu formalisieren, könnte man ein Prädikat $P(x)$ einführen, das den Satz "`x ist ein Mensch"' zum Ausdruck bringt. Für die Variable $x$ können dann Werte eingesetzt werden, zum Beispiel $a, b$ und $c$ für Albert, Bernhard und Cäsar. 
+Prädikate können eine beliebige Stelligkeit besitzen. Das zweistellige Prädikat $Q(x,y)$ könnte zum Beispiel den Zusammenhang "`x ist der Bruder von y"' darstellen.
+
+In 
+
+Zusätzlich zu Prädikaten, gibt es in der Prädikatenlogik Funktionen. Wie Prädikate können, Funktionen beliebig viele Stellen haben.
+
+		\subsection{Ableitung}
+Formeln 
+		\subsection{Klausel}
+Wie in Abschnitt \ref{section:Normalformen} beschrieben wurde, lässt sich jede aussagenlogische Formel in die konjunktive Normalform bringen. Eine andere Darstellungsform dieser Normalform ist die Schreibweise in Klauselform.
+\begin{align*}
+	&& (L_{1,1} \vee L_{1,2} \vee \cdots \vee L_{1,n_1}) &&\wedge &&
+	(L_{2,1} \vee\cdots\vee L_{2,n_2}) && \wedge\cdots\wedge &&
+	(L_{m,1} \vee\cdots\vee L_{m,n_m}) \\
+	&& 
+	\{\{L_{1,1},L_{1,2},\cdots,L_{1,n_1}\}&&,&&
+	\{L_{2,1},\cdots,L_{2,n_2}\} &&,\cdots,&&
+	\{L_{m,1},\cdots,L_{m,n_m}\}\}
+\end{align*}
+
+Syntaktisch beschreiben die beiden Schreibweisen unterschiedliche Dinge. Bei der konjunktiven Normalform handelt es sich um eine Konjunktion einzelner Disjunktionen, wohingegen es sich bei der Klauselform um eine Menge von Mengen handelt.
+
+Semantisch stellt die Klauselform jedoch denselben Zusammenhang dar, wie die konjunktive Normalform. Aus jeder Klausel, also aus jeder Menge von Literalen, muss mindestens ein Literal wahr sein, damit die gesamte Klauselmenge wahr ist.
+
+
+	\section{Resolutionsverfahren}
+
+Theorembeweiser haben das Ziel, aus einer gegebenen Wissensbasis eine Aussage zu beweisen. Das Wissen sei formal durch eine Klauselmenge $N=\{C_1, C_2, ..., C_n \}$ gegeben, die Aussage sei eine Klausel $D$. Um zu beweisen, dass $D$ aus $N$ folgt gibt es mehrere Ansätze: 
+\begin{itemize}
+\item Man weißt nach, dass aus der Klauselmenge $N$ die Klausel $D$ ableitbar ist. 
+\item Man weißt nach, dass die Klauselmenge $N\cup\{\neg D\}$  unerfüllbar ist, das heißt, dass die leere Klausel $\{\}$ ableitbar ist. Das Zeichen $\neg D$ entspricht der Negierung von $D$.
+\end{itemize}
+
+Beim Resolutionsverfahren wird der zweite Ansatz gewählt, das heißt die negierte Form des zu beweisenden Ziels wird zur Klauselmenge hinzugefügt. Danach werden mittels Resolution jeweils zweier gegebenen Klauseln neue Klausel abgeleitet. Die neuen Klauseln werden ebenfalls zur Klauselmenge hinzugefügt. Sobald die leere Klausel abgeleitet wurde, terminiert das Programm und die Hypothese wurde bewiesen. Das Resolutionsverfahren ist vollständig fürs Widerlegen, das heißt aus jeder widersprüchlichen Klauselmenge lässt sich die leere Klausel ableiten. Das Resolutionsverfahren garantiert nicht, dass die leere Klausel in endlicher Zeit gefunden wird. \cite{Chang1973Symb}
+
+		\subsection{Resolution in der Aussagenlogik}
+Gegeben seien zwei Klauseln $C$ und $D$, die sich aus den Literalen $L_i$ und $K_i$ zusammensetzen. Jedes Literal ist entweder ein Atom $A$, oder ein negiertes Atom $\neg A$
+$$C=\{L_1, L_2, ..., L_n\}, D=\{K_1, K_2, ..., K_m\}$$
+Wenn ein Literal $L_i$ aus Klausel $D$ in negierter Form in $D$ vorkommt, also $L_i=\neg K_j$, dann kann die Resolvente $E$ gebildet werden mit:
+$$E=(C \cup D) \backslash \{L_i, K_j\} $$
+Anschaulich kann die Resolution folgendermaßen erklärt werden: 
+Wenn das Literal $L_i$ unter einer Interpretation mit einer bestimmten Variablenersetzung wahr ist, dann wird die gesamte Klausel $C$ wahr. Sollte $L_i$ falsch sein, dann muss mindestens eines der übrigen Literale in C wahr sein.
+Das gleiche gilt für $K_j$ in der Klausel $D$.
+Da $L_i$ und $K_j$ komplementär sind, muss in jedem Fall eines der beiden Literalen $L_i$ und $K_j$ falsch sein. Damit beide Klauseln wahr werden, muss für eine der beiden Klauseln mindestens eines der übrigen Literale wahr sein. Die Resolvente $E$ bringt diesen Zusammenhang zum Ausdruck, da sie die Literale aus $C$ und $D$ ohne $L_i$ und $K_j$ vereinigt.
+
+		\subsection{Substitution}
+Nicht immer kommen in zwei Klauseln zwei Literale vor, die komplementär sind. Die beiden Klauseln $C=\{P(x), Q(x)\}, D=\{\neg P(f(a)), R(x)\}$ lassen sich beispielsweise nicht resolvieren, da $P(x)$ negiert nicht $\neg P(f(a))$ ergibt.
+Mit einer Substitution können die Klauseln so angepasst werden, dass sich die Resolution anwenden lässt.
+$$C\sigma=\{P(f(a)), Q(f(a))\} \text{ mit } \sigma=\{x \mapsto f(a)\}$$
+$$D\lambda=\{\neg P(f(a)), R(x)\} \text{ mit } \lambda=\{\}$$
+Anschließend lässt sich die Resolvente bilden.
+$$E=\{Q(f(a)), R(x)\}$$
+		\subsection{Vollständigkeit}
+	
+	\section{Set-Of-Support-Strategien}
+Ein Problem beim Resolutionsverfahren ist, dass aus einer endlichen Menge von Axiomen häufig unendlich viele neue Klauseln abgeleitet werden können. Dadurch gibt es keine Garantie, dass in endlicher Zeit ein Beweis gefunden wird. Selbst wenn ein Beweiser bereits einen Widerspruch herleiten konnten, bedeutet das nicht, dass jeder andere Beweiser auch einen Widerspruch finden wird.
+
+Um die Chance, dass ein Beweis gefunden wird, zu vergrößern, wurde eine Vielzahl von Strategien entwickelt, die bei der Durchführung der Resolution angewendet werden kann. Beim gewöhnlichen Resolutionsverfahren gibt es keine vorgeschriebene Reihenfolge, in der die Klauseln abgearbeitet werden. Meist iteriert der Algorithmus der Reihe nach oder willkürlich über die Klauseln. Die Grundidee diverser Strategien ist folgende: Die Klauseln sollen vom Beweiser nicht willkürlich ausgewählt werden. Stattdessen sollen Algorithmen beurteilen, welche möglichen Schritte vielversprechend sind, um unnötige Schritte zu vermeiden. Zwei sehr intuitive Strategien sind zum Beispiel:
+\begin{itemize}
+	\item Heuristiken: Aus Klauseln mit wenig Literalen ist die Wahrscheinlichkeit größer, einen Widerspruch zu finden, als aus Klauseln mit sehr vielen Literalen. Kleinere Klauseln werden deshalb priorisiert verarbeitet.
+	\item Tautologien löschen: Klauseln, die unter jeder Interpretation wahr sind, also Tautologien, tragen nichts zur Beweisführung bei. Sie können deshalb für das gesamte Beweisverfahren ignoriert werden.
+\end{itemize}
+
+Eine Reihe komplexerer Strategien sind die Set-of-Support-Strategien. Sie wurden erstmals 1965 von Lawrence Wos et al. vorgestellt. \cite{Wos1965Sos}
+
+		\subsection{Prinzip}
+Bei den Set-Of-Support-Strategien (SOS-Strategien) wird die Menge aller gegebenen Klauseln in zwei disjunkte Teilmengen $N$ und $S$ unterteilt. Die Menge $N$ ist erfüllbar. Ein Widerspruch kann erst bei Hinzunehmen vom sogennenannten Set-Of-Support $S$ entstehen. Nach der Einteilung wird wie gewöhnlich das Resolutionsverfahren durchgeführt. Es wird jedoch verboten, die Resolvente zweier Klauseln zu bilden, wenn beide Klauseln in $N$ liegen. Dies hat den Vorteil, dass weniger Klauseln miteinander kombiniert werden können und es weniger mögliche Resolutionsschritte gibt. Somit soll die Chance vergrößert werden, einen Widerspruch zu finden.
+
+
+Bei einer gegebenen Klauselmenge gibt es sehr viel Möglichkeiten, die Klauseln in zwei Mengen $N$ und $S$ einzuteilen. Da die Laufzeit der Beweissuche sehr wichtig ist, ist es nicht sinnvoll sehr komplexe Einteilungen vorzunehmen, da sonst der gesamte Performance-Vorteil durch den Mehraufwand der Einteilung wieder verloren geht. Stattdessen liegt der Fokus auf Einteilungen, die sehr einfach vorzunehmen sind. In dieser Arbeit werden drei verschiedene Einteilungen vorgestellt:
+\begin{enumerate}
+	\item Alle Axiome werden zu $N$ hinzugefügt und die Klauseln der negierten Vermutung werden zu $S$ hinzugefügt. Die Bedingung, dass $N$ erfüllbar ist, ist in jedem Fall gegeben, da von Axiomen angenommen wird, dass sie immer erfüllbar sind.
+	\item Alle Klauseln, die nur positive Literale enthalten, werden zu $N$ hinzugefügt, die restlichen zu $S$. $N$ ist erfüllbar, da alle Klauseln in $N$ unter der Interpretation, dass alle Literale für beliebige Variablenersetzungen wahr sind, auch wahr werden. $S$ enthält in diesem Fall Klauseln, die mindestens ein negatives Literal enthalten. Sollte die leere Klausel vorkommen, wird sie ebenfalls zu $S$ hinzugefügt.
+	\item Alle Klauseln, die nur negative Literale enthalten, werden zu $N$ hinzugefügt. Äquivalent zu 2) ist diese Klauselmenge erfüllbar, unter der Interpretation, dass alle Literale für beliebige Variablenersetzungen falsch sind.
+\end{enumerate}
+
+Der Einsatz von SOS-Strategien ist nur dann sinnvoll, wenn zwei Bedingungen erfüllt sind:
+\begin{itemize}
+	\item Das Resolutionsverfahren muss mit einer SOS-Strategie weiterhin vollständig fürs Widerlegen sein. Andernfalls könnte es passieren, dass der Beweiser eine unerfüllbare Klauselmenge für erfüllbar hält, da kein Widerspruch hergeleitet werden kann.
+	\item Die Laufzeit der Beweisführung sollte mit einer SOS-Strategie im Mittel signifikant schneller sein, als ohne.
+
+\end{itemize}
+Die Vollständigkeit wird im folgenden Abschnitt erläutert. Das Laufzeitverhalten wird in Kapitel 5 analysiert.
+
+		\subsection{Vollständigkeit}		
+Die Resolution ist weiterhin vollständig fürs Widerlegen \cite{Wos1965Sos}
+Dass die Vollständigkeit erhalten bleibt, kann man sich anschaulich folgendermaßen vorstellen: Dadurch, dass die Klauselmenge $N$ erfüllbar ist, kann aus ihren Klauseln kein Widerspruch hergeleitet werden. Eine Resolvente, die aus zwei Klauseln in $N$ gebildet wird, trägt zur Suche des Widerspruchs nichts bei und wird deshalb gar nicht erst gebildet.
+		
+	\section{PyRes}
+Beweiser in Python, Fokus liegt nicht auf Performance sondern auf einfachem Verständnis, kann Formelmengen oder Klauselmengen aus Datei parsen und Resolution anwenden, drei mögliche Ausgänge: Beweis gefunden, kein Beweis vorhanden, Beweis nicht in der Zeit gefunden
