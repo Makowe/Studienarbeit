@@ -38,7 +38,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3.1}Resolution in der Aussagenlogik}{7}{subsection.2.3.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.2}Substitution}{7}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.2}Substitution}{8}{subsection.2.3.2}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3.3}Vollständigkeit}{8}{subsection.2.3.3}%
 \defcounter {refsection}{0}\relax 

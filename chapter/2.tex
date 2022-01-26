@@ -97,7 +97,7 @@ Wie in Abschnitt \ref{section:Normalformen} beschrieben wurde, lässt sich jede 
 Syntaktisch beschreiben die beiden Schreibweisen unterschiedliche Dinge. Bei der konjunktiven Normalform handelt es sich um eine Konjunktion einzelner Disjunktionen, wohingegen es sich bei der Klauselform um eine Menge von Mengen handelt.
 
 Semantisch stellt die Klauselform jedoch denselben Zusammenhang dar, wie die konjunktive Normalform. Aus jeder Klausel, also aus jeder Menge von Literalen, muss mindestens ein Literal wahr sein, damit die gesamte Klauselmenge wahr ist.
-
+Gegenüber der Konjunktiven Normalform wird die Klauselform oft bevorzugt, da sie eine kürzere und übersichtlichere Syntax hat.
 
 	\section{Resolutionsverfahren}
 
@@ -110,15 +110,21 @@ Theorembeweiser haben das Ziel, aus einer gegebenen Wissensbasis eine Aussage zu
 Beim Resolutionsverfahren wird der zweite Ansatz gewählt, das heißt die negierte Form des zu beweisenden Ziels wird zur Klauselmenge hinzugefügt. Danach werden mittels Resolution jeweils zweier gegebenen Klauseln neue Klausel abgeleitet. Die neuen Klauseln werden ebenfalls zur Klauselmenge hinzugefügt. Sobald die leere Klausel abgeleitet wurde, terminiert das Programm und die Hypothese wurde bewiesen. Das Resolutionsverfahren ist vollständig fürs Widerlegen, das heißt aus jeder widersprüchlichen Klauselmenge lässt sich die leere Klausel ableiten. Das Resolutionsverfahren garantiert nicht, dass die leere Klausel in endlicher Zeit gefunden wird. \cite{Chang1973Symb}
 
 		\subsection{Resolution in der Aussagenlogik}
-Gegeben seien zwei Klauseln $C$ und $D$, die sich aus den Literalen $L_i$ und $K_i$ zusammensetzen. Jedes Literal ist entweder ein Atom $A$, oder ein negiertes Atom $\neg A$
-$$C=\{L_1, L_2, ..., L_n\}, D=\{K_1, K_2, ..., K_m\}$$
-Wenn ein Literal $L_i$ aus Klausel $D$ in negierter Form in $D$ vorkommt, also $L_i=\neg K_j$, dann kann die Resolvente $E$ gebildet werden mit:
-$$E=(C \cup D) \backslash \{L_i, K_j\} $$
-Anschaulich kann die Resolution folgendermaßen erklärt werden: 
-Wenn das Literal $L_i$ unter einer Interpretation mit einer bestimmten Variablenersetzung wahr ist, dann wird die gesamte Klausel $C$ wahr. Sollte $L_i$ falsch sein, dann muss mindestens eines der übrigen Literale in C wahr sein.
-Das gleiche gilt für $K_j$ in der Klausel $D$.
-Da $L_i$ und $K_j$ komplementär sind, muss in jedem Fall eines der beiden Literalen $L_i$ und $K_j$ falsch sein. Damit beide Klauseln wahr werden, muss für eine der beiden Klauseln mindestens eines der übrigen Literale wahr sein. Die Resolvente $E$ bringt diesen Zusammenhang zum Ausdruck, da sie die Literale aus $C$ und $D$ ohne $L_i$ und $K_j$ vereinigt.
+Gegeben sei eine Klauselmenge $S$ mit zwei Klauseln $C$ und $D$, die sich aus den Literalen $L_i$ und $K_i$ zusammensetzen. Jedes Literal ist entweder ein Atom $A$, oder ein negiertes Atom $\neg A$.
+$$L=\{C,D\}, \quad C=\{L_1, L_2, ..., L_n\}\quad, D=\{K_1, K_2, ..., K_m\}$$
+Wenn das Literal $L_1$ aus Klausel $D$ in negierter Form in $D$ vorkommt, also $L_1\equiv\neg K_1$, dann kann aus $C$ und $D$ die Resolvente $E$ gebildet werden mit:
+$$\frac{C\quad D}{E}L_1=\frac{C \quad D}{(C \cup D) \backslash \{L_1, K_1\}}L_1
+= \frac{\{L_1, L_2, ..., L_n\}\quad\{K_1, K_2, ..., K_m\}}{\{L_2, ..., L_n, K_2, ..., K_m\}}L_1$$
 
+Anschaulich kann die Resolution folgendermaßen erklärt werden: 
+Wenn das Literal $L_1$ unter einer Interpretation wahr ist, dann wird die gesamte Klausel $C$ wahr. Sollte $L_1$ falsch sein, dann muss mindestens eines der übrigen Literale in C wahr sein.
+Das gleiche gilt für $K_1$ in der Klausel $D$.
+Da $L_1$ und $K_1$ komplementär sind, muss in jeder Interpretation eines der beiden Literalen $L_1$ und $K_1$ falsch sein. Damit beide Klauseln wahr werden, muss also in einer der beiden Klauseln mindestens eines der übrigen Literale wahr sein. Die Resolvente $E$ bringt diesen Zusammenhang zum Ausdruck, da sie die Literale aus $C$ und $D$ ohne $L_1$ und $K_1$ vereinigt.
+
+Das Anwachsen der hergeleiteten Klauseln kann mit dem Res-Operators dargestellt werden. Der Res-Operator angewendet auf eine Klauselmenge ergibt die Klauselmenge vereinigt mit der Resolvente eines einzelnen Resolutionsschritts.
+$$Res(S)=S \cup \{E\}$$
+$Res*(S)$ enthält alle Klauseln in $S$ sind und alle Resolventen, die aus $Res*(S)$ gebildet werden können. Diese rekursiv definierte Klauselmenge enthält also alle Klauseln, die mit beliebig vielen Resolutionsschritten aus $S$ abgeleitet werden können. Ist die leere Klausel in $Res*(S)$ enthalten, so ist die Vermutung bestätigt.
+		\subsection{Resolution in der Prädikatenlogik}
 		\subsection{Substitution}
 Nicht immer kommen in zwei Klauseln zwei Literale vor, die komplementär sind. Die beiden Klauseln $C=\{P(x), Q(x)\}, D=\{\neg P(f(a)), R(x)\}$ lassen sich beispielsweise nicht resolvieren, da $P(x)$ negiert nicht $\neg P(f(a))$ ergibt.
 Mit einer Substitution können die Klauseln so angepasst werden, dass sich die Resolution anwenden lässt.
