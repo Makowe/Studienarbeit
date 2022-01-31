@@ -54,6 +54,9 @@
 \newcommand{\langstr}[1]{\einstellung{lang#1}}
 
 
+\newcommand{\cellbreak}[2][c]{%
+	\begin{tabular}[x]{@{}c@{}}#2\end{tabular}
+}
 
 
 \input{ads/einstellungen_liste} % verfügbare Einstellungen
@@ -385,3 +388,5 @@
 }
 
 \definecolor{cyan}{RGB}{0,255,255}
+
+

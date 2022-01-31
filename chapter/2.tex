@@ -125,6 +125,7 @@ Das Anwachsen der hergeleiteten Klauseln kann mit dem Res-Operators dargestellt 
 $$Res(S)=S \cup \{E\}$$
 $Res*(S)$ enthält alle Klauseln in $S$ sind und alle Resolventen, die aus $Res*(S)$ gebildet werden können. Diese rekursiv definierte Klauselmenge enthält also alle Klauseln, die mit beliebig vielen Resolutionsschritten aus $S$ abgeleitet werden können. Ist die leere Klausel in $Res*(S)$ enthalten, so ist die Vermutung bestätigt.
 		\subsection{Resolution in der Prädikatenlogik}
+		
 		\subsection{Substitution}
 Nicht immer kommen in zwei Klauseln zwei Literale vor, die komplementär sind. Die beiden Klauseln $C=\{P(x), Q(x)\}, D=\{\neg P(f(a)), R(x)\}$ lassen sich beispielsweise nicht resolvieren, da $P(x)$ negiert nicht $\neg P(f(a))$ ergibt.
 Mit einer Substitution können die Klauseln so angepasst werden, dass sich die Resolution anwenden lässt.
@@ -149,13 +150,51 @@ Eine Reihe komplexerer Strategien sind die Set-of-Support-Strategien. Sie wurden
 Bei den Set-Of-Support-Strategien (SOS-Strategien) wird die Menge aller gegebenen Klauseln in zwei disjunkte Teilmengen $N$ und $S$ unterteilt. Die Menge $N$ ist erfüllbar. Ein Widerspruch kann erst bei Hinzunehmen vom sogennenannten Set-Of-Support $S$ entstehen. Nach der Einteilung wird wie gewöhnlich das Resolutionsverfahren durchgeführt. Es wird jedoch verboten, die Resolvente zweier Klauseln zu bilden, wenn beide Klauseln in $N$ liegen. Dies hat den Vorteil, dass weniger Klauseln miteinander kombiniert werden können und es weniger mögliche Resolutionsschritte gibt. Somit soll die Chance vergrößert werden, einen Widerspruch zu finden.
 
 
-Bei einer gegebenen Klauselmenge gibt es sehr viel Möglichkeiten, die Klauseln in zwei Mengen $N$ und $S$ einzuteilen. Da die Laufzeit der Beweissuche sehr wichtig ist, ist es nicht sinnvoll sehr komplexe Einteilungen vorzunehmen, da sonst der gesamte Performance-Vorteil durch den Mehraufwand der Einteilung wieder verloren geht. Stattdessen liegt der Fokus auf Einteilungen, die sehr einfach vorzunehmen sind. In dieser Arbeit werden drei verschiedene Einteilungen vorgestellt:
+Bei einer gegebenen Klauselmenge gibt es sehr viel Möglichkeiten, die Klauseln in zwei Mengen $N$ und $S$ einzuteilen. Da die Laufzeit der Beweissuche sehr wichtig ist, ist es nicht sinnvoll sehr komplexe Einteilungen vorzunehmen, da sonst der gesamte Performance-Vorteil durch den Mehraufwand der Einteilung wieder verloren geht. Stattdessen liegt der Fokus auf Einteilungen, die sehr einfach vorzunehmen sind. Im Folgenden werden fünf Einteilungen vorgestellt:
 \begin{enumerate}
 	\item Alle Axiome werden zu $N$ hinzugefügt und die Klauseln der negierten Vermutung werden zu $S$ hinzugefügt. Die Bedingung, dass $N$ erfüllbar ist, ist in jedem Fall gegeben, da von Axiomen angenommen wird, dass sie immer erfüllbar sind.
-	\item Alle Klauseln, die nur positive Literale enthalten, werden zu $N$ hinzugefügt, die restlichen zu $S$. $N$ ist erfüllbar, da alle Klauseln in $N$ unter der Interpretation, dass alle Literale für beliebige Variablenersetzungen wahr sind, auch wahr werden. $S$ enthält in diesem Fall Klauseln, die mindestens ein negatives Literal enthalten. Sollte die leere Klausel vorkommen, wird sie ebenfalls zu $S$ hinzugefügt.
-	\item Alle Klauseln, die nur negative Literale enthalten, werden zu $N$ hinzugefügt. Äquivalent zu 2) ist diese Klauselmenge erfüllbar, unter der Interpretation, dass alle Literale für beliebige Variablenersetzungen falsch sind.
+	\item Alle Klauseln, die nur negative Literale enthalten, werden zu $S$ hinzugefügt, die restlichen zu $N$. $N$ ist erfüllbar, da jede Klausel in $N$ mindestens ein positives Literal enthält. Somit macht eine Interpretation, die alle Literale wahr werden lässt, jede Klausel wahr.
+	\item Alle Klauseln, die nur positive Literale enthalten, werden zu $S$ hinzugefügt, die restlichen $N$. $N$ ist erfüllbar, da die Interpretation "alle Literale falsch" die Klauselmenge wahr macht.
+	\item Alle Klauseln, die nur positive Literale enthalten, werden zu $N$ hinzugefügt, die restlichen zu $S$. Ähnlich wie bei 2. ist $N$ erfüllbar, da die Interpretation unter der alle Literale wahr werden, ein Modell der Klauselmenge ist.
+	\item Alle Klauseln, die nur negative Literale enthalten, werden zu $N$ hinzugefügt. Äquivalent zu 3. ist diese Klauselmenge erfüllbar, unter der Interpretation, dass alle Literale für beliebige Variablenersetzungen falsch sind.
 \end{enumerate}
 
+		\subsection{Beispiel Aussagenlogik}
+
+Zwei Tatverdächtige mit den Namen A, B beschuldigen sich gegenseitig. Folgende Aussagen konnten ermittelt werden:
+\begin{enumerate}
+	\item Person A sagt, Person B sei Täter.
+	\item Person B sagt, wenn sie Täter ist, dann sei auch A Täter.
+	\item Eine Person lügt genau dann, wenn sie Täter ist.
+	\item Vermutung: Genau eine der beiden Personen ist Täter. Die negierte Vermutung ist somit: Keiner der beiden oder beide Personen sind Täter.
+\end{enumerate}
+
+\begin{table}[h]
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		Aussage & Formel & KNF & Klauselmenge \\ \hline
+		1 & 
+		$W_A \leftrightarrow T_B$ & 
+		\cellbreak{$(\neg W_A \vee T_B) \wedge$\\$ (W_A \vee \neg T_B)$} & 
+		$\{\neg W_A, T_B\}, \{W_A, \neg T_B\}$ \\ \hline
+		2 & 
+		$W_B \leftrightarrow (T_B \to T_A)$ & 
+		\cellbreak{$(\neg W_B \vee \neg T_B \vee T_A) \wedge $\\$ (W_B \vee T_B \vee \neg T_A)$} & 
+		\cellbreak{$\{\neg W_B, \neg T_B, T_A\},$\\$ \{W_B, T_B, \neg T_A\}$} \\ \hline
+		3 & 
+		\cellbreak{$(T_A \leftrightarrow \neg W_A) \wedge $\\$ (T_B \leftrightarrow \neg W_B)$} & 
+		\cellbreak{$(\neg T_A \vee \neg W_A)\wedge$\\$(T_A \vee W_A)\wedge $\\$ (\neg T_B \vee \neg W_B)\wedge$\\$(T_B \vee W_B)$} & 
+		\cellbreak{$ \{\neg T_A, \neg W_A\}, \{T_A, W_A\},$\\$ \{\neg T_B, \neg W_B\}, \{T_B, W_B\}$}  \\ \hline
+		$\neg$ 4 &
+		\cellbreak{$T_A \leftrightarrow T_B$} &
+		\cellbreak{$(\neg T_A \vee T_B) \wedge$ \\ $(T_A\vee \neg T_B)$} &
+		$\{\neg T_A, T_B\}, \{T_A, \neg T_B\}$ \\ \hline
+
+	\end{tabular}
+\end{table}
+
+
+		\subsection{Vorteil gegenüber gewöhnlicher Resolution}
 Der Einsatz von SOS-Strategien ist nur dann sinnvoll, wenn zwei Bedingungen erfüllt sind:
 \begin{itemize}
 	\item Das Resolutionsverfahren muss mit einer SOS-Strategie weiterhin vollständig fürs Widerlegen sein. Andernfalls könnte es passieren, dass der Beweiser eine unerfüllbare Klauselmenge für erfüllbar hält, da kein Widerspruch hergeleitet werden kann.
@@ -163,6 +202,8 @@ Der Einsatz von SOS-Strategien ist nur dann sinnvoll, wenn zwei Bedingungen erf�
 
 \end{itemize}
 Die Vollständigkeit wird im folgenden Abschnitt erläutert. Das Laufzeitverhalten wird in Kapitel 5 analysiert.
+
+Auch ohne Laufzeitanalyse lässt sich zeigen, dass die Methoden 4. und 5. keinen Vorteil in der Beweissuche liefern. Dies lässt sich folgendermaßen erklären. Die Resolution kann dann und genau dann durchgeführt werden, wenn in zwei Klauseln komplementäre aber sonst identische Literale vorkommen. In SOS-Strategie 4 und 5 kommen in allen Klauseln der Basisklauselmenge entweder nur positive Literale oder nur negative Literale vor. Auch ohne SOS-Strategie kann deshalb auf zwei dieser Klauseln keine Resolution angewendet werden. Das heißt, dass ein Verbot dieser Resolutionsschritte keine Auswirkung auf den Ablauf der Beweisführung hat und somit auch keinen Zeitvorteil liefern kann. Diese beiden Strategien werden in dieser Arbeit deshalb nicht weiter betrachtet.
 
 		\subsection{Vollständigkeit}		
 Die Resolution ist weiterhin vollständig fürs Widerlegen \cite{Wos1965Sos}
