@@ -161,13 +161,14 @@ Bei einer gegebenen Klauselmenge gibt es sehr viel Möglichkeiten, die Klauseln 
 
 		\subsection{Beispiel Aussagenlogik}
 
-Zwei Tatverdächtige mit den Namen A, B beschuldigen sich gegenseitig. Folgende Aussagen konnten ermittelt werden:
+Zwei Tatverdächtige mit den Namen A, B beschuldigen sich gegenseitig. Es ist nicht bekannt, wie viele Täter es gibt. Folgende Zusammenhänge konnten ermittelt werden:
 \begin{enumerate}
 	\item Person A sagt, Person B sei Täter.
-	\item Person B sagt, wenn sie Täter ist, dann sei auch A Täter.
+	\item Person B sagt, wenn B Täter ist, dann sei auch A Täter.
 	\item Eine Person lügt genau dann, wenn sie Täter ist.
 	\item Vermutung: Genau eine der beiden Personen ist Täter. Die negierte Vermutung ist somit: Keiner der beiden oder beide Personen sind Täter.
 \end{enumerate}
+Alle vier Zusammenhänge lassen sich als Klauselmenge formalisieren (siehe \ref{table:exmaple_sos})
 
 \begin{table}[h]
 	\begin{tabular}{|c|c|c|c|}
@@ -191,8 +192,10 @@ Zwei Tatverdächtige mit den Namen A, B beschuldigen sich gegenseitig. Folgende 
 		$\{\neg T_A, T_B\}, \{T_A, \neg T_B\}$ \\ \hline
 
 	\end{tabular}
+	\caption{Die vier Aussagen formalisiert als Formel, KNF und Klauselmenge. Das Atom $T_A$ sagt aus: "`A ist Täter"', $W_A$ sagt aus: "`A sagt die Wahrheit"'.}
+	\label{table:exmaple_sos}
 \end{table}
-
+Ohne SOS-Strategie könnten alle zehn Klauseln beliebig miteinander resolviert werden. Damit ergeben sich 45 Möglichkeiten, zwei Klauseln miteinander zu kombinieren. Für das Beispiel ist es bei 23 dieser Kombinationen möglich, eine Resolvente zu bilden.
 
 		\subsection{Vorteil gegenüber gewöhnlicher Resolution}
 Der Einsatz von SOS-Strategien ist nur dann sinnvoll, wenn zwei Bedingungen erfüllt sind:
@@ -206,7 +209,34 @@ Die Vollständigkeit wird im folgenden Abschnitt erläutert. Das Laufzeitverhalt
 Auch ohne Laufzeitanalyse lässt sich zeigen, dass die Methoden 4. und 5. keinen Vorteil in der Beweissuche liefern. Dies lässt sich folgendermaßen erklären. Die Resolution kann dann und genau dann durchgeführt werden, wenn in zwei Klauseln komplementäre aber sonst identische Literale vorkommen. In SOS-Strategie 4 und 5 kommen in allen Klauseln der Basisklauselmenge entweder nur positive Literale oder nur negative Literale vor. Auch ohne SOS-Strategie kann deshalb auf zwei dieser Klauseln keine Resolution angewendet werden. Das heißt, dass ein Verbot dieser Resolutionsschritte keine Auswirkung auf den Ablauf der Beweisführung hat und somit auch keinen Zeitvorteil liefern kann. Diese beiden Strategien werden in dieser Arbeit deshalb nicht weiter betrachtet.
 
 		\subsection{Vollständigkeit}		
-Die Resolution ist weiterhin vollständig fürs Widerlegen \cite{Wos1965Sos}
+Die Resolution ist weiterhin vollständig fürs Widerlegen. Dies wurde bereits 1965 von Lawrence Wos et al. gezeigt.\cite{Wos1965Sos}
+
+In dieser Arbeit wird nicht der gesamte Beweis für die Prädikatenlogik erster Stufe gezeigt, sondern lediglich für die Aussagenlogik. 
+
+\paragraph{Theorem} Werden aus einer unerfüllbaren variablenlosen Klauselmenge $M$ zwei neue Klauselmengen $N$ und $S$ erstellt, sodass gilt: 
+$$N \cup S = M \quad\quad N \cap S = \emptyset \quad\quad S \neq \emptyset \quad\quad N \text{ ist erfüllbar}$$
+so kann aus $N$ mit $S$ als Set of Support die leere Klausel abgeleitet werden.
+
+\paragraph{Beweis durch vollständige Induktion}
+Kommt in der unerfüllbaren Menge $M$ nur ein Atom $A_1$ vor, dann gilt
+$M=\big\{\{A_1\}, \{\neg A_1\}\big\}$. Theoretisch könnte auch eine Klausel in $M$ vorkommen, die sowohl $A_1$ als auch $\neg A_1$ enthält, dies ist jedoch eine Tautologie und wird zur Übersicht nicht weiter berücksichtigt. $M$ kann auf drei verschiedene Arten in $N$ und $S$ unterteilt werden:
+\begin{table}[h]
+	\centering
+	\begin{tabular}{c|c}
+		N & S \\ \hline
+		$\big\{\{A_1\}\big\}$ & $\big\{\{\neg A_1\}\big\}$ \\
+		$\big\{\{\neg A_1\}\big\}$ & $\big\{\{A_1\}\big\}$ \\	
+		$\big\{\big\}$ & $\big\{\{A_1\},\{\neg A_1\}\big\}$
+	\end{tabular}
+\end{table}
+
+
+Für alle drei Unterteilungen ist es möglich mit Set-Of-Support-Regeln einen Widerspruch herzuleiten.
+
+Es wird nun gezeigt, dass wenn das Theorem für $i$ verschiedene Atome in $M$ gültig bleibt, dass es dann auch für $i+1$ Atome in $M$ gültig bleibt.
+
+
+
 Dass die Vollständigkeit erhalten bleibt, kann man sich anschaulich folgendermaßen vorstellen: Dadurch, dass die Klauselmenge $N$ erfüllbar ist, kann aus ihren Klauseln kein Widerspruch hergeleitet werden. Eine Resolvente, die aus zwei Klauseln in $N$ gebildet wird, trägt zur Suche des Widerspruchs nichts bei und wird deshalb gar nicht erst gebildet.
 		
 	\section{PyRes}
