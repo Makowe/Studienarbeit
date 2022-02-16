@@ -159,45 +159,8 @@ Bei einer gegebenen Klauselmenge gibt es sehr viel Möglichkeiten, die Klauseln 
 	\item Alle Klauseln, die nur negative Literale enthalten, werden zu $N$ hinzugefügt. Äquivalent zu 3. ist diese Klauselmenge erfüllbar, unter der Interpretation, dass alle Literale für beliebige Variablenersetzungen falsch sind.
 \end{enumerate}
 
-		\subsection{Beispiel Aussagenlogik}
-
-Zwei Tatverdächtige mit den Namen A, B beschuldigen sich gegenseitig. Es ist nicht bekannt, wie viele Täter es gibt. Folgende Zusammenhänge konnten ermittelt werden:
-\begin{enumerate}
-	\item Person A sagt, Person B sei Täter.
-	\item Person B sagt, wenn B Täter ist, dann sei auch A Täter.
-	\item Eine Person lügt genau dann, wenn sie Täter ist.
-	\item Vermutung: Genau eine der beiden Personen ist Täter. Die negierte Vermutung ist somit: Keiner der beiden oder beide Personen sind Täter.
-\end{enumerate}
-Alle vier Zusammenhänge lassen sich als Klauselmenge formalisieren (siehe \ref{table:exmaple_sos})
-
-\begin{table}[h]
-	\begin{tabular}{|c|c|c|c|}
-		\hline
-		Aussage & Formel & KNF & Klauselmenge \\ \hline
-		1 & 
-		$W_A \leftrightarrow T_B$ & 
-		\cellbreak{$(\neg W_A \vee T_B) \wedge$\\$ (W_A \vee \neg T_B)$} & 
-		$\{\neg W_A, T_B\}, \{W_A, \neg T_B\}$ \\ \hline
-		2 & 
-		$W_B \leftrightarrow (T_B \to T_A)$ & 
-		\cellbreak{$(\neg W_B \vee \neg T_B \vee T_A) \wedge $\\$ (W_B \vee T_B \vee \neg T_A)$} & 
-		\cellbreak{$\{\neg W_B, \neg T_B, T_A\},$\\$ \{W_B, T_B, \neg T_A\}$} \\ \hline
-		3 & 
-		\cellbreak{$(T_A \leftrightarrow \neg W_A) \wedge $\\$ (T_B \leftrightarrow \neg W_B)$} & 
-		\cellbreak{$(\neg T_A \vee \neg W_A)\wedge$\\$(T_A \vee W_A)\wedge $\\$ (\neg T_B \vee \neg W_B)\wedge$\\$(T_B \vee W_B)$} & 
-		\cellbreak{$ \{\neg T_A, \neg W_A\}, \{T_A, W_A\},$\\$ \{\neg T_B, \neg W_B\}, \{T_B, W_B\}$}  \\ \hline
-		$\neg$ 4 &
-		\cellbreak{$T_A \leftrightarrow T_B$} &
-		\cellbreak{$(\neg T_A \vee T_B) \wedge$ \\ $(T_A\vee \neg T_B)$} &
-		$\{\neg T_A, T_B\}, \{T_A, \neg T_B\}$ \\ \hline
-
-	\end{tabular}
-	\caption{Die vier Aussagen formalisiert als Formel, KNF und Klauselmenge. Das Atom $T_A$ sagt aus: "`A ist Täter"', $W_A$ sagt aus: "`A sagt die Wahrheit"'.}
-	\label{table:exmaple_sos}
-\end{table}
-Ohne SOS-Strategie könnten alle zehn Klauseln beliebig miteinander resolviert werden. Damit ergeben sich 45 Möglichkeiten, zwei Klauseln miteinander zu kombinieren. Für das Beispiel ist es bei 23 dieser Kombinationen möglich, eine Resolvente zu bilden.
-
-		\subsection{Vorteil gegenüber gewöhnlicher Resolution}
+	
+\subsection{Vorteil gegenüber gewöhnlicher Resolution}
 Der Einsatz von SOS-Strategien ist nur dann sinnvoll, wenn zwei Bedingungen erfüllt sind:
 \begin{itemize}
 	\item Das Resolutionsverfahren muss mit einer SOS-Strategie weiterhin vollständig fürs Widerlegen sein. Andernfalls könnte es passieren, dass der Beweiser eine unerfüllbare Klauselmenge für erfüllbar hält, da kein Widerspruch hergeleitet werden kann.
@@ -209,17 +172,25 @@ Die Vollständigkeit wird im folgenden Abschnitt erläutert. Das Laufzeitverhalt
 Auch ohne Laufzeitanalyse lässt sich zeigen, dass die Methoden 4. und 5. keinen Vorteil in der Beweissuche liefern. Dies lässt sich folgendermaßen erklären. Die Resolution kann dann und genau dann durchgeführt werden, wenn in zwei Klauseln komplementäre aber sonst identische Literale vorkommen. In SOS-Strategie 4 und 5 kommen in allen Klauseln der Basisklauselmenge entweder nur positive Literale oder nur negative Literale vor. Auch ohne SOS-Strategie kann deshalb auf zwei dieser Klauseln keine Resolution angewendet werden. Das heißt, dass ein Verbot dieser Resolutionsschritte keine Auswirkung auf den Ablauf der Beweisführung hat und somit auch keinen Zeitvorteil liefern kann. Diese beiden Strategien werden in dieser Arbeit deshalb nicht weiter betrachtet.
 
 		\subsection{Vollständigkeit}		
-Die Resolution ist weiterhin vollständig fürs Widerlegen. Dies wurde bereits 1965 von Lawrence Wos et al. gezeigt.\cite{Wos1965Sos}
-
-In dieser Arbeit wird nicht der gesamte Beweis für die Prädikatenlogik erster Stufe gezeigt, sondern lediglich für die Aussagenlogik. 
+Die Resolution ist mit Set-Of-Support-Strategien weiterhin vollständig fürs Widerlegen. Dies wurde bereits 1965 von Lawrence Wos et al. gezeigt.\cite{Wos1965Sos} In dieser Arbeit wird nicht der gesamte Beweis für die Prädikatenlogik erster Stufe gezeigt, sondern lediglich für die Aussagenlogik. 
 
 \paragraph{Theorem} Werden aus einer unerfüllbaren variablenlosen Klauselmenge $M$ zwei neue Klauselmengen $N$ und $S$ erstellt, sodass gilt: 
-$$N \cup S = M \quad\quad N \cap S = \emptyset \quad\quad S \neq \emptyset \quad\quad N \text{ ist erfüllbar}$$
-so kann aus $N$ mit $S$ als Set of Support die leere Klausel abgeleitet werden.
+$$N \cup S = M \quad\quad N \cap S = \emptyset \quad\quad S \neq \emptyset \quad\quad N \text{ ist erfüllbar,}$$
+so kann aus $M$ mit $S$ als Set of Support die leere Klausel abgeleitet werden.
 
 \paragraph{Beweis durch vollständige Induktion}
-Kommt in der unerfüllbaren Menge $M$ nur ein Atom $A_1$ vor, dann gilt
-$M=\big\{\{A_1\}, \{\neg A_1\}\big\}$. Theoretisch könnte auch eine Klausel in $M$ vorkommen, die sowohl $A_1$ als auch $\neg A_1$ enthält, dies ist jedoch eine Tautologie und wird zur Übersicht nicht weiter berücksichtigt. $M$ kann auf drei verschiedene Arten in $N$ und $S$ unterteilt werden:
+Besteht die Signatur $\Sigma$ aus einem einzigen Symbol $A_1$, dann können nur die beiden Literale $A_1$ und $\neg A_1$ in den Klauseln von $M$ vorkommen.
+Es ergeben sich vier mögliche Klauseln für $M$: 
+\begin{enumerate}
+	\item $\{A_1\}$
+	\item $\{\neg A_1\}$
+	\item Die leere Klausel $\{\}$
+	\item Die Tautologie $\{A_1,\neg A_1\}$
+\end{enumerate}
+Wenn die Tautologie in $M$ enthalten ist, trägt sie zum Beweis nichts bei, deshalb wird sie zur Übersichtlichkeit weggelassen.
+Für den Fall, dass die leere Klausel in $M$ vorkommt, muss sie im Set-Of-Support liegen, da $N$ erfüllbar sein muss. Da die leere Klausel bereits vorliegt, muss kein Beweis gesucht werden, das Theorem hält für diesen Fall also stand. 
+
+Falls die leere Klausel nicht in $M$ liegt, müssen sowohl die Klauseln 1 und 2 in $M$ enthalten sein, da $M$ unerfüllbar sein muss. Es gibt drei verschiedene Unterteilungen, wie $M$ in $N$ und $S$ unterteilt werden können:
 \begin{table}[h]
 	\centering
 	\begin{tabular}{c|c}
@@ -230,14 +201,107 @@ $M=\big\{\{A_1\}, \{\neg A_1\}\big\}$. Theoretisch könnte auch eine Klausel in 
 	\end{tabular}
 \end{table}
 
+Für alle drei Unterteilungen ist es möglich mit Set-Of-Support-Regeln einen Widerspruch herzuleiten, indem die Resolvente beider Klauseln gebildet wird. Das Theorem ist dementsprechend für alle Klauseln mit nur einem Atom gültig.
 
-Für alle drei Unterteilungen ist es möglich mit Set-Of-Support-Regeln einen Widerspruch herzuleiten.
+\paragraph{Induktionsschritt} Im Folgenden wird angenommen, dass das Theorem für eine Anzahl von $i-1$ Atomen in $\Sigma$ gültig ist. Unter dieser Annahme wird bewiesen, dass dass das Theorem für $i$ Atome in $\Sigma$ ebenfalls gültig ist.
 
-Es wird nun gezeigt, dass wenn das Theorem für $i$ verschiedene Atome in $M$ gültig bleibt, dass es dann auch für $i+1$ Atome in $M$ gültig bleibt.
+Die Signatur sei nun folgendermaßen definiert:
+$\Sigma=\{A_1, A_2, ... , A_{i-1}, A_i\}$
+Die Klauselmenge $M$ sei bereits in eine erfüllbare Menge $N$ und ein Set-Of-Support $S$ unterteilt worden.
+Als nächstes wird eine Fallunterscheidung vorgenommen. Zuerst wird $A_i$ als wahr interpretiert. Damit können alle Klauseln, die $A_i$ enthalten, gestrichen werden. Aus den restlichen Klauseln, wird das Literal $\neg A_i$ entfernt. Diese beiden Operationen werden auf $M$, $N$ und $S$ angewendet. Die daraus entstehenden Klauseln werden mit $M_1$, $N_1$ und $S_1$ bezeichnet.
+Danach wird $A_i$ als falsch interpretiert. Alle Klauseln, die $\neg A_i$ enthalten, können entfernt werden. Aus den übrigen Klauseln, wird das Literal $A_i$ entfernt. Die neu entstandenen Klauselmengen werden als $M_2$, $N_2$, $S_2$ bezeichnet.
+Jede Klausel $C$ in $M_1$ und $M_2$ besitzt somit eine korrespondierende Klausel $C'$, die in $M$ enthalten ist. $C'$ enthält mindestens die Literale von $C$, kann aber zusätzlich eins der Literale $A_i$ oder $\neg A_i$ enthalten. 
 
+Da $M$ unerfüllbar ist, müssen sowohl $M_1$ als auch $M_2$ unerfüllbar sein. Da $N$ erfüllbar ist, muss entweder $N_1$ oder $N_2$ oder beide erfüllbar sein.
 
+Wenn $N_1$ erfüllbar ist, dann kann aus $M_1$ mit $S_1$ als Set-Of-Support ein Widerspruch abgeleitet werden. Diese Folgerung ergibt sich daraus, dass $M_1$ maximal $i-1$ verschiedene Atome enthalten kann und für die Induktion angenommen wird, dass das Theorem für $i-1$ Atome erfüllt ist. Gleiches gilt für $M_2$, wenn $N_2$ erfüllbar ist. 
 
-Dass die Vollständigkeit erhalten bleibt, kann man sich anschaulich folgendermaßen vorstellen: Dadurch, dass die Klauselmenge $N$ erfüllbar ist, kann aus ihren Klauseln kein Widerspruch hergeleitet werden. Eine Resolvente, die aus zwei Klauseln in $N$ gebildet wird, trägt zur Suche des Widerspruchs nichts bei und wird deshalb gar nicht erst gebildet.
+Es wird zuerst der Fall berücksichtigt, dass sowohl $N_1$ als auch $N_2$ erfüllbar sind. Die Deduktionen, mit denen aus $M_1$ bzw. $M_2$ die leere Klausel abgeleitet werden kann, werden $D_1$ bzw. $D_2$ benannt. Folgendes Beispiel veranschaulicht den Zusammenhang:
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+		\hline 
+		& Basisklauselmenge & Set-Of-Support & Deduktion\\ \hline\hline
+		$M$ &
+		$N=\big\{\{A_1\},\{\neg A_2,\neg A_3\}\big\}$ &
+		$S=\big\{\{A_2\},\{\neg A_1,A_3\}\big\}$ & 
+		$D$ ist gesucht \\ \hline
+		
+		$M_1$ &
+		$N_1=\big\{\{A_1\},\{\neg A_2\}\big\}$ &
+		$S_1=\big\{\{A_2\}\big\}$ &
+		$D_1=\big(\{A_2\},\{\neg A_2\},\{\}\big)$ \\ \hline
+		
+		$M_2$ &
+		$N_2=\big\{\{A_1\}\big\}$ &
+		$S_2=\big\{\{A_2\},\{\neg A_1\}\big\}$ & 
+		$D_2=\big(\{\neg A_1\},\{A_1\},\{\}\big)$ \\ \hline
+	\end{tabular}
+\end{table}
+
+ Werden die Resolutionsschritten von $D_1$ nicht auf die Klauseln in $M_1$ angewendet, sondern auf die korrespondierenden Klauseln in $M$, so ergibt sich eine neue Deduktion $D_1'$.
+ Diese endet im Beispiel nicht mit der leeren Klausel, sondern mit der Klausel $\neg A_3$.
+ $$D_1'=\big(\{A_2\},\{\neg A_2, \neg A_3\},\{\neg A_3\}\big)$$
+ Genauso können die Schritte von $D_2$ auf $M$ angewendet werden. Damit ergibt sich $D_2'$ wie folgt:
+ $$D_2'=\big(\{\neg A_1, A_3\},\{A_1\},\{A_3\}\big)$$
+ Werden $D_1'$ und $D_2'$ zusammengeführt, kann als neuen Resolutionsschritt die leere Klausel abgeleitet werden. Die neue Deduktion wird als $D$ bezeichnet und ist ein Beweis für die Unerfüllbarkeit von $M$ mit $S$ als Set-Of-Support. Für das Beispiel ergibt sich $D$ mit
+ $$D=D_1'\oplus D_2'\oplus\big(\{\}\big)=\big(\{A_2\},\{\neg A_2, \neg A_3\},\{\neg A_3\},\{\neg A_1, A_3\},\{A_1\},\{A_3\},\{\}\big) \text{ ,}$$
+ wobei der Operator $\oplus$ als Aneinanderreihung von Tupeln verstanden wird.
+ 
+ Anmerkung: Die Deduktionen $D_1'$ und $D_2'$ müssen im Allgemeinen nicht mit den Klauseln $\{\neg A_i\}$ und $\{A_i\}$ enden. Stattdessen können sie auch mit der leeren Klausel enden. Für diesen Fall müssen $D_1'$ und $D_2'$ nicht zusammengeführt werden, da die leere Klausel bereits gefunden wurde. Das Theorem  hält also dennoch stand.
+ 
+ 
+ Wenn eine der beiden Klauselmengen $N_1$ und $N_2$ unerfüllbar ist, kann der Beweis nicht mit der gezeigten Methode geführt werden. Grund dafür ist, dass eine der beiden Deduktionen nicht die Set-Of-Support-Regeln befolgt, da $N_1$ bzw. $N_2$ nicht erfüllbar ist. Somit würde auch die zusammengeführte Deduktion $D$ nicht zwangsweise den Set-Of-Support-Regeln folgen.  Folgendes Beispiel mit $i=3$ veranschaulicht die Situation.
+ 
+  \begin{table}[h]
+ 	\centering
+ 	\begin{tabular}{|l|l|l|l|}
+ 		\hline
+ 		& Basisklauselmenge & Set-Of-Support & Deduktion \\ \hline
+ 		
+ 		$M$ &
+ 		$N=\big\{\{A_1\},\{\neg A_1, A_3\}\big\}$ &
+ 		\cellbreak{l}{
+ 			$S=\big\{\{\neg A_1, A_2\},$\\
+ 			$\quad\quad\{\neg A_1,\neg A_3\}\big\}$} &
+ 		$D$ wird gesucht\\ \hline
+ 		
+ 		$M_1$ &
+ 		$N_1=\big\{\{A_1\}\big\}$ &
+ 		\cellbreak{l}{
+ 			$S_1=\big\{\{\neg A_1, A_2\},$\\
+ 			$\quad\quad\{\neg A_1\}\big\}$} &
+ 		$D_1=\big(\{\neg A_1\},\{A_1\},\{\}\big)$\\ \hline
+ 		
+ 		$M_2$ &
+ 		$N_2=\big\{\{A_1\},\{\neg A_1\}\big\}$ &
+ 		$S_2=\big\{\{\neg A_1, A_2\}\big\}$ &
+ 		$D_2$ ist undefiniert \\ \hline
+ 	\end{tabular}
+ \end{table}
+
+Zuerst wird angenommen $N_1$ ist erfüllbar und $N_2$ unerfüllbar. Für $M_1$ gibt es eine Deduktion $D_1$, die die die Set-Of-Support-Regeln befolgt und mit der leeren Klausel endet. Äquivalent zum vorherigen Beispiel gibt es somit auch eine Deduktion $D_1'$ für $M$, die mit der Klausel $\{\neg A_i\}$ endet. Für das Beispiel gilt:
+ $$D_1'=\big(\{\neg A_1, \neg A_3\},\{A_1\}, \{\neg A_3\}\big) \text{ .}$$
+ 
+ $D_2$ ist undefiniert, da durch die Unerfüllbarkeit von $N_2$ die Set-Of-Support-Eigenschaften nicht erfüllt sind. Die Klauselmenge $N_2$ setzt sich aus zwei Arten von Klauseln zusammen:
+ \begin{enumerate}
+ 	\item Klauseln, die in $N$ vorkommen. Die Menge dieser Klauseln wird mit $T$ bezeichnet. $T$ ist erfüllbar, da $N$ erfüllbar ist und $T$ eine Teilmenge von $N$ ist.
+ 	\item Klauseln, die nicht in $N$ vorkommen, da sie durch das Entfernen von $A_i$ modifiziert wurden. Die Menge dieser Klauseln wird mit $U$ bezeichnet.
+ \end{enumerate}
+ Somit kann die unerfüllbare Menge $N_2$ in eine erfüllbare Teilmenge $T$ und ein Set-Of-Support $U$ geteilt werden. $N_2$ enthält maximal $i-1$ verschiedene Atome. Für den Induktionsbeweis wird vorausgesetzt, dass das Theorem für $i-1$ erfüllt ist, weshalb aus $N_2$ mit Set-Of-Support-Regeln die leere Klausel abgeleitet werden kann. Diese Deduktion wird mit $D_3$ bezeichnet. Für das Beispiel gilt:
+ $$N_2=\big\{\{A_1\},\{\neg A_1\}\big\} \quad\quad T=\big\{\{A_1\}\big\} \quad\quad U=\big\{\{\neg A_1\}\big\} \quad\quad D_3=\big(\{\neg A_1\},\{A_1\},\{\}\big)$$
+ 
+ Jede der Klauseln in $U$ ist aus einer Klausel von $N$ durch Entfernung des Atoms $A_i$ entstanden. Anders ausgedrückt kann jede Klausel in $U$ abgeleitet werden, indem die korrespondiere Klausel in $N$ mit der Unit-Klausel $\{\neg A_i\}$ resolviert wird. Die Unit-Klausel $\{\neg A_i\}$ kann wie bereits gezeigt aus $N$ und $S$ mit der Deduktion $D_1'$ abgeleitet werden, somit können aus $N$ und $S$ auch alle Klauseln, die in $U$ vorkommen, abgeleitet werden. Daraus wiederum kann die leere Menge hergeleitet werden.
+ 
+ Formal ergibt sich die Deduktion $D$ aus der Aneinanderreihung von (1) $D_1'$, (2) allen Klauseln in $N$, die durch Entfernung von $\neg A_i$ in eine Klausel von $U$ umgewandelt werden und (3) $D_3$. Für das Beispiel gilt:
+ \begin{align*}
+ 	D &=D_1'\oplus\big(\{\neg A_1,A_3\}\big)\oplus D_3 \\
+ 	&= \big(\{\neg A_1, \neg A_3\}, \{A_1\}, \{\neg A_3\}, \{\neg A_1,A_3\}, \{\neg A_1\},\{A_1\},\{\} \big)
+ \end{align*}
+
+Sollte $N_1$ unerfüllbar sein, aber dafür $N_2$ erfüllbar, dann muss für den Beweis lediglich $A_i$ mit $\neg A_i$ vertauscht werden. Somit ist der Beweis für alle Fälle abgedeckt, das Theorem ist also für beliebiges $i \geq 0$ gültig.
+ 
+% Dass die Vollständigkeit erhalten bleibt, kann man sich anschaulich folgendermaßen vorstellen: Dadurch, dass die Klauselmenge $N$ erfüllbar ist, kann aus ihren Klauseln kein Widerspruch hergeleitet werden. Eine Resolvente, die aus zwei Klauseln in $N$ gebildet wird, trägt zur Suche des Widerspruchs nichts bei und wird deshalb gar nicht erst gebildet.
 		
 	\section{PyRes}
 Beweiser in Python, Fokus liegt nicht auf Performance sondern auf einfachem Verständnis, kann Formelmengen oder Klauselmengen aus Datei parsen und Resolution anwenden, drei mögliche Ausgänge: Beweis gefunden, kein Beweis vorhanden, Beweis nicht in der Zeit gefunden
