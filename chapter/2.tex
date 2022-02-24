@@ -36,7 +36,7 @@ Formeln lassen sich rekursiv konstruieren und können dadurch beliebig weit vers
 	\item Wenn $F$ eine Formel ist, dann sind auch $\neg F$ und $(F)$ eine Formel.
 	\item Wenn $F$ und $G$ Formeln sind, dann sind auch $F \vee G$, $F \wedge G$, $F \to G$ und $F \leftrightarrow G$ Formeln.
 \end{enumerate}
-Wie bei mathematischen Operatoren z.B. Addition und Multiplikation, haben auch in der Logik die Operatoren eine Präzedenz. Sie beschreibt, wie stark die Operatoren binden, also in welcher Reihenfolge sie aufgelöst werden.In der Literatur wird meistens folgende Rangfolge eingesetzt:
+Wie bei mathematischen Operatoren z.B. Addition und Multiplikation, haben auch in der Logik die Operatoren eine Präzedenz. Sie beschreibt, wie stark die Operatoren binden, also in welcher Reihenfolge sie aufgelöst werden. Für diese Arbeit wird die in der Literatur am häufigsten eingesetzte Präzedenz verwendet:
 $$\neg \quad \wedge \quad \vee \quad \to \quad \leftrightarrow$$
 Die Negation bindet am stärksten und wird als erstes aufgelöst. Das Symbol für die Äquivalenz wird als letztes aufgelöst. Klammern können zusätzlich eingefügt werden, sie binden noch schwächer.
 Zwei Junktoren der gleichen Präzedenz werden von links nach rechts aufgelöst. Das heißt die beiden folgenden Formeln beschreiben den gleichen Zusammenhang.
@@ -147,7 +147,9 @@ Um die Chance, dass ein Beweis gefunden wird, zu vergrößern, wurde eine Vielza
 Eine Reihe komplexerer Strategien sind die Set-of-Support-Strategien. Sie wurden erstmals 1965 von Lawrence Wos et al. vorgestellt. \cite{Wos1965Sos}
 
 		\subsection{Prinzip}
-Bei den Set-Of-Support-Strategien (SOS-Strategien) wird die Menge aller gegebenen Klauseln in zwei disjunkte Teilmengen $N$ und $S$ unterteilt. Die Menge $N$ ist erfüllbar. Ein Widerspruch kann erst bei Hinzunehmen vom sogennenannten Set-Of-Support $S$ entstehen. Nach der Einteilung wird wie gewöhnlich das Resolutionsverfahren durchgeführt. Es wird jedoch verboten, die Resolvente zweier Klauseln zu bilden, wenn beide Klauseln in $N$ liegen. Dies hat den Vorteil, dass weniger Klauseln miteinander kombiniert werden können und es weniger mögliche Resolutionsschritte gibt. Somit soll die Chance vergrößert werden, einen Widerspruch zu finden.
+Bei den Set-Of-Support-Strategien (SOS-Strategien) wird die unerfüllbare Menge $M$ aller Klauseln in zwei disjunkte Teilmengen $N$ und $S$ unterteilt. Die Menge $N$ ist erfüllbar. Aus $N$ alleine kann also kein Widerspruch hergeleitet werden. Erst beim Hinzunehmen vom sogenannten Set-Of-Support $S$ kann die leere Klausel abgeleitet werden. Nach der Einteilung wird wie gewöhnlich das Resolutionsverfahren durchgeführt. Die neuen Klauseln, die durch Resolution oder Faktorisierung gebildet werden, werden zu $S$ hinzugefügt. 
+
+Die einzige Einschränkung bei den Set-Of-Support-Strategien ist, dass keine Resolvente zweier Klauseln gebildet werden darf, wenn beide Klauseln in $N$ liegen. Dies hat den Vorteil, dass weniger Klauseln miteinander kombiniert werden können und es weniger mögliche Resolutionsschritte gibt. Somit soll die Chance vergrößert werden, einen Widerspruch zu finden.
 
 
 Bei einer gegebenen Klauselmenge gibt es sehr viel Möglichkeiten, die Klauseln in zwei Mengen $N$ und $S$ einzuteilen. Da die Laufzeit der Beweissuche sehr wichtig ist, ist es nicht sinnvoll sehr komplexe Einteilungen vorzunehmen, da sonst der gesamte Performance-Vorteil durch den Mehraufwand der Einteilung wieder verloren geht. Stattdessen liegt der Fokus auf Einteilungen, die sehr einfach vorzunehmen sind. Im Folgenden werden fünf Einteilungen vorgestellt:
@@ -172,7 +174,7 @@ Die Vollständigkeit wird im folgenden Abschnitt erläutert. Das Laufzeitverhalt
 Auch ohne Laufzeitanalyse lässt sich zeigen, dass die Methoden 4. und 5. keinen Vorteil in der Beweissuche liefern. Dies lässt sich folgendermaßen erklären. Die Resolution kann dann und genau dann durchgeführt werden, wenn in zwei Klauseln komplementäre aber sonst identische Literale vorkommen. In SOS-Strategie 4 und 5 kommen in allen Klauseln der Basisklauselmenge entweder nur positive Literale oder nur negative Literale vor. Auch ohne SOS-Strategie kann deshalb auf zwei dieser Klauseln keine Resolution angewendet werden. Das heißt, dass ein Verbot dieser Resolutionsschritte keine Auswirkung auf den Ablauf der Beweisführung hat und somit auch keinen Zeitvorteil liefern kann. Diese beiden Strategien werden in dieser Arbeit deshalb nicht weiter betrachtet.
 
 		\subsection{Vollständigkeit}		
-Die Resolution ist mit Set-Of-Support-Strategien weiterhin vollständig fürs Widerlegen. Dies wurde bereits 1965 von Lawrence Wos et al. gezeigt.\cite{Wos1965Sos} In dieser Arbeit wird nicht der gesamte Beweis für die Prädikatenlogik erster Stufe gezeigt, sondern lediglich für die Aussagenlogik. 
+Die Resolution ist mit Set-Of-Support-Strategien weiterhin vollständig für das Widerlegen. Dies wurde bereits 1965 von Lawrence Wos et al. gezeigt. In dieser Arbeit wird nicht der gesamte Beweis für die Prädikatenlogik erster Stufe gezeigt, sondern lediglich ein Beweis für die Vollständigkeit in der Aussagenlogik. Dieser Beweis orientiert sich an der Veröffentlichung von Wos et al. \cite{Wos1965Sos}
 
 \paragraph{Theorem} Werden aus einer unerfüllbaren variablenlosen Klauselmenge $M$ zwei neue Klauselmengen $N$ und $S$ erstellt, sodass gilt: 
 $$N \cup S = M \quad\quad N \cap S = \emptyset \quad\quad S \neq \emptyset \quad\quad N \text{ ist erfüllbar,}$$
@@ -212,7 +214,7 @@ Als nächstes wird eine Fallunterscheidung vorgenommen. Zuerst wird $A_i$ als wa
 Danach wird $A_i$ als falsch interpretiert. Alle Klauseln, die $\neg A_i$ enthalten, können entfernt werden. Aus den übrigen Klauseln, wird das Literal $A_i$ entfernt. Die neu entstandenen Klauselmengen werden als $M_2$, $N_2$, $S_2$ bezeichnet.
 Jede Klausel $C$ in $M_1$ und $M_2$ besitzt somit eine korrespondierende Klausel $C'$, die in $M$ enthalten ist. $C'$ enthält mindestens die Literale von $C$, kann aber zusätzlich eins der Literale $A_i$ oder $\neg A_i$ enthalten. 
 
-Da $M$ unerfüllbar ist, müssen sowohl $M_1$ als auch $M_2$ unerfüllbar sein. Da $N$ erfüllbar ist, muss entweder $N_1$ oder $N_2$ oder beide erfüllbar sein.
+Da $M$ unerfüllbar ist, müssen sowohl $M_1$ als auch $M_2$ unerfüllbar sein. Dies lässt sich damit begründen, dass $M$ für jede beliebige Interpretation mit falsch ausgewertet wird und somit auch alle Interpretationen in den beiden Fälle $A_i \equiv \top$ und $A_i \equiv \bot$ die Klauselmenge falsch machen. Da $N$ erfüllbar ist, muss entweder $N_1$ oder $N_2$ oder beide erfüllbar sein.
 
 Wenn $N_1$ erfüllbar ist, dann kann aus $M_1$ mit $S_1$ als Set-Of-Support ein Widerspruch abgeleitet werden. Diese Folgerung ergibt sich daraus, dass $M_1$ maximal $i-1$ verschiedene Atome enthalten kann und für die Induktion angenommen wird, dass das Theorem für $i-1$ Atome erfüllt ist. Gleiches gilt für $M_2$, wenn $N_2$ erfüllbar ist. 
 
@@ -300,8 +302,34 @@ Zuerst wird angenommen $N_1$ ist erfüllbar und $N_2$ unerfüllbar. Für $M_1$ g
  \end{align*}
 
 Sollte $N_1$ unerfüllbar sein, aber dafür $N_2$ erfüllbar, dann muss für den Beweis lediglich $A_i$ mit $\neg A_i$ vertauscht werden. Somit ist der Beweis für alle Fälle abgedeckt, das Theorem ist also für beliebiges $i \geq 0$ gültig.
- 
-% Dass die Vollständigkeit erhalten bleibt, kann man sich anschaulich folgendermaßen vorstellen: Dadurch, dass die Klauselmenge $N$ erfüllbar ist, kann aus ihren Klauseln kein Widerspruch hergeleitet werden. Eine Resolvente, die aus zwei Klauseln in $N$ gebildet wird, trägt zur Suche des Widerspruchs nichts bei und wird deshalb gar nicht erst gebildet.
+
+Da die Aussagenlogik ein Sonderfall der Prädikatenlogik ist, gilt das Theorem für eine Teilmenge aller prädikatenlogischen Formeln. Mit weiteren Lemmas kann die Vollständigkeit auf alle Formeln der Prädikatenlogik erster Stufe erweitert werden. \cite{Wos1965Sos}
+		
+	\section{TPTP und StarExec}
+	
+TPTP steht für "`Thousands of Problems for Theorem Provers"' und ist eine Sammlung prädikatenlogischer Probleme \cite{Sutcliff2021TPTP}. Jedes Problem ist setzt sich aus einer Menge von Formeln und Klauseln zusammen und ist entweder erfüllbar oder unerfüllbar. 
 		
 	\section{PyRes}
-Beweiser in Python, Fokus liegt nicht auf Performance sondern auf einfachem Verständnis, kann Formelmengen oder Klauselmengen aus Datei parsen und Resolution anwenden, drei mögliche Ausgänge: Beweis gefunden, kein Beweis vorhanden, Beweis nicht in der Zeit gefunden
+PyRes ist ein Theorembeweiser, der in der Programmiersprache Python entwickelt wurde. Der Beweiser arbeitet mit Resolution in der Prädikatenlogik erster Stufe und ist somit vollständig. Der Fokus bei PyRes liegt nicht auf dem schnellstmöglichen Lösen von Problemen. Ziel ist, die Konzepte des Theorembeweisens anschaulich darzustellen und für Anfänger leicht verständlich zu machen. \cite{Schulz2020PyRes}
+
+Das Programm kann beispielhaft folgendermaßen aufgerufen werden:
+
+./pyres-fof.py -t -HPickGiven5 file.p
+
+Die Beweissuche wird dann in mehreren Schritten durchgeführt. 
+\begin{enumerate}
+	\item Die Eingabeoptionen werden eingelesen und in einem Container-Objekt gespeichert.
+	\item Die Datei file.p wird eingelesen und geparst. Die Datei kann sowohl Formeln (FOF-Format) als auch Klauseln (CNF-Format) enthalten.
+	\item Alle Formeln werden in Klauseln umgewandelt.
+	\item Die Beweissuche beginnt. Alle Klauseln sind in einer Klauselmenge $S_1$ namens unprocessed (unverarbeitet) gesammelt. Eine zweite Klauselmenge $S_2$ heißt processsed (verarbeitet) ist anfangs leer. 
+	\item Es wird eine Klausel $C_1$ aus $S_1$ ausgewählt und aus $S_1$ entfernt. Wenn $C_1$ die leeren Klausel ist, wurde ein Beweis gefunden. Die Suche ist abgeschlossen. Ist $C_1$ nicht leer, werden weitere Schritte unternommen:
+	\begin{enumerate}
+		\item Aus $C_1$ werden neuen Klauseln durch Faktorisierung erstellt.
+		\item Aus $C_1$ werden in Kombination mit jeder Klausel aus $S_2$ neue Klausel durch Resolution erstellt.
+	\end{enumerate}
+	Sowohl die Faktoren als auch die Resolventen werden zu $S_1$ hinzugefügt. Danach wird $C_1$ zu $S_2$ hinzugefügt. Dieser Schritt wird solange wiederholt, bis die leere Klausel gefunden wurde.
+	\item Wenn die Suche abgeschlossen ist, wird eine Zusammenfassung des Beweises ausgegeben.
+\end{enumerate}
+PyRes ermöglicht diverse Optimierungen, die die Wahrscheinlichkeiten erhöhen, einen Beweis zu finden.
+Der Anwender kann diese Optimierungen mit den Eingabeparametern angeben. Der Parameter "`t"' sorgt dafür, dass das Programm in jedem Beweisschritt prüft, ob die Klausel eine Tautologie ist, und sie gegebenenfalls löscht. Mit "`f"' und "`b"' können Vorwärts- und Rückwärtssubsumption aktiviert werden.
+Der Benutzer kann mit der Option "`H"' eine Stategie auswählen, mit der PyRes die Klauseln aus der unverarbeiteten Menge $S_1$ auswählt. Mögliche Optionen sind FIFO, SymbolCount, PickGiven2 und PickGiven5. FIFO steht für "`first in first out"' und wählt in jedem Schritt diejenige Klausel aus, die am längsten in der Menge ist. SymbolCount wählt die Kausel mit den wenigsten Literalen aus, und PickGiven2 und PickGiven5 wechseln zwischen FIFO und SymbolCount in vorgegebenen Verhältnissen ab.
