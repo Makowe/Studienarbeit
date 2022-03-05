@@ -171,7 +171,7 @@ Der Einsatz von SOS-Strategien ist nur dann sinnvoll, wenn zwei Bedingungen erf�
 \end{itemize}
 Die Vollständigkeit wird im folgenden Abschnitt erläutert. Das Laufzeitverhalten wird in Kapitel 5 analysiert.
 
-Auch ohne Laufzeitanalyse lässt sich zeigen, dass die Methoden 4. und 5. keinen Vorteil in der Beweissuche liefern. Dies lässt sich folgendermaßen erklären. Die Resolution kann dann und genau dann durchgeführt werden, wenn in zwei Klauseln komplementäre aber sonst identische Literale vorkommen. In SOS-Strategie 4 und 5 kommen in allen Klauseln der Basisklauselmenge entweder nur positive Literale oder nur negative Literale vor. Auch ohne SOS-Strategie kann deshalb auf zwei dieser Klauseln keine Resolution angewendet werden. Das heißt, dass ein Verbot dieser Resolutionsschritte keine Auswirkung auf den Ablauf der Beweisführung hat und somit auch keinen Zeitvorteil liefern kann. Diese beiden Strategien werden in dieser Arbeit deshalb nicht weiter betrachtet.
+Auch ohne Laufzeitanalyse lässt sich zeigen, dass die Methoden 4. und 5. keinen Vorteil in der Beweissuche liefern. Dies lässt sich folgendermaßen erklären. Die Resolution kann dann und genau dann durchgeführt werden, wenn in zwei Klauseln komplementäre Literale vorkommen. In SOS-Strategie 4 und 5 kommen in allen Klauseln der Basisklauselmenge entweder nur positive Literale oder nur negative Literale vor. Auch ohne SOS-Strategie kann deshalb auf zwei dieser Klauseln keine Resolution angewendet werden. Das heißt, dass ein Verbot dieser Resolutionsschritte keine Auswirkung auf den Ablauf der Beweisführung hat und somit auch keinen Zeitvorteil liefern kann. Diese beiden Strategien werden in dieser Arbeit deshalb nicht weiter betrachtet.
 
 		\subsection{Vollständigkeit}		
 Die Resolution ist mit Set-Of-Support-Strategien weiterhin vollständig für das Widerlegen. Dies wurde bereits 1965 von Lawrence Wos et al. gezeigt. In dieser Arbeit wird nicht der gesamte Beweis für die Prädikatenlogik erster Stufe gezeigt, sondern lediglich ein Beweis für die Vollständigkeit in der Aussagenlogik. Dieser Beweis orientiert sich an der Veröffentlichung von Wos et al. \cite{Wos1965Sos}
@@ -307,7 +307,16 @@ Da die Aussagenlogik ein Sonderfall der Prädikatenlogik ist, gilt das Theorem f
 		
 	\section{TPTP und StarExec}
 	
-TPTP steht für "`Thousands of Problems for Theorem Provers"' und ist eine Sammlung prädikatenlogischer Probleme \cite{Sutcliff2021TPTP}. Jedes Problem ist setzt sich aus einer Menge von Formeln und Klauseln zusammen und ist entweder erfüllbar oder unerfüllbar. 
+TPTP steht für "`Thousands of Problems for Theorem Provers"' und ist eine Sammlung prädikatenlogischer Probleme \cite{Sutcliff2021TPTP}. Jedes Problem setzt sich aus einer Menge von Formeln und/oder Klauseln zusammen und ist entweder erfüllbar oder unerfüllbar. Für Theorembeweiser können diese Probleme als Benchmark eingesetzt werden, um sie auf Fehler zu prüfen und um ihre Performanz zu testen. Die aktuelle Version 7.5.0 beinhaltet 24098 Probleme.
+Um die Performanz der Beweissuche mit anderen Beweisern vergleichen zu können, sollte Hardware benutzt werden, die eine konsistente Rechenleistung bereitstellt. StarExec ist ein Service, der genau dies ermöglicht. Es handelt sich dabei um mehrere Rechner, die zu einem Cluster vereint sind. \cite{Sutcliff2022StarExec}
+ Rechenaufgaben, bei denen Beweiser beispielsweise TPTP Probleme lösen, werden als Jobs bezeichnet und können über eine Webseite konfiguriert werden. Ein Job setzt sich aus einer Menge von Beweisern und einer Menge von Problemen zusammen. Das Kreuzprodukt beider Mengen entspricht allen Paarungen aus einem Beweiser und einem Problem. Für jede Paarung führt der Beweiser eine Beweissuche für das Problem durch. Die möglichen Resultate lassen sich in vier Gruppen einteilen. 
+\begin{enumerate}
+	\item Unerfüllbar: Die leere Menge wurde gefunden, es liegt ein Beweis vor.
+	\item Erfüllbar: Das Problem wurde so weit saturiert, dass ein Modell gefunden wurde. Das Problem ist erfüllbar.
+	\item Zeit abgelaufen: Der Beweiser konnte sich in der zugewiesenen Zeit weder für 1. noch 2. entscheiden.
+	\item Ungültig: Das Problem liegt in einer Syntax vor, die der Beweiser nicht verarbeiten kann. Die Beweissuche wird nicht ausgeführt.
+\end{enumerate}
+Das Ergebnis des gesamten Jobs ist eine ZIP-Datei, die für jede Paarung eine Ergebnisdatei mit dem Resultat enthält. Probleme, die gelöst wurden, enthalten in der Ergebnisdatei zusätzliche Informationen wie Laufzeit und Anzahl Resolutionsschritte.
 		
 	\section{PyRes}
 PyRes ist ein Theorembeweiser, der in der Programmiersprache Python entwickelt wurde. Der Beweiser arbeitet mit Resolution in der Prädikatenlogik erster Stufe und ist somit vollständig. Der Fokus bei PyRes liegt nicht auf dem schnellstmöglichen Lösen von Problemen. Ziel ist, die Konzepte des Theorembeweisens anschaulich darzustellen und für Anfänger leicht verständlich zu machen. \cite{Schulz2020PyRes}
@@ -320,8 +329,8 @@ Die Beweissuche wird dann in mehreren Schritten durchgeführt.
 \begin{enumerate}
 	\item Die Eingabeoptionen werden eingelesen und in einem Container-Objekt gespeichert.
 	\item Die Datei file.p wird eingelesen und geparst. Die Datei kann sowohl Formeln (FOF-Format) als auch Klauseln (CNF-Format) enthalten.
-	\item Alle Formeln werden in Klauseln umgewandelt.
-	\item Die Beweissuche beginnt. Alle Klauseln sind in einer Klauselmenge $S_1$ namens unprocessed (unverarbeitet) gesammelt. Eine zweite Klauselmenge $S_2$ heißt processsed (verarbeitet) ist anfangs leer. 
+	\item Alle Formeln werden in Klauseln umgewandelt. Sollte das Problem Formeln vom Typ "conjecture" (Vermutung) enthalten, so werden diese negiert.
+	\item Die Beweissuche beginnt. Alle Klauseln sind in einer Klauselmenge $S_1$ namens unprocessed (unverarbeitet) gesammelt. Eine zweite Klauselmenge $S_2$ heißt processsed (verarbeitet) und ist anfangs leer. 
 	\item Es wird eine Klausel $C_1$ aus $S_1$ ausgewählt und aus $S_1$ entfernt. Wenn $C_1$ die leeren Klausel ist, wurde ein Beweis gefunden. Die Suche ist abgeschlossen. Ist $C_1$ nicht leer, werden weitere Schritte unternommen:
 	\begin{enumerate}
 		\item Aus $C_1$ werden neuen Klauseln durch Faktorisierung erstellt.
@@ -332,4 +341,4 @@ Die Beweissuche wird dann in mehreren Schritten durchgeführt.
 \end{enumerate}
 PyRes ermöglicht diverse Optimierungen, die die Wahrscheinlichkeiten erhöhen, einen Beweis zu finden.
 Der Anwender kann diese Optimierungen mit den Eingabeparametern angeben. Der Parameter "`t"' sorgt dafür, dass das Programm in jedem Beweisschritt prüft, ob die Klausel eine Tautologie ist, und sie gegebenenfalls löscht. Mit "`f"' und "`b"' können Vorwärts- und Rückwärtssubsumption aktiviert werden.
-Der Benutzer kann mit der Option "`H"' eine Stategie auswählen, mit der PyRes die Klauseln aus der unverarbeiteten Menge $S_1$ auswählt. Mögliche Optionen sind FIFO, SymbolCount, PickGiven2 und PickGiven5. FIFO steht für "`first in first out"' und wählt in jedem Schritt diejenige Klausel aus, die am längsten in der Menge ist. SymbolCount wählt die Kausel mit den wenigsten Literalen aus, und PickGiven2 und PickGiven5 wechseln zwischen FIFO und SymbolCount in vorgegebenen Verhältnissen ab.
+Der Benutzer kann mit der Option "`H"' eine Stategie auswählen, mit der PyRes die Klauseln aus der unverarbeiteten Menge $S_1$ auswählt. Mögliche Optionen sind FIFO, SymbolCount, PickGiven2 und PickGiven5. FIFO steht für "`first in first out"' und wählt in jedem Schritt diejenige Klausel aus, die am längsten in der Menge ist. SymbolCount wählt die Kausel mit den wenigsten Literalen aus, und PickGiven2 und PickGiven5 wechseln zwischen FIFO und SymbolCount in vorgegebenen Verhältnissen ab. Eine weitere Optimierung ist die Literalselektion, die die Anzahl der möglichen Kombinationen von Klauseln mindert.

@@ -101,6 +101,84 @@
     \field{year}{2020}
   \endentry
 
+  \entry{Sutcliff2021TPTP}{misc}{}
+    \name{author}{2}{}{%
+      {{hash=SG}{%
+         family={Sutcliff},
+         familyi={S\bibinitperiod},
+         given={Geoff},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=SC}{%
+         family={Suttner},
+         familyi={S\bibinitperiod},
+         given={Christian},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SGSC1}
+    \strng{fullhash}{SGSC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{title}{The TPTP Problem Library for automated theorem proving}
+    \verb{url}
+    \verb http://www.tptp.org/
+    \endverb
+    \field{journaltitle}{TPTP}
+  \endentry
+
+  \entry{Sutcliff2022StarExec}{misc}{}
+    \name{author}{2}{}{%
+      {{hash=SG}{%
+         family={Sutcliff},
+         familyi={S\bibinitperiod},
+         given={Geoff},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=TC}{%
+         family={Tinelli},
+         familyi={T\bibinitperiod},
+         given={Cesare},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SGTC1}
+    \strng{fullhash}{SGTC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{title}{StarExec}
+    \verb{url}
+    \verb https://www.starexec.org/starexec/public/about.jsp
+    \endverb
+    \field{journaltitle}{STAREXEC}
+  \endentry
+
+  \entry{WillkommIntel}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=WD}{%
+         family={Willkomm},
+         familyi={W\bibinitperiod},
+         given={Dennis},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WD1}
+    \strng{fullhash}{WD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \field{title}{Verifikation der Fliesskomma-Arithmetik bei Intel}
+    \verb{url}
+    \verb https://formal.kastel.kit.edu/~beckert/teaching/Seminar-Formal-Method
+    \verb s-SS05/ko-seminarSS05-floating-point.pdf
+    \endverb
+  \endentry
+
   \entry{Wos1965Sos}{article}{}
     \name{author}{3}{}{%
       {{hash=WL}{%
