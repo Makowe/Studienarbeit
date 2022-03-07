@@ -3,13 +3,12 @@
 \chapter{Grundlagen}
 	\section{Aussagenlogik}
 
-Mit der Aussagenlogik können viele logische Zusammenhänge formal beschrieben werden. Eine Aussage stellt eine Behauptung auf, die entweder wahr oder falsch sein kann, aber nicht beides. Beispiele für Aussagen sind: "Die Sonne scheint" und "Die Temperatur beträgt mindestens 20 °C". Solche Aussagen werden mit einzelnen Großbuchstaben $A, B, C, ...$ dargestellt und als Atome bezeichnet. Die Menge aller Atom-Symbole $\Sigma$ wird als Signatur bezeichnet. 
+Mit der Aussagenlogik können viele logische Zusammenhänge formal beschrieben werden. Eine Aussage ist eine Behauptung, die entweder wahr oder falsch sein kann, aber nicht beides. Beispiele für Aussagen sind: "1+1=3" und "". Solche Aussagen werden mit einzelnen Großbuchstaben $A, B, C, ...$ dargestellt und als Atome bezeichnet. Die Menge aller Atom-Symbole $\Sigma$ wird als Signatur bezeichnet. 
 
-Atome können mithilfe von Junktoren verknüpft werden, um Zusammenhänge von Aussagen darzustellen. Das Ergebnis dieser Verknüpfung ist eine Formel. Ist ein Atom $C$ nur dann wahr, wenn sowohl $A$ als auch $B$ wahr sind, kann man dies mit folgender Formel ausdrücken:
-$$C=A \wedge B$$
-Weitere Junktoren sind $\vee$ (logisches Oder), $\to$ (wenn, dann), $\leftrightarrow$ (genau dann, wenn) und $\neg$ (Negierung).
+Atome können mithilfe von Junktoren verknüpft werden, um Atome logische von Aussagen darzustellen. Das Ergebnis dieser Verknüpfung ist eine Formel. 
+Es gibt fünf Junktoren: $\wedge$ (logisches Und), $\vee$ (logisches Oder), $\to$ (wenn, dann), $\leftrightarrow$ (genau dann, wenn) und $\neg$ (Negierung).
 
-Weitere Symbole, die in der Aussagenlogik verwendet werden, sind das Symbol $\top$ für wahr und das Symbol $\bot$ für falsch. 
+In der Logik werden außerdem die beiden Symbole $\top$ für wahr und $\bot$ für falsch eingesetzt. 
 
 Folgende Tabelle zeigt, wie sich aus den Wahrheitswerten zweier Atome die Wahrheitswerte einer Formel ergeben.
 
@@ -20,10 +19,10 @@ Folgende Tabelle zeigt, wie sich aus den Wahrheitswerten zweier Atome die Wahrhe
 		&& Negierung & Konjunktion & Disjunktion & Implikation & Äquivalenz \\
 		$A$ & $B$ & $\neg A$ & $A \wedge B$ & $A \vee B$ & $A \to B$ & $A \leftrightarrow B$ \\
 		\hline
-		wahr & wahr & falsch & wahr & wahr & wahr & wahr \\
-		wahr & falsch & falsch & falsch & wahr & falsch & falsch \\
-		falsch & wahr & wahr & falsch & wahr & wahr & falsch \\
-		falsch & falsch & wahr & falsch & falsch & wahr & falsch \\
+		$\top$ & $\top$ & $\bot$ & $\top$ & $\top$ & $\top$ & $\top$ \\
+		$\top$ & $\bot$ & $\bot$ & $\bot$ & $\top$ & $\bot$ & $\bot$ \\
+		$\bot$ & $\top$ & $\top$ & $\bot$ & $\top$ & $\top$ & $\bot$ \\
+		$\bot$ & $\bot$ & $\top$ & $\bot$ & $\bot$ & $\top$ & $\top$ \\
 		\hline
 	\end{tabular}
 	\caption{Übersicht der Wahrheitswerte von Junktoren}
@@ -39,75 +38,109 @@ Formeln lassen sich rekursiv konstruieren und können dadurch beliebig weit vers
 Wie bei mathematischen Operatoren z.B. Addition und Multiplikation, haben auch in der Logik die Operatoren eine Präzedenz. Sie beschreibt, wie stark die Operatoren binden, also in welcher Reihenfolge sie aufgelöst werden. Für diese Arbeit wird die in der Literatur am häufigsten eingesetzte Präzedenz verwendet:
 $$\neg \quad \wedge \quad \vee \quad \to \quad \leftrightarrow$$
 Die Negation bindet am stärksten und wird als erstes aufgelöst. Das Symbol für die Äquivalenz wird als letztes aufgelöst. Klammern können zusätzlich eingefügt werden, sie binden noch schwächer.
-Zwei Junktoren der gleichen Präzedenz werden von links nach rechts aufgelöst. Das heißt die beiden folgenden Formeln beschreiben den gleichen Zusammenhang.
-\begin{align*}
-	&& A\to B\to C && ((A\to B)\to C)
-\end{align*}
-\subsection{Interpretation}
+Zwei Junktoren der gleichen Präzedenz werden von links nach rechts aufgelöst. Das heißt die Formel $A\to B\to C$ ist gleichbedeutend wie $((A\to B)\to C)$.
 
-Eine Interpretation I ist eine Abbildung, bei der jedem Atom einer der beiden Wahrheitswerte wahr oder falsch zugeordnet wird. 
+\subsection{weitere Begriffe}
+
+Eine \textbf{Interpretation} I ist eine Abbildung, bei der jedem Atom einer der beiden Wahrheitswerte wahr oder falsch zugeordnet wird. 
 
 $$I: \Sigma\to\{\top,\bot\}$$
 
-Unter einer Interpretation $I$ ist dann auch jede Formel entweder wahr oder falsch.
+Unter einer Interpretation $I$ ist dann auch jede Formel entweder wahr oder falsch. Die Auflösung einer Formel $F$ findet rekursiv statt, indem für alle Atome die Wahrheitswerte eingesetzt werden und die Teilformeln von $F$ von innen beginnend mit \ref{table:Junktoren} aufgelöst werden.
 
-Die Auflösung einer Formel $F_0$ findet rekursiv statt. $F_0$ habe eine der beiden Zusammensetzungen, wobei $F_1$ und $F_2$ auch Teilformeln von $F_0$ sind und $\oplus$ ein zweistelliger Junktor ist:
-$$F=\neg F_1 \quad\quad\text{oder}\quad\quad F=F_1 \oplus F_2$$ 
-\begin{enumerate}
-	\item Wenn eine Teilformeln $F_i$ ein Atom ist, dann ist der Wahrheitswert bekannt, da er von der Interpretation vorgegeben wird.
-	\item Wenn die Wahrheitswerte aller Teilformeln $F_i$ bekannt sind, kann mit Tabelle \ref{table:Junktoren} bestimmt werden, ob die ganze Formel $F_0$ wahr oder falsch ist.
-	\item Wenn nicht die Wahrheitswerte aller Teilformeln bekannt sind, werden die Wahrheitswerte bestimmt. Dazu werden für jedes $F_i$ die selben Schritte durchgeführt wie für $F_0$. 
-	\item Sobald die Wahrheitswerte aller Teilformeln bekannt sind, wird Schritt 2 wiederholt. Die Auflösung ist abgeschlossen.
-\end{enumerate}
+Zwei Formeln werden \textbf{äquivalent} genannt, wenn sie für jede Interpretation den gleichen Wahrheitswert besitzen.
 
+Mit Äquivalenzumformungen kann aus einer Formel $F$ eine Formel $F'$ hergeleitet werden, die äquivalent zu $F$ ist. Ein Beispiel für eine Äquivalenzumformung ist die doppelte Negation. Wenn $F$ eine Formel ist, dann ist $\neg\neg F$ äquivalent zu $F$. Doppelte Negationen können in jeder beliebigen Position einer Formel eingefügt und entfernt werden. Äquivalenzen und Implikationen lassen sich in Kon- und Disjunktionen umformen:
+\begin{align*}
+	A \to B &\equiv \neg A \vee B \\
+	A \leftrightarrow B &\equiv (A \wedge B) \vee (\neg A \wedge \neg B)	
+\end{align*}
 
-\subsection{Äquivalenz von Formeln}
-Zwei Formeln werden äquivalent genannt, wenn sie für jede Interpretation den gleichen Wahrheitswert besitzen.
+Eine Formel, die unter keiner Interpretation wahr ist, heißt \textbf{unerfüllbar}. Eine Formel, die unter jeder Interpretation wahr ist, heißt \textbf{allgemeingültig}.
 
-Mit Äquivalenzumformungen kann aus einer Formel $F$ eine Formel $F'$ hergeleitet werden, die äquivalent zu $F$ ist. Ein Beispiel für eine Äquivalenzumformung ist die doppelte Negation. Wenn $F$ eine Formel ist, dann ist $\neg\neg F$ äquivalent zu $F$. Doppelte Negationen können in jeder beliebigen Position einer Formel eingefügt und entfernt werden, da die Negation am stärksten bindet.
+Ein \textbf{Literal} $L$ ist entweder ein Atom $A$ oder ein negiertes Atom $\neg A$. 
+		\subsection{Ableitung}
+Aus zwei Formeln kann durch logisches Schlussfolgern eine neue Formel hergeleitet werden. Dieser Prozess wird Ableitung genannt. Eine Ableitung bei der aus den Formeln $F_1$ und $F_2$ die Formel $F_3$ abgeleitet wird, wird folgendermaßen dargestellt:
+$$\frac{F_1 \quad F_2}{F_3}$$
+Semantisch bedeutet diese Ableitung, dass $F_3$ aus $F_1$ und $F_2$ folgt, also dass für jede Interpretation unter der $F_1 \wedge F_2$ wahr ist, auch $F_3$ wahr ist.
+Das Beispiel 
+$$\frac{A\quad A\to B}{B}$$
+sagt aus: "`Immer wenn $A$ wahr ist und aus $A$ $B$ folgt, dann muss auch $B$ wahr sein."'
 
 \subsection{Normalformen}\label{section:Normalformen}
+Es gibt mehrere Normalformen für die Aussagenlogik. Es lässt sich zeigen, dass jede beliebige Formel in die folgenden Normalformen transformiert werden kann.
+\paragraph{Konjunktive Normalform (KNF)}
+Eine Formel $F$, die in konjunktiver Normalform (KNF) vorliegt, besteht aus Konjunktionen einzelner Disjunktionen:
+$$F=(L_{1,1} \vee L_{1,2} \vee \ldots \vee L_{1,n_1}) \wedge
+   (L_{2,1} \vee \ldots \vee L_{2,n_2}) \wedge \ldots \wedge
+   (L_{m,1} \vee \ldots \vee L_{m,n_m})$$
+Die KNF hat den Vorteil, dass die Unerfüllbarkeit eines einzelnen Disjunktionsblocks zur Unerfüllbarkeit der gesamten Formel führt. Es ist dadurch einfach die Unerfüllbarkeit zu beweisen. Erfüllbarkeit und Allgemeingültigkeit sind vergleichsweise aufwändig zu beweisen.
+\paragraph{Disjunktive Normalform}
+Eine Formel $F$ in disjunktiver Normalform hat folgende Struktur.
+$$F=(L_{1,1} \wedge L_{1,2} \wedge \ldots \wedge L_{1,n_1}) \vee
+(L_{2,1} \wedge \ldots \wedge L_{2,n_2}) \vee \ldots \vee
+(L_{m,1} \wedge \ldots \wedge L_{m,n_m})$$
+Komplementär zur KNF können die Erfüllbarkeit und die Allgemeingültigkeit von Formeln sehr einfach nachgewiesen werden. Dazu muss nur eine einzlne Teilformel erfüllbar bzw. allgemeingültig sein. Unerfüllbarkeit ist schwierig nachzuweisen.
+
+\paragraph{Klauselnormalform}
+Die Klauselnormalform ist eine Alternative Schreibweise zur konjunktiven Normalform, die aber den gleichen Zusammenhang beschreibt.
+$$\{\{A_{1,1},A_{1,2},\ldots,A_{1,n_1}\},
+\{A_{2,1},\ldots,A_{2,n_2}\},\ldots,
+\{A_{m,1},\ldots,A_{m,n_m}\}\}$$
+
+Syntaktisch beschreiben die beiden Normalformen unterschiedliche Dinge. Bei der konjunktiven Normalform handelt es sich um eine Konjunktion einzelner Disjunktionen, wohingegen die Klauselnormalform eine Menge von Klauseln, wobei jede Klausel eine Menge von Literalen ist.
+Semantisch stellt beide Formen denselben Zusammenhang dar. Aus jeder Klausel muss mindestens ein Literal wahr sein, damit die gesamte Klauselmenge wahr ist.
+Gegenüber der KNF wird die Klauselnormalform oft bevorzugt, da sie eine kürzere und übersichtlichere Syntax hat. In der Klauselnormalform kann auch eine leere Klausel $\{\}$ oder $\emptyset$ vorkommen. Die leere Klausel ist wird immer zu falsch ausgewertet und macht somit die gesamte Klauselmenge unerfüllbar.
 
 	\section{Prädikatenlogik erster Stufe}
 		\subsection{Begriffe}
-Prädikat, Funktion, Term, Konstante, Variable
-Quantor
 
-Die Prädikatenlogik erster Stufe ist eine Erweiterung zur Aussagenlogik. Um die drei Aussagen "`Albert ist ein Mensch"', "`Bernhard ist ein Mensch"' und "`Cäsar ist ein Mensch"' in der Aussagenlogik dazustellen, müsste man drei Atome $A, B$ und $C$ einführen. Anstatt Aussagen, gibt es in der Prädikatenlogik Prädikate. Um das genannte Beispiel in der Prädikatenlogik zu formalisieren, könnte man ein Prädikat $P(x)$ einführen, das den Satz "`x ist ein Mensch"' zum Ausdruck bringt. Für die Variable $x$ können dann Werte eingesetzt werden, zum Beispiel $a, b$ und $c$ für Albert, Bernhard und Cäsar. 
+Die Prädikatenlogik erster Stufe ist eine Erweiterung zur Aussagenlogik. Um die drei Aussagen "`Albert ist ein Mensch"', "`Bernhard ist ein Mensch"' und "`Cäsar ist ein Mensch"' in der Aussagenlogik dazustellen, müsste man drei Atome $A, B$ und $C$ einführen. Anstatt Aussagen, gibt es in der Prädikatenlogik \textbf{Prädikate}. Um das genannte Beispiel in der Prädikatenlogik zu formalisieren, könnte man ein Prädikat $P(x)$ einführen, das den Satz "`x ist ein Mensch"' zum Ausdruck bringt. Für die \textbf{Variable} $x$ können dann Werte eingesetzt werden, zum Beispiel $a, b$ und $c$ für Albert, Bernhard und Cäsar. $a, b$ und $c$ bezeichnet man als Konstanten.
 Prädikate können eine beliebige Stelligkeit besitzen. Das zweistellige Prädikat $Q(x,y)$ könnte zum Beispiel den Zusammenhang "`x ist der Bruder von y"' darstellen.
 
-In 
+Zusätzlich gibt es in der Prädikatenlogik \textbf{Funktionen}. Wie Prädikate können Funktionen beliebig viele Stellen haben. Eine einstellige Funktion bildet Konstanten auf Konstanten ab. Eine n-stellige Funktion bildet n-Tupel von Konstanten auf Konstanten ab.
 
-Zusätzlich zu Prädikaten, gibt es in der Prädikatenlogik Funktionen. Wie Prädikate können, Funktionen beliebig viele Stellen haben.
+\textbf{Terme} sind Zusammensetzungen aus Variablen, Konstanten und Funktionen und können rekursiv konstruiert werden. Dabei ist jede einzelne Variable und jede einzelne Konstante ein Term und jede Funktion $f(t_1,\ldots,t_n)$ ebenso, wobei $t_1,\ldots,t_n$ auch Terme sind.
 
-		\subsection{Ableitung}
-Formeln 
-		\subsection{Klausel}
-Wie in Abschnitt \ref{section:Normalformen} beschrieben wurde, lässt sich jede aussagenlogische Formel in die konjunktive Normalform bringen. Eine andere Darstellungsform dieser Normalform ist die Schreibweise in Klauselform.
-\begin{align*}
-	&& (L_{1,1} \vee L_{1,2} \vee \cdots \vee L_{1,n_1}) &&\wedge &&
-	(L_{2,1} \vee\cdots\vee L_{2,n_2}) && \wedge\cdots\wedge &&
-	(L_{m,1} \vee\cdots\vee L_{m,n_m}) \\
-	&& 
-	\{\{L_{1,1},L_{1,2},\cdots,L_{1,n_1}\}&&,&&
-	\{L_{2,1},\cdots,L_{2,n_2}\} &&,\cdots,&&
-	\{L_{m,1},\cdots,L_{m,n_m}\}\}
-\end{align*}
+Aus einem $n$-stelligen Prädikatensymbol und $n$ Termen lässt sich ein \textbf{Atom} erstellen. Beispiele für Atome sind:
+$$P(x) \quad P(a) \quad P(f(a)) \quad Q(x, g(a,y)) \quad Q(g(a,f(b)), f(f(a)))$$
+Wie in der Aussagenlogik lassen sich Atome mit Junktoren zu Formeln verknüpfen. Zusätzlich zu den 5 Junktoren gibt es noch zwei Quantoren $\forall$ und $\exists$. Für Quantoren gibt es eine zusätzliche Konstruktionsregel:
+Wenn $F$ eine Formel und $x$ eine Variable ist, dann sind $\forall x(F)$ und $\exists x(F)$ ebenso Formeln.
+Semantisch bedeutet $\forall x(F)$: "`Für jedes $x$ gilt die Formel $F$"'.  $\exists x(F)$ heißt: "`Es existiert mindestens ein $x$, für das die Formel $F$ gilt."'
 
-Syntaktisch beschreiben die beiden Schreibweisen unterschiedliche Dinge. Bei der konjunktiven Normalform handelt es sich um eine Konjunktion einzelner Disjunktionen, wohingegen es sich bei der Klauselform um eine Menge von Mengen handelt.
+\begin{table}
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline
+		Begriff & Symbole \\ \hline\hline
+		Konstante & $a,b,c$ \\\hline
+		Variable & $x,y,z$ \\ \hline
+		Funktion & $f, g, h$ \\\hline
+		Prädikat & $P, Q, R$ \\\hline
+		Atom & $A, B, C$ \\\hline
+		Formel & $F, G, H$ \\\hline
+	\end{tabular}
+	\caption{Symbole in der Prädikatenlogik}
+	\label{table:symbole}
+\end{table}
 
-Semantisch stellt die Klauselform jedoch denselben Zusammenhang dar, wie die konjunktive Normalform. Aus jeder Klausel, also aus jeder Menge von Literalen, muss mindestens ein Literal wahr sein, damit die gesamte Klauselmenge wahr ist.
-Gegenüber der Konjunktiven Normalform wird die Klauselform oft bevorzugt, da sie eine kürzere und übersichtlichere Syntax hat.
+\subsection{Normalformen}
+\paragraph{pränexe Normalform} Prädikatenlogische Formeln können durch die Vermischung von Junktoren und Quantoren schnell komplex werden. Die pränexe Normalform sorgt für eine klare Trennung von Junktoren und Quantoren. Die allgemeine Form ist gegeben durch
+$$Q_1x_1\ldots Q_nx_n(F),$$
+wobei jedes $Q$ entweder $\forall$ oder $\exists$ ist und $F$ eine quantorenfreie Formel ist.
+\paragraph{Skolemnormalform} Die Quantoren einer Formel $F_0$ können durch Äquivalenzumformungen nicht vollständig entfernt werden, aber es kann eine erfüllbarkeitsgleiche Formel $F_1$ aufgestellt werden, die keine Quantoren enthält. Die Skolemisierung ist ein Prozess, der aus $F_0$ in pränexer Normalform $F_1$ erstellt. $F_1$ liegt dann  in Skolemnormalform vor. Die erfüllbarkeitsgleichen Formeln $F_0$ und $F_1$ müssen nicht zwangsweise äquivalent sein, aber wenn $F_0$ (un-)erfüllbar ist, dann gilt das gleiche für $F_1$. Für viele Anwendungen ist nur die (Un-)erfüllbarkeit von Interesse und die konkreten Interpretationen sind irrelevant. Die Skolemisierung ist somit sehr nützlich, da Prüfung auf (Un-)erfüllbarkeit auch auf die vereinfachte Formel $F_1$ angewendet werden kann.
+\paragraph{Klauselnormalform}
+Die Skolemnormalform enthält keine Quantoren mehr, deshalb kann nach den Regeln der Aussagenlogik zuerst die konjunktive Normalform und danach die Klauselnormalform aufgestellt werden.
 
 	\section{Resolutionsverfahren}
 
-Theorembeweiser haben das Ziel, aus einer gegebenen Wissensbasis eine Aussage zu beweisen. Das Wissen sei formal durch eine Klauselmenge $N=\{C_1, C_2, ..., C_n \}$ gegeben, die Aussage sei eine Klausel $D$. Um zu beweisen, dass $D$ aus $N$ folgt gibt es mehrere Ansätze: 
+Theorembeweiser haben das Ziel, aus einer gegebenen Wissensbasis eine Aussage zu beweisen. Das Wissen liege in Klauselnormalform $N=\{C_1, C_2, ..., C_n \}$ vor, die Vermutung sei eine weitere Klausel $D$. Um zu beweisen, dass $D$ aus $N$ folgt gibt es zwei Ansätze: 
 \begin{itemize}
 \item Man weißt nach, dass aus der Klauselmenge $N$ die Klausel $D$ ableitbar ist. 
 \item Man weißt nach, dass die Klauselmenge $N\cup\{\neg D\}$  unerfüllbar ist, das heißt, dass die leere Klausel $\{\}$ ableitbar ist. Das Zeichen $\neg D$ entspricht der Negierung von $D$.
 \end{itemize}
 
-Beim Resolutionsverfahren wird der zweite Ansatz gewählt, das heißt die negierte Form des zu beweisenden Ziels wird zur Klauselmenge hinzugefügt. Danach werden mittels Resolution jeweils zweier gegebenen Klauseln neue Klausel abgeleitet. Die neuen Klauseln werden ebenfalls zur Klauselmenge hinzugefügt. Sobald die leere Klausel abgeleitet wurde, terminiert das Programm und die Hypothese wurde bewiesen. Das Resolutionsverfahren ist vollständig fürs Widerlegen, das heißt aus jeder widersprüchlichen Klauselmenge lässt sich die leere Klausel ableiten. Das Resolutionsverfahren garantiert nicht, dass die leere Klausel in endlicher Zeit gefunden wird. \cite{Chang1973Symb}
+Beim Resolutionsverfahren wird der zweite Ansatz gewählt, das heißt die negierte Form des zu beweisenden Ziels wird zur Klauselmenge hinzugefügt. Danach werden mittels Resolution jeweils zweier gegebenen Klauseln neue Klauseln abgeleitet. Die neuen Klauseln werden ebenfalls zur Klauselmenge hinzugefügt. Sobald die leere Klausel abgeleitet wurde, terminiert das Programm und die Vermutung wurde bewiesen. Das Resolutionsverfahren ist vollständig fürs Widerlegen, das heißt aus jeder widersprüchlichen Klauselmenge lässt sich die leere Klausel ableiten. Der Beweisprozess kann beliebig lange dauern, das heißt solange kein Beweis gefunden wurde, kann man nicht sicher sein, ob die Klauselmenge erfüllbar oder unerfüllbar ist. \cite{Chang1973Symb}
 
 		\subsection{Resolution in der Aussagenlogik}
 Gegeben sei eine Klauselmenge $S$ mit zwei Klauseln $C$ und $D$, die sich aus den Literalen $L_i$ und $K_i$ zusammensetzen. Jedes Literal ist entweder ein Atom $A$, oder ein negiertes Atom $\neg A$.
@@ -125,15 +158,17 @@ Das Anwachsen der hergeleiteten Klauseln kann mit dem Res-Operators dargestellt 
 $$Res(S)=S \cup \{E\}$$
 $Res*(S)$ enthält alle Klauseln in $S$ sind und alle Resolventen, die aus $Res*(S)$ gebildet werden können. Diese rekursiv definierte Klauselmenge enthält also alle Klauseln, die mit beliebig vielen Resolutionsschritten aus $S$ abgeleitet werden können. Ist die leere Klausel in $Res*(S)$ enthalten, so ist die Vermutung bestätigt.
 		\subsection{Resolution in der Prädikatenlogik}
-		
-		\subsection{Substitution}
-Nicht immer kommen in zwei Klauseln zwei Literale vor, die komplementär sind. Die beiden Klauseln $C=\{P(x), Q(x)\}, D=\{\neg P(f(a)), R(x)\}$ lassen sich beispielsweise nicht resolvieren, da $P(x)$ negiert nicht $\neg P(f(a))$ ergibt.
+Äquivalent zur Aussagenlogik kann auch in der Prädikatenlogik die Resolution angewendet werden. Da die Atome im Gegensatz zur Aussagenlogik nicht in einer Signatur festgelegt sind, sondern meist beliebig konstruiert sein können, kommen meist mehr unterschiedliche Atome in der Klauselmenge vor. Dadurch ist das Resolutionsverfahren mit der Resolution als einzige Ableitungsregel unvollständig. Durch die Hinzunahme von Faktorisierung als Ableitungsregel ist das Resolutionsverfahren wird die Vollständigkeit zurückgewonnen.
+
+Definition Faktorisierung
+
+ Die beiden Klauseln $C=\{P(x), Q(x)\}, D=\{\neg P(f(a)), R(x)\}$ lassen sich beispielsweise nicht resolvieren, da $P(x)$ negiert nicht $\neg P(f(a))$ ergibt.
 Mit einer Substitution können die Klauseln so angepasst werden, dass sich die Resolution anwenden lässt.
 $$C\sigma=\{P(f(a)), Q(f(a))\} \text{ mit } \sigma=\{x \mapsto f(a)\}$$
 $$D\lambda=\{\neg P(f(a)), R(x)\} \text{ mit } \lambda=\{\}$$
 Anschließend lässt sich die Resolvente bilden.
 $$E=\{Q(f(a)), R(x)\}$$
-		\subsection{Vollständigkeit}
+
 	
 	\section{Set-Of-Support-Strategien}
 Ein Problem beim Resolutionsverfahren ist, dass aus einer endlichen Menge von Axiomen häufig unendlich viele neue Klauseln abgeleitet werden können. Dadurch gibt es keine Garantie, dass in endlicher Zeit ein Beweis gefunden wird. Selbst wenn ein Beweiser bereits einen Widerspruch herleiten konnten, bedeutet das nicht, dass jeder andere Beweiser auch einen Widerspruch finden wird.
@@ -259,7 +294,7 @@ Es wird zuerst der Fall berücksichtigt, dass sowohl $N_1$ als auch $N_2$ erfül
  	\centering
  	\begin{tabular}{|l|l|l|l|}
  		\hline
- 		& Basisklauselmenge & Set-Of-Support & Deduktion \\ \hline
+ 		& Basisklauselmenge & Set-Of-Support & Deduktion \\ \hline\hline
  		
  		$M$ &
  		$N=\big\{\{A_1\},\{\neg A_1, A_3\}\big\}$ &
