@@ -46,6 +46,41 @@
     \field{year}{1973}
   \endentry
 
+  \entry{Haifani2021Sos}{misc}{}
+    \name{author}{3}{}{%
+      {{hash=HF}{%
+         family={Haifani},
+         familyi={H\bibinitperiod},
+         given={Fajar},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=TS}{%
+         family={Tourret},
+         familyi={T\bibinitperiod},
+         given={Sophie},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=WC}{%
+         family={Weidenbach},
+         familyi={W\bibinitperiod},
+         given={Christoph},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer International Publishing}%
+    }
+    \strng{namehash}{HFTSWC1}
+    \strng{fullhash}{HFTSWC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{title}{Generalized Completeness for SOS Resolution and its
+  Application to a New Notion of Relevance}
+    \field{year}{2021}
+  \endentry
+
   \entry{Harrison2006Float}{inproceedings}{}
     \name{author}{1}{}{%
       {{hash=HJ}{%
@@ -69,6 +104,28 @@
     \field{pages}{211\bibrangedash 242}
     \field{title}{Floating-point verification using theorem proving}
     \field{year}{2006}
+  \endentry
+
+  \entry{Hoffmann2008TI}{book}{}
+    \name{author}{1}{}{%
+      {{hash=HDW}{%
+         family={Hoffmann},
+         familyi={H\bibinitperiod},
+         given={Dirk\bibnamedelima W},
+         giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Carl Hanser Verlag GmbH Co KG}%
+    }
+    \strng{namehash}{HDW1}
+    \strng{fullhash}{HDW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{title}{Theoretische Informatik}
+    \field{year}{2009}
   \endentry
 
   \entry{Schulz2020PyRes}{inproceedings}{}
