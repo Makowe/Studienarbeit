@@ -2,13 +2,13 @@
 
 \chapter{Grundlagen}
 	\section{Aussagenlogik}
-
+		\subsection{Einführung}
 Mit der Aussagenlogik können viele logische Zusammenhänge formal beschrieben werden. Eine Aussage ist eine Behauptung, die entweder wahr oder falsch sein kann, aber nicht beides. Beispiele für Aussagen sind: "`1+1=3"' und "`Das Gras ist grün."'. Solche Aussagen werden mit einzelnen Großbuchstaben $A, B, C, ...$ dargestellt und als Atome bezeichnet. Die Menge aller Atom-Symbole $\Sigma$ wird als Signatur bezeichnet. 
 
 Atome können mithilfe von Junktoren verknüpft werden, um logische Zusammenhänge darzustellen. Das Ergebnis dieser Verknüpfung ist eine Formel. 
-Es gibt fünf Junktoren: $\wedge$ (logisches Und, Konjunktion), $\vee$ (logisches Oder, Disjunktion), $\to$ (wenn, dann), $\leftrightarrow$ (genau dann, wenn) und $\neg$ (Negierung).
+Im folgenden werden fünf Junktoren eingesetzt: $\wedge$ (logisches Und, Konjunktion), $\vee$ (logisches Oder, Disjunktion), $\to$ (wenn, dann), $\leftrightarrow$ (genau dann, wenn) und $\neg$ (Negierung). Es gibt weitere Junktoren wie das exklusive Oder (xor), diese werden zur Einfachheit im Folgenden nicht berücksichtigt.
 
-In der Logik werden außerdem die beiden Symbole $\top$ für wahr und $\bot$ für falsch eingesetzt. 
+In der Logik werden außerdem die beiden Symbole $\top$ und $\bot$. Der Wahrheitswert von $\top$ ist immer wahr und der Wahrheitswert von $bot$ immer falsch.
 
 Folgende Tabelle zeigt, wie sich aus den Wahrheitswerten zweier Atome die Wahrheitswerte einer Formel ergeben.
 
@@ -16,13 +16,12 @@ Folgende Tabelle zeigt, wie sich aus den Wahrheitswerten zweier Atome die Wahrhe
 	\centering
 	\begin{tabular}{| c | c || c | c | c | c | c |}
 		\hline
-		&& Negierung & Konjunktion & Disjunktion & Implikation & Äquivalenz \\
 		$A$ & $B$ & $\neg A$ & $A \wedge B$ & $A \vee B$ & $A \to B$ & $A \leftrightarrow B$ \\
 		\hline
-		$\top$ & $\top$ & $\bot$ & $\top$ & $\top$ & $\top$ & $\top$ \\
-		$\top$ & $\bot$ & $\bot$ & $\bot$ & $\top$ & $\bot$ & $\bot$ \\
-		$\bot$ & $\top$ & $\top$ & $\bot$ & $\top$ & $\top$ & $\bot$ \\
-		$\bot$ & $\bot$ & $\top$ & $\bot$ & $\bot$ & $\top$ & $\top$ \\
+		wahr & wahr & falsch & wahr & wahr & wahr & wahr \\
+		wahr & falsch & falsch & falsch & wahr & falsch & falsch \\
+		falsch & wahr & wahr & falsch & wahr & wahr & falsch \\
+		falsch & falsch & wahr & falsch & falsch & wahr & wahr \\
 		\hline
 	\end{tabular}
 	\caption{Übersicht der Wahrheitswerte von Junktoren}
@@ -33,14 +32,14 @@ Formeln lassen sich rekursiv konstruieren und können dadurch beliebig weit vers
 \begin{enumerate}
 	\item Alle Symbole in $\Sigma$ sowie die Symbole $\top$ und $\bot$ sind Formeln.
 	\item Wenn $F$ eine Formel ist, dann ist auch $\neg F$ eine Formel.
-	\item Wenn $F$ und $G$ Formeln sind, dann sind auch $(F) \vee (G)$, $(F) \wedge (G)$, $(F) \to (G)$ und $(F) \leftrightarrow (G)$ Formeln.
+	\item Wenn $F$ und $G$ Formeln sind, dann sind auch $(F \vee G)$, $(F \wedge G)$, $(F \to G)$ und $(F \leftrightarrow G)$ Formeln.
 \end{enumerate}
 Wie bei mathematischen Operatoren z.B. Addition und Multiplikation, haben auch in der Logik die Operatoren eine Präzedenz. Sie beschreibt, wie stark die Operatoren binden, also in welcher Reihenfolge sie aufgelöst werden. Für diese Arbeit wird die in der Literatur am häufigsten eingesetzte Präzedenz verwendet:
 $$\neg \quad \wedge \quad \vee \quad \to \quad \leftrightarrow$$
-Die Negation bindet am stärksten und wird als erstes aufgelöst. Das Symbol für die Äquivalenz wird als letztes aufgelöst. Klammern können zusätzlich eingefügt werden, sie binden noch schwächer und werden als letztes aufgelöst.
+Die Negation bindet am stärksten und wird als erstes aufgelöst. Das Symbol für die Äquivalenz wird als letztes aufgelöst. Klammern können zusätzlich eingefügt werden, sie binden am stärksten.
 Zwei Junktoren der gleichen Präzedenz werden von links nach rechts aufgelöst. Das heißt die Formel $A\to B\to C$ ist gleichbedeutend wie $((A\to B)\to C)$.
 
-\subsection{weitere Begriffe}
+\subsection{Weitere Begriffe}
 
 Eine \textbf{Interpretation} I ist eine Abbildung, bei der jedem Atom einer der beiden Wahrheitswerte wahr oder falsch zugeordnet wird. 
 
@@ -78,7 +77,7 @@ Eine Formel $F$ in disjunktiver Normalform hat folgende Struktur:
 $$F=(L_{1,1} \wedge L_{1,2} \wedge \ldots \wedge L_{1,n_1}) \vee
 (L_{2,1} \wedge \ldots \wedge L_{2,n_2}) \vee \ldots \vee
 (L_{m,1} \wedge \ldots \wedge L_{m,n_m})$$
-Komplementär zur KNF können die Erfüllbarkeit und die Allgemeingültigkeit von Formeln sehr einfach nachgewiesen werden. Dazu muss nur eine einzlne Teilformel erfüllbar bzw. allgemeingültig sein. Unerfüllbarkeit ist schwierig nachzuweisen.
+Komplementär zur KNF können die Erfüllbarkeit und die Allgemeingültigkeit von Formeln sehr einfach nachgewiesen werden. Dazu muss nur eine einzelne Teilformel erfüllbar bzw. allgemeingültig sein. Unerfüllbarkeit ist schwierig nachzuweisen.
 
 \paragraph{Klauselnormalform}
 Die Klauselnormalform ist eine Alternative Schreibweise zur konjunktiven Normalform, die aber den gleichen Zusammenhang darstellt.
@@ -134,11 +133,13 @@ Tabelle \ref{table:symbole} zeigt eine Auflistung von Begriffen und deren Symbol
 \paragraph{pränexe Normalform} Prädikatenlogische Formeln können durch die Vermischung von Junktoren und Quantoren schnell komplex werden. Die pränexe Normalform sorgt für eine klare Trennung von Junktoren und Quantoren. Die allgemeine Form ist gegeben durch
 $$Q_1x_1\ldots Q_nx_n(F),$$
 wobei jedes $Q$ entweder $\forall$ oder $\exists$ ist und $F$ eine quantorenfreie Formel ist. \cite{Chang1973Symb}
-\paragraph{Skolemnormalform} Die Quantoren einer Formel $F_0$ können durch Äquivalenzumformungen nicht vollständig entfernt werden, aber es kann eine erfüllbarkeitsgleiche Formel $F_1$ aufgestellt werden, die keine Quantoren enthält. Die Skolemisierung ist ein Prozess, der aus $F_0$ in pränexer Normalform $F_1$ erstellt. $F_1$ liegt dann  in Skolemnormalform vor. Die erfüllbarkeitsgleichen Formeln $F_0$ und $F_1$ müssen nicht zwangsweise äquivalent sein, aber wenn $F_0$ (un-)erfüllbar ist, dann gilt das gleiche für $F_1$. Für viele Anwendungen ist nur die (Un-)erfüllbarkeit von Interesse und die konkreten Interpretationen sind irrelevant. Die Skolemisierung ist somit sehr nützlich, da Prüfung auf (Un-)erfüllbarkeit auch auf die vereinfachte Formel $F_1$ angewendet werden kann.
+\paragraph{Skolemnormalform} Die Quantoren einer Formel $F_0$ können durch Äquivalenzumformungen nicht vollständig entfernt werden, aber es kann eine erfüllbarkeitsgleiche Formel $F_1$ aufgestellt werden, die nur noch Allquantoren enthält.
+$$\forall x_1\ldots \forall x_n(F),$$
+ Die Skolemisierung ist ein Prozess, der aus $F_0$ in pränexer Normalform $F_1$ erstellt. $F_1$ liegt dann  in Skolemnormalform vor. Die erfüllbarkeitsgleichen Formeln $F_0$ und $F_1$ müssen nicht zwangsweise äquivalent sein, aber wenn $F_0$ (un-)erfüllbar ist, dann gilt das gleiche für $F_1$. Für viele Anwendungen ist nur die (Un-)erfüllbarkeit von Interesse und die konkreten Interpretationen sind irrelevant. Die Skolemisierung ist somit sehr nützlich, da Prüfung auf (Un-)erfüllbarkeit auch auf die vereinfachte Formel $F_1$ angewendet werden kann.	
 \paragraph{Klauselnormalform}
-Die Skolemnormalform enthält keine Quantoren mehr, deshalb kann aus ihr nach den Regeln der Aussagenlogik die Klauselnormalform aufgestellt werden.
+Aus dem Formelteil $F$ der Skolemnormalform kann nach den Regeln der Aussagenlogik die Klauselnormalform aufgestellt werden. 
 
-	\section{Resolutionsverfahren}
+	\section{Beweisführung mit dem Resolutionsverfahren}
 
 Theorembeweiser haben das Ziel, aus einer gegebenen Wissensbasis eine Aussage zu beweisen. Das Wissen liege in Klauselnormalform $N=\{C_1, C_2, ..., C_n \}$ vor, die Vermutung sei eine weitere Klausel $D$. Um zu beweisen, dass $D$ aus $N$ folgt gibt es zwei Ansätze: 
 \begin{itemize}
@@ -148,7 +149,7 @@ Theorembeweiser haben das Ziel, aus einer gegebenen Wissensbasis eine Aussage zu
 
 Beim Resolutionsverfahren wird der zweite Ansatz gewählt, das heißt die negierte Form des zu beweisenden Ziels wird zur Klauselmenge hinzugefügt. Danach werden mittels Resolution jeweils zweier gegebenen Klauseln neue Klauseln abgeleitet. Die neuen Klauseln werden ebenfalls zur Klauselmenge hinzugefügt. Sobald die leere Klausel abgeleitet wurde, terminiert das Programm und die Vermutung wurde bewiesen. Das Resolutionsverfahren ist vollständig fürs Widerlegen, das heißt aus jeder widersprüchlichen Klauselmenge lässt sich die leere Klausel ableiten. Der Beweisprozess kann beliebig lange dauern, das heißt solange kein Beweis gefunden wurde, kann man nicht sicher sein, ob die Klauselmenge erfüllbar oder unerfüllbar ist. \cite{Chang1973Symb}
 
-		\subsection{Resolution in der Aussagenlogik}
+		\subsection{Resolutionsverfahren in der Aussagenlogik}
 Gegeben sei eine Klauselmenge $S$ mit zwei Klauseln $C$ und $D$, die sich aus den Literalen $L_i$ und $K_i$ zusammensetzen. Jedes Literal ist entweder ein Atom $A$, oder ein negiertes Atom $\neg A$.
 $$S=\{C,D\}, \quad C=\{L_1, L_2, ..., L_n\}\quad, D=\{K_1, K_2, ..., K_m\}$$
 Wenn das Literal $L_1$ aus Klausel $C$ in negierter Form in $D$ vorkommt, also $L_1\equiv\neg K_1$, dann kann aus $C$ und $D$ die Resolvente $E$ gebildet werden mit:
@@ -164,7 +165,7 @@ Das Anwachsen der hergeleiteten Klauseln kann mit dem Res-Operators dargestellt 
 $$Res(S)=S \cup \{E\}$$
 $Res^*(S)$ enthält alle Klauseln in $S$ sind und alle Resolventen, die aus $Res^*(S)$ gebildet werden können. Diese rekursiv definierte Klauselmenge enthält also alle Klauseln, die mit beliebig vielen Resolutionsschritten aus $S$ abgeleitet werden können. Ist die leere Klausel in $Res^*(S)$ enthalten, so ist die Vermutung bestätigt.
 		\subsection{Resolutionsverfahren in der Prädikatenlogik}
-Äquivalent zur Aussagenlogik kann auch in der Prädikatenlogik die Resolution angewendet werden. Im Gegensatz zur Aussagenlogik ist die Anzahl der Literale nicht begrenzt, sondern kann durch die Kombination von Variablen, Konstanten und Funktionen beliebig erweitert werden. Meist gibt es unendlich viele potenzielle Literale. Dadurch verringert sich die Wahrscheinlichkeit, dass neue Klauseln abgeleitet werden können. Damit das Resolutionsverfahren für die Prädikatenlogik weiterhin vollständig bleibt, wird die Resolutionsregel erweitert, außerdem wird die Faktorisierung als zweite Ableitungsregel eingeführt. \cite{Chang1973Symb}
+Äquivalent zur Aussagenlogik kann auch in der Prädikatenlogik die Resolution angewendet werden. Das bisherige Verfahren für die Aussagenlogik ist für die Prädikatenlogik unvollständig. Um die Vollständigkeit zu erhalten, wird die Resolutionsregel um eine Substitutionsregel erweitert, außerdem wird die Faktorisierung als zweite Ableitungsregel eingeführt. \cite{Chang1973Symb}
 \paragraph{Resolution}
 Die beiden Klauseln $C=\{P(x), Q(x)\}, D=\{\neg P(f(a)), R(y)\}$ lassen sich mit der bisherigen Resolutionsregel nicht resolvieren, da keine komplementären Literale in den Klauseln vorkommen.
 Mit einer Substitution $\sigma$ können die Klauseln so angepasst werden, dass sich die Resolution anwenden lässt. $\sigma$ beschreibt, wie Variablen ersetzt werden. Die entstandenen Klauseln aus $C$ und $D$ werden $C\sigma$ und $D\sigma$ genannt.
@@ -180,7 +181,7 @@ $$\frac{C \cup \{L\} \quad D \cup \{\neg M\}}{(C \cup D)\sigma} \sigma \quad\tex
 Die Funktion $\text{mgu}(L, M)$ steht für "`most general unifier"' und ist die allgemeinste Substitution, die die Literale $L$ und $M$ gleich werden lässt \cite{Haifani2021Sos}.
 Es muss zu jeder Zeit garantiert werden, dass die beiden Klauseln keine gemeinsamen Variablen besitzen. Diese Anforderung kann immer erfüllt werden, indem die Variablen einer Klausel beliebig umbenannt werden \cite{Hoffmann2008TI}.
 \paragraph{Faktorisierung}
-Die Faktorisierung ist eine Ableitungsregel, mit der aus einer einzelnen Klausel neue Klauseln abgeleitet werden können. Ziel ist, eine Substitution zu finden, die zwei Literale $L$ und $M$ innerhalb der Klausel gleich werden lässt, damit sich die Größe der Klausel verringert. \cite{Chang1973Symb}
+Die Faktorisierung ist eine Ableitungsregel, mit der aus einer einzelnen Klausel neue Klauseln abgeleitet werden können. Ziel ist, eine Substitution zu finden, die zwei Literale $L$ und $M$ innerhalb der Klausel gleich werden lässt. Dadurch verringert sich die Länge der Klausel \cite{Chang1973Symb}.
 Die allgemeine Form der Ableitungsregel lautet:
 $$\frac{C \cup \{L,M\}}{(C \cup \{L\})\sigma}\sigma \quad\text{mit}\quad\sigma=\text{mgu}(L,K)$$
 	
@@ -396,4 +397,4 @@ Die Beweissuche wird dann in mehreren Schritten durchgeführt.
 \end{enumerate}
 PyRes ermöglicht diverse Optimierungen, die die Wahrscheinlichkeiten erhöhen, einen Beweis zu finden.
 Der Anwender kann diese Optimierungen mit den Eingabeparametern angeben. Der Parameter "`t"' sorgt dafür, dass das Programm in jedem Beweisschritt prüft, ob die Klausel eine Tautologie ist, und sie gegebenenfalls löscht. Mit "`f"' und "`b"' können Vorwärts- und Rückwärtssubsumption aktiviert werden.
-Der Benutzer kann mit der Option "`H"' eine Stategie auswählen, mit der PyRes die Klauseln aus der unverarbeiteten Menge $S_1$ auswählt. Mögliche Optionen sind FIFO, SymbolCount, PickGiven2 und PickGiven5. FIFO steht für "`first in first out"' und wählt in jedem Schritt diejenige Klausel aus, die am längsten in der Menge ist. SymbolCount wählt die Kausel mit den wenigsten Literalen aus, und PickGiven2 und PickGiven5 wechseln zwischen FIFO und SymbolCount in vorgegebenen Verhältnissen ab. Eine weitere Optimierung ist die Literalselektion, die die Anzahl der möglichen Kombinationen von Klauseln mindert.
+Der Benutzer kann mit der Option "`H"' eine Stategie auswählen, mit der PyRes die Klauseln aus der unverarbeiteten Menge $S_1$ auswählt. Mögliche Optionen sind FIFO, SymbolCount, PickGiven2 und PickGiven5. FIFO steht für "`first in first out"' und wählt in jedem Schritt diejenige Klausel aus, die am längsten in der Menge ist. SymbolCount wählt die Kausel aus, die am wenigsten Symbole enthält. Variablen- und Funktionssymbole werden unterschiedlich gewichtet. Die Strategien PickGiven2 und PickGiven5 wechseln zwischen FIFO und SymbolCount in vorgegebenen Verhältnissen ab. Eine weitere Optimierung ist die Literalselektion, die die Anzahl der möglichen Kombinationen von Klauseln mindert.
