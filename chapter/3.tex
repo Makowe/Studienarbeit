@@ -27,12 +27,33 @@ Das Programm sollte noch vor Beginn der Beweissuche eine Instanz einer SOS-Klass
 
 
 \section{Anpassung der Beweisprozedur}
+\paragraph{bisherige Beweisprozedur}
 \begin{figure}
 	\centering
 	\includegraphics[width=1\linewidth]{images/Lucid/PyResProofState}
 	\caption{Klassendiagramm der bisherigen Beweisprozedur}
 	\label{fig:pyresproofstate}
 \end{figure}
+
+Mit der Beweisprozedur ist die Durchführung des Resolutionsverfahrens gemeint. Die wird begonnen, nachdem das Einlesen der Datei und die Initialisierung der Klauseln abgeschlossen ist. PyRes startet die Prozedur, indem die Methode saturate() der ProofState-Instanz aufgerufen wird.
+
+Das Proofstate-Objekt hält Referenzen zu drei Objekten (siehe Abbildung \ref{fig:pyresproofstate})
+\begin{enumerate}
+	\item Eine Instanz der Klasse SearchParams. Es handelt sich dabei um einen Container, der speichert, welche Beweis-Optimierungen durchgeführt werden, zum Beispiel ob Tautologien gelöscht werden sollen.
+	\item Eine Klauselmenge mit allen unverarbeiteten Klauseln. Diese Menge ist von der Klasse "`HeuristicClauseset"', welche von der gewöhnlichen Klauselmenge "`Clauseset"' erbt. Die Klasse Clauseset implementiert einige einfache Methoden zur Verwaltung von Klauseln (z.B. hinzufügen, entfernen). HeuristicClauseset hat zusätzlich die Methode extractBest(), welche die geeignetste Klausel auswählt. Wie geeignet eine Klausel ist, wird von den gewählten Heuristiken bestimmt, die in der Klasse EvalStructure gekapselt sind.
+	\item Eine Klauselmenge mit verarbeiteten Klauseln. Diese Klauselmenge ist entweder von der Klasse Clauseset oder der vererbten Klasse IndexedClauseset. Welche der beiden Klassen verwendet wird, hängt davon ab, ob das Indexing als Optimierung aktiviert ist. Für die SOS-Implementierung hat das Indexing keine weitere Bedeutung.
+\end{enumerate}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1\linewidth]{images/Lucid/ActivityProof}
+	\caption{Aktivitätsdiagramm der Beweisprozedur}
+	\label{fig:activityproof}
+\end{figure}
+
+
+Der Algorithmus, den die saturate()-Methode durchführt, ist im Aktivitätsdiagramm in Abbildung \ref{fig:activityproof} dargestellt. Zusammengefasst werden Klauseln solange durch Faktorisierung und Resolution mit den bereits verarbeiteten Klauseln abgearbeitet, bis entweder der leere Klausel gefunden wurde, oder keine Klauseln mehr übrig sind.
+Im ersten Fall wird die leere Klausel zurückgegeben, im zweiten Fall None. Das Schlüsselwort None repräsentiert in Python ein undefiniertes Objekt und ist vergleichbar mit einem null-Pointer in der Sprache C.
 
 Aufteilungsmöglichkeiten in Grundklauselmenge und SOS, SOS durch Flags in Klauseln darstellen, Strategie, um neue Klausel auszuwählen (Non-SOS in processed, oder alternierend mit Verhältnis),
 Sonderfälle: Wenn SOS leer, 
