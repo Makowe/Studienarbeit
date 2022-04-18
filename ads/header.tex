@@ -85,27 +85,28 @@
 \newcommand{\listingsettings}{%
 	\lstset{%
 		language=Python,		% Standardsprache des Quellcodes
-		%numbers=left,			% Zeilennummern links
-		%stepnumber=1,			% Jede Zeile nummerieren.
-		%numbersep=5pt,			% 5pt Abstand zum Quellcode
-		%numberstyle=\tiny,		% Zeichengrösse 'tiny' für die Nummern.
+		numbers=left,			% Zeilennummern links
+		stepnumber=1,			% Jede Zeile nummerieren.
+		numbersep=5pt,			% 5pt Abstand zum Quellcode
+		numberstyle=\tiny,		% Zeichengrösse 'tiny' für die Nummern.
 		breaklines=true,		% Zeilen umbrechen wenn notwendig.
 		breakautoindent=true,	% Nach dem Zeilenumbruch Zeile einrücken.
 		postbreak=\space,		% Bei Leerzeichen umbrechen.
-		tabsize=2,				% Tabulatorgrösse 2
+		tabsize=4,				% Tabulatorgrösse 2
 		basicstyle=\ttfamily\footnotesize, % Nichtproportionale Schrift, klein für den Quellcode
 		showspaces=false,		% Leerzeichen nicht anzeigen.
 		showstringspaces=false,	% Leerzeichen auch in Strings ('') nicht anzeigen.
 		extendedchars=true,		% Alle Zeichen vom Latin1 Zeichensatz anzeigen.
 		captionpos=b,			% sets the caption-position to bottom
 		%backgroundcolor=\color{ListingBackground}, % Hintergrundfarbe des Quellcodes setzen.
-		xleftmargin=0pt,		% Rand links
+		xleftmargin=2em,		% Rand links
 		xrightmargin=0pt,		% Rand rechts
 		frame=single,			% Rahmen an
 		frameround=ffff,
 		rulecolor=\color{darkgray},	% Rahmenfarbe
+		framexleftmargin=1.5em,	% Rahmenrand sodass Zahlennummern innerhalb
 		%fillcolor=\color{ListingBackground},
-		keywordstyle=\color[rgb]{0.133,0.133,0.6},
+		keywordstyle=\color[rgb]{0.133,0.133,1.0},
 		commentstyle=\color[rgb]{0.133,0.545,0.133},
 		stringstyle=\color[rgb]{0.627,0.126,0.941},
     aboveskip=1.5em,
@@ -331,7 +332,7 @@
 \graphicspath{{images/}}
 
 % Einige häufig verwendete Sprachen
-\lstloadlanguages{PHP,Python,Java,C,C++,bash}
+\lstloadlanguages{Python}
 \listingsettings{}
 % Umbennung des Listings
 \renewcommand\lstlistingname{\langlistingname}
