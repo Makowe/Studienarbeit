@@ -9,7 +9,7 @@ PyRes erzeugt bei jeder Beweisprozedur ein Objekt der Klasse ProofState (Beweisz
 	\item Anstatt den bisher zwei Klauselmengen für verarbeitete und unverarbeitete Klauseln, werden drei Klauselmengen eingesetzt. Jeweils eine Klauselmenge enthält die verarbeiteten Klauseln, die unverarbeiteten SOS-Klauseln und die unverarbeiteten Nicht-SOS-Klauseln.
 	\item Jede Klausel erhält eine Zusatzinformation in Form eines Wahrheitswertes, der aussagt, ob sich eine Klausel im SOS befindet oder nicht. Der Wahrheitswert ist als Markierung der Klausel zu verstehen. Das ProofState-Objekt speichert SOS-Klauseln und Nicht-SOS-Klauseln gemischt innerhalb der verarbeiteten und unverarbeiteten Klauselmengen ab.
 \end{enumerate}
-Beide Lösungsansätze haben Vor- und Nachteile. Ein Vorteil der ersten Variante ist, dass die Klauseln auf Programmebene getrennt voneinander sind. Durch diese Abkapselung könnte es später einfacher und schneller sein, eine neue SOS-Klausel auszuwählen. Diese Variante ist auch einfacher zu verstehen und intuitiver, da die zwei separaten Klauselmengen der theoretischen Grundlage zweier getrennter Mengen entspricht. Ein Nachteil ist, dass der Beweismechanismus stark angepasst werden muss. Zum Beispiel muss für die Resolution eine SOS-Klausel nicht mehr nur mit den verarbeiteten Klauseln kombiniert werden, sondern auch mit den Nicht-SOS-Klauseln. In Hinblick auf die weitere Umsetzung wird es vermutlich Sonderfälle geben, bei denen Nicht-SOS-Klauseln verarbeitet werden müssen. Für die Implementierung solcher Sonderfälle sind zwei getrennte Klauselmengen eher eine Hürde, da die Kombination verschiedener Klauseln komplexer wird. Ein weiterer Nachteil der ersten Variante ist, dass die Information, ob eine Klausel im SOS ist, nicht direkt an die Klausel gebunden ist. Eine Funktion, die eine Klausel übergeben bekommt, kann somit nicht prüfen, ob die übergebene Klausel im SOS ist. Der Funktion müsste deshalb ein zusätzlicher Wahrheitswert übergeben werden, was zu größeren Anpassungen führt.
+Beide Lösungsansätze haben Vor- und Nachteile. Ein Vorteil der ersten Variante ist, dass die Klauseln auf Programmebene getrennt voneinander sind. Durch diese Abkapselung könnte es später einfacher und schneller sein, eine neue SOS-Klausel auszuwählen. Diese Variante ist auch einfacher zu verstehen, da die zwei separaten Klauselmengen der theoretischen Grundlage zweier getrennter Mengen entspricht. Ein Nachteil ist, dass der Beweismechanismus stark angepasst werden muss. Zum Beispiel muss für die Resolution eine SOS-Klausel nicht mehr nur mit den verarbeiteten Klauseln kombiniert werden, sondern auch mit den Nicht-SOS-Klauseln. In Hinblick auf die weitere Umsetzung wird es vermutlich Sonderfälle geben, bei denen Nicht-SOS-Klauseln verarbeitet werden müssen. Für die Implementierung solcher Sonderfälle sind zwei getrennte Klauselmengen eher eine Hürde, da die Kombination verschiedener Klauseln komplexer wird. Ein weiterer Nachteil der ersten Variante ist, dass die Information, ob eine Klausel im SOS ist, nicht direkt an die Klausel gebunden ist. Eine Funktion, die eine Klausel übergeben bekommt, kann somit nicht prüfen, ob die übergebene Klausel im SOS ist.
 Für die Implementierung wurde sich nach Abwägung der Vor- und Nachteile für Variante 2 entschieden. Das Hauptargument ist, dass der Code weniger stark angepasst werden muss, aber trotzdem eine einfache Unterscheidungsmöglichkeit eingeführt wird.
 
 \section{Markierung der Klauseln}
@@ -35,7 +35,7 @@ Das Programm sollte noch vor Beginn der Beweissuche eine Instanz einer SOS-Klass
 	\label{fig:pyresproofstate}
 \end{figure}
 
-Mit der Beweisprozedur ist die Durchführung des Resolutionsverfahrens gemeint. Die wird begonnen, nachdem das Einlesen der Datei und die Initialisierung der Klauseln abgeschlossen ist. PyRes startet die Prozedur, indem die Methode saturate() der ProofState-Instanz aufgerufen wird.
+Mit der Beweisprozedur ist die Durchführung des Resolutionsverfahrens gemeint. Diese wird begonnen, nachdem das Einlesen der Datei und die Initialisierung der Klauseln abgeschlossen ist. PyRes startet die Prozedur, indem die Methode saturate() der ProofState-Instanz aufgerufen wird.
 
 Das Proofstate-Objekt hält Referenzen zu drei Objekten (siehe Abbildung \ref{fig:pyresproofstate})
 \begin{enumerate}
@@ -53,7 +53,12 @@ Das Proofstate-Objekt hält Referenzen zu drei Objekten (siehe Abbildung \ref{fi
 
 
 Der Algorithmus, den die saturate()-Methode durchführt, ist im Aktivitätsdiagramm in Abbildung \ref{fig:activityproof} dargestellt. Zusammengefasst werden Klauseln solange durch Faktorisierung und Resolution mit den bereits verarbeiteten Klauseln abgearbeitet, bis entweder der leere Klausel gefunden wurde, oder keine Klauseln mehr übrig sind.
-Im ersten Fall wird die leere Klausel zurückgegeben, im zweiten Fall None. Das Schlüsselwort None repräsentiert in Python ein undefiniertes Objekt und ist vergleichbar mit einem null-Pointer in der Sprache C.
+
+Im ersten Fall wird die leere Klausel zurückgegeben, im zweiten Fall None. Das Schlüsselwort None repräsentiert in Python ein undefiniertes Objekt und ist vergleichbar mit einem null-Pointer in der Sprache C. Anhand des Rückgabewertes von saturate() führt PyRes dann weitere Aktionen durch, um das Ergebnis auszugeben.
+
+In der Praxis bekommt der Beweiser nur eine begrenzte Zeit zugewiesen, um einen Beweis zu finden. Wenn die Methode saturate() bis dahin nicht terminiert hat, gibt das Programm eine Nachricht aus, dass das Problem nicht gelöst werden konnte.
+
+Im Folgenden werden zwei Konzepte vorgestellt, wie die Beweisprozedur angepasst werden könnte, um die SOS-Strategien zu realisieren.
 
 \paragraph{SOS-Konzept 1: Nicht-SOS zu processed hinzufügen}
 
@@ -72,3 +77,17 @@ Egal, wie groß das gewählte Verhältnis $r$ ist, die Beweissuche wird immer vo
 Ein unendlicher großer Wert für $r$ würde bedeuten, dass Nicht-SOS-Klauseln erst dann ausgewählt werden, wenn es keine SOS-Klauseln mehr gibt. Wenn dieser Fall eintritt, dann und genau dann ist die Erfüllbarkeit des SOS gezeigt. Es kann passieren, dass das SOS erfüllbar ist und diese Erfüllbarkeit nicht nachgewiesen werden kann, da unendlich viele Klauseln abgeleitet werden können. In diesem Fall werden nie Nicht-SOS-Klauseln ausgewählt, wodurch die leere Menge nie hergeleitet werden kann. 
 
 Zusammenfassend gilt: Damit die Vollständigkeit erhalten bleibt, kann für $r$ jede positive ganze Zahl gewählt werden. Es ist davon auszugehen, dass sehr große Werte und sehr kleine Werte die Effizienz der Strategie reduzieren und es ein Optimum in der Mitte gibt. Für große Werte werden Nicht-SOS-Klauseln kaum verarbeitet, wodurch die Unerfüllbarkeit erst spät nachweisbar wird. Für kleine Werte ist anzunehmen, dass der potenzielle Vorteil der SOS-Strategie verloren geht.
+
+\subsection{Vererbung des SOS-Zustands}
+
+Wenn aus einer oder zwei Klauseln mittels Faktorisierung oder Resolution eine neue Klausel abgeleitet wird, dann muss PyRes für die neue Klausel festlegen, ob die Klausel Teil des SOS ist oder nicht. Die Entscheidung hängt vom SOS-Zustand der Eltern-Klauseln ab.
+\paragraph{Resolution}
+Bei der Resolution wird die Klausel genau dann zum SOS hinzugefügt, wenn mindestens einer der Elternteile Teil des SOS ist. Diese Festlegung ergibt sich aus der Definition der SOS-Strategien nach Wos et al. 1965 \cite{Wos1965Sos}. In dem Paper wird definiert, wie sich das SOS iterativ vergrößert. Eine neue Klausel kann genau dann abgeleitet werden, wenn die Resolvente einer SOS-Klausel mit einer beliebigen anderen Klausel gebildet wird. Die Resolvente ist dann in der nächsten Iteration Teil des SOS. Auch in einem Paper von 2021, das die Vollständigkeit der SOS-Strategien verallgemeinert, werden Klauseln, die mit Resolution abgeleitet werden, zum SOS hinzugefügt \cite{Haifani2021Sos}.
+
+Eine Überlegung ist, die Vererbungsregel zu verschärfen, also eine neue Klausel nur dann zum SOS hinzuzufügen, wenn beide Klauseln im SOS liegen. Das würde aber mit SOS-Konzept 1 die Vollständigkeit verhindern. Folgendes Beispiel zeigt dies. Die Menge $M$ aussagenlogischer Klauseln ist offensichtlich unerfüllbar
+$$M=\big\{\{A,B\},\{\neg A\},\{\neg B\}\big\}$$
+Die Einteilung in das Set-Of-Support $S$ und die erfüllbare Menge $N$ ist nach den SOS-Regeln zulässig.
+$$S=\big\{\{A,B\}\big\} \quad\quad N=\big\{\{\neg A\},\{\neg B\}\big\}$$
+Aus der SOS-Klausel lassen sich mit je einer der anderen Klauseln die Resolventen $\{A\}$ und $\{B\}$ bilden. Würde man diese nicht zu $S$ hinzufügen, sondern zu $N$, liese sich kein Widerspruch herleiten. Diese Strategie wäre also unvollständig.
+\paragraph{Faktorisierung}
+Bei der Faktorisierung gibt es nur eine Eltern-Klausel. Dieser wird an das Kind weitervererbt. Auch diese Festlegung ergibt sich aus den theoretischen Definitionen der SOS-Strategien. \cite{Haifani2021Sos}

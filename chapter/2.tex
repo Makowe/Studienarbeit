@@ -360,6 +360,8 @@ Sollte $N_1$ unerfüllbar sein, aber dafür $N_2$ erfüllbar, dann muss für den
 
 Da die Aussagenlogik ein Sonderfall der Prädikatenlogik ist, gilt das Theorem für eine Teilmenge aller prädikatenlogischen Formeln. Mit weiteren Lemmas kann die Vollständigkeit auf alle Formeln der Prädikatenlogik erster Stufe erweitert werden. \cite{Wos1965Sos}
 		
+Es ist anzumerken, dass die Vollständigkeit der Set-Of-Support-Strategien verloren geht, wenn sie mit manchen anderen Optimierungsstrategien kombiniert wird. SOS kann beispielsweise nicht mit geordneter Resolution kombiniert werden \cite{Sutcliffe2010Progress} und auch negative Literalselektion und SOS sind in Verbindung miteinander nicht vollständig \cite{nalon2016resolution}
+		
 	\section{TPTP und StarExec}
 	
 TPTP steht für "`Thousands of Problems for Theorem Provers"' und ist eine Sammlung prädikatenlogischer Probleme \cite{Sutcliff2021TPTP}. Jedes Problem setzt sich aus einer Menge von Formeln und/oder Klauseln zusammen und ist entweder erfüllbar oder unerfüllbar. Für Theorembeweiser können diese Probleme als Benchmark eingesetzt werden, um sie auf Fehler zu prüfen und um ihre Performanz zu testen. Die aktuelle Version 7.5.0 beinhaltet 24098 Probleme.

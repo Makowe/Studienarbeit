@@ -6,8 +6,8 @@ Das Klassenkonzept aus Abbildung \ref{fig:sosstrategy0} wurde als Grundlage für
 
 
 
-Die Änderungen und die Gründe für die spezifische Umsetzung werden in den nächsten Abschnitten erläutert. Tabelle xxx enthält eine Übersicht über die Änderungen und eine R
-\begin{table}
+Die Änderungen und die Gründe für die spezifische Umsetzung werden in den nächsten Abschnitten erläutert. Tabelle xxx enthält eine Übersicht über die Änderungen und eine Referenz zu den zugehörigen Abschnitten.
+\begin{table}[h]
 	\centering
 	\begin{tabular}{|c|l|c|}
 		\hline
@@ -78,7 +78,7 @@ class SosConjecture(SosStrategy):
 class SosOnlyPosLit(SosStategy):
     def should_mark_clause(self, clause):
 		for lit in clause.literals:
-			if lit.isNegative:
+			if lit.isNegative():
 				return False
 		return True
 \end{lstlisting}
@@ -92,13 +92,12 @@ Wie im Kapitel Konzeption beschrieben, müssen alle Klauseln, die nicht zum SOS 
 
 \paragraph{SOS-Konzept 2: SOS und Nicht-SOS mit unterschiedlicher Priorität verarbeiten}
 
-Das Verhältnis $r$ mit dem SOS- und Nicht-SOS-Klauseln verarbeitet werden, ist in der Variable ratio der SOS-Klasse abgespeichert. Dieses Verhältnis kann vom Benutzer als Eingabegröße ausgewählt werden (siehe \ref{listing:UserSelectRatio}). Zeile 1 legt kein $r$ fest wodurch automatisch das erste Konzept gewählt wird. Der tatsächliche Wert der Variablen ratio ist dann 0. Zeile 2 setzt ratio auf 3. Zeile 3 ist die Kurzschreibweise für Zeile 2 und Zeile 4 würde zum Abbruch des Programms führen, da erst eine SOS-Strategie festgelegt werden muss.
+Das Verhältnis $r$ mit dem SOS- und Nicht-SOS-Klauseln verarbeitet werden, ist in der Variable ratio der SOS-Klasse abgespeichert. Dieses Verhältnis kann vom Benutzer als Eingabegröße ausgewählt werden (siehe \ref{listing:UserSelectRatio}). Zeile 1 legt kein $r$ fest wodurch automatisch das erste Konzept gewählt wird. Der tatsächliche Wert der Variablen ratio ist dann 0. Zeile 2 setzt ratio auf 3. Zeile 3 ist die Kurzschreibweise für Zeile 2
 
 \begin{lstlisting}[label={listing:UserSelectRatio}]
 ./pyres-fof --set-of-support=Conjecture file.p
 ./pyres-fof --set-of-support=Conjecture --sos-ratio=3 file.p
 ./pyres-fof -OConjecture -R3 file.p
-./pyres-fof -R3 file.p
 \end{lstlisting}
 
 Der gewählte Wert von $r$ fließt in die Beweissuche mit ein, indem die Methode extractBest() angepasst wird. Bisher floss in die Auswahl der nächsten Klausel lediglich die gewählte Heuristik-Strategie ein, welche eine Klausel anhand von Warteschlangenposition und Symbolanzahl auswählt. 
@@ -107,13 +106,25 @@ In die angepasste Methode soll zusätzlich die Information einfließen, welche K
 
 Ist der Rückgabewert von should\_apply() wahr, dann wird extractBest() eine SOS-Klausel auswählen, andernfalls eine Nicht-SOS-Klausel. Welche SOS-Klausel genau ausgewählt wird, hängt dann von der angewandten Heuristik ab.
 
-Ein Sonderfall muss gesondert behandelt werden. Wird als nächstes eine SOS-Klausel erwartet und die Menge der unverarbeiteten Klauseln enthält nur Nicht-SOS-Klausel, dann werden erneut alle Klauseln durchlaufen und es wird explizit eine Nicht-SOS-Klausel gesucht. Äquivalent wird der Fall behandelt, dass eine Nicht-SOS-Klausel gesucht wird und nur noch SOS-Klauseln vorhanden sind.
+Ein Spezialfall muss gesondert behandelt werden. Wird als nächstes eine SOS-Klausel erwartet und die Menge der unverarbeiteten Klauseln enthält nur Nicht-SOS-Klausel, dann werden erneut alle Klauseln durchlaufen und es wird explizit eine Nicht-SOS-Klausel gesucht. Äquivalent wird der Fall behandelt, dass eine Nicht-SOS-Klausel gesucht wird und nur noch SOS-Klauseln vorhanden sind.
 
 \section{weitere Implementierungen}
 \paragraph{Vererbung des SOS-Zustands}
-\paragraph{Speicherung der Anzahl von SOS-Klauseln}
+Wie in der Konzeption beschrieben, wird eine abgeleitete Klausel zum SOS hinzugefügt, wenn mindestens eine der Eltern-Klauseln Teil des SOS ist. Die entsprechenden Anpassungen im Code sind sehr einfach (siehe Quellcode \ref{listing:InheritSos})
+\begin{lstlisting}[caption={Implementierung der Vererbung des SOS.Zustands an abgeleitee Klauseln}label={listing:InheritSos}]
+def resolution(clause1, lit1, clause2, lit2):
+	...
+	res.part_of_sos = clause1.part_of_sos or clause2.part_of_sos
+	return res
+	
+def factor(clause, lit1, lit2):
+	...
+	res.part_of_sos = clause.part_of_sos
+	return res
+\end{lstlisting}
+Eine weitere Methode, in der eine SOS-Vererbung stattfinden muss, ist bei der Erstellung von Klauselkopien mit neuen Variablen. Diese Aktion wird von der Methode FreshVarCopy() durchgeführt und vor dem Verarbeiten einer einzelnen Klausel aufgerufen.
+Im Gegensatz zur Resolution und Faktorisierung enthält FreshVarCopy() keine neuen semantischen Informationsgehalt, sondern wird nur angewandt, um Kollisionen von Variablennamen während der Resolution zu verhindern.
 
-Prozedur zur Einteilung in SOS,
-Durchführung der Resolution,
-Klassenkonzept,
-Performance Test,
+
+\paragraph{Speicherung der Anzahl von SOS-Klauseln}
+Zur Umsetzung der SOS-Strategien ist es nicht nötig, die momentane Anzahl von SOS-Klausel einer Klauselmenge zu speichern. Die Speicherung vereinfacht aber den Code zur Auswahl der nächsten Klausel.
