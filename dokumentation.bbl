@@ -128,6 +128,42 @@
     \field{year}{2009}
   \endentry
 
+  \entry{nalon2016resolution}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=NC}{%
+         family={Nalon},
+         familyi={N\bibinitperiod},
+         given={Cl{\'a}udia},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=HU}{%
+         family={Hustadt},
+         familyi={H\bibinitperiod},
+         given={Ullrich},
+         giveni={U\bibinitperiod},
+      }}%
+      {{hash=DC}{%
+         family={Dixon},
+         familyi={D\bibinitperiod},
+         given={Clare},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{NCHUDC1}
+    \strng{fullhash}{NCHUDC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{N}
+    \field{sortinithash}{N}
+    \field{booktitle}{International Joint Conference on Automated Reasoning}
+    \field{pages}{406\bibrangedash 415}
+    \field{title}{: A resolution-based prover for multimodal K}
+    \field{year}{2016}
+  \endentry
+
   \entry{Schulz2020PyRes}{inproceedings}{}
     \name{author}{2}{}{%
       {{hash=SS}{%
@@ -212,6 +248,51 @@
     \verb https://www.starexec.org/starexec/public/about.jsp
     \endverb
     \field{journaltitle}{STAREXEC}
+  \endentry
+
+  \entry{Sutcliffe2010Progress}{inproceedings}{}
+    \name{author}{5}{}{%
+      {{hash=SG}{%
+         family={Sutcliffe},
+         familyi={S\bibinitperiod},
+         given={Geoff},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Suda},
+         familyi={S\bibinitperiod},
+         given={Martin},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=TA}{%
+         family={Teyssandier},
+         familyi={T\bibinitperiod},
+         given={Alexandra},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=DN}{%
+         family={Dellis},
+         familyi={D\bibinitperiod},
+         given={Nelson},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=DMG}{%
+         family={De\bibnamedelima Melo},
+         familyi={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+         given={Gerard},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SG+1}
+    \strng{fullhash}{SGSMTADNDMG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{booktitle}{Twenty-Third International FLAIRS Conference}
+    \field{title}{Progress towards effective automated reasoning with world
+  knowledge}
+    \field{year}{2010}
   \endentry
 
   \entry{WillkommIntel}{misc}{}

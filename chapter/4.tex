@@ -2,22 +2,28 @@
 
 \chapter{Implementierung}
 
-Das Klassenkonzept aus Abbildung \ref{fig:sosstrategy0} wurde als Grundlage für die Umsetzung verwendet. Einige Einzelheiten wurden im Laufe der Implementierung angepasst, sodass das neue Klassendiagramm folgendermaßen aussieht.
+Das Klassenkonzept aus Abbildung \ref{fig:sosstrategy0} wurde als Grundlage für die Umsetzung verwendet. Einige Einzelheiten wurden im Laufe der Implementierung angepasst, sodass das neue Klassendiagramm folgendermaßen aussieht. (siehe \ref{fig:sosstrategy1})
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{images/Lucid/SosStrategy1}
+	\caption{Neues Klassendiagramm der SOS-Klassen}
+	\label{fig:sosstrategy1}
+\end{figure}
 
 
-
-Die Änderungen und die Gründe für die spezifische Umsetzung werden in den nächsten Abschnitten erläutert. Tabelle xxx enthält eine Übersicht über die Änderungen und eine Referenz zu den zugehörigen Abschnitten.
+Die Änderungen und die Gründe für die spezifische Umsetzung werden in den nächsten Abschnitten erläutert. Tabelle \ref{table:difference_sos_classes} enthält eine Übersicht über die Änderungen und eine Referenz zu den zugehörigen Abschnitten.
 \begin{table}[h]
 	\centering
 	\begin{tabular}{|c|l|c|}
 		\hline
 		Änderung & Beschreibung & Referenz \\
 		\hline
-		1 & zusätzliche Klasse NoSos &  \\
+		1 & zusätzliche Klasse NoSos & \ref{section:4.1} \\
 		\hline
-		2 & zusätzliche Methode should\_mark\_sos() &  \\
+		2 & zusätzliche Methode should\_mark\_sos() & \ref{section:4.2} \\
 		\hline
-		3 & \cellbreak{l}{zusätzliche Felder current, ratio \\ und zusätzliche Methode should\_apply\_next()} &  \\
+		3 & \cellbreak{l}{zusätzliche Felder current, ratio \\ und zusätzliche Methode should\_apply\_next()} & \ref{section:4.3} \\
 		\hline
 	\end{tabular}
 	\caption{Änderungen zwischen konzeptionellem Klassenkonzept und tatsächlicher Umsetzung}
@@ -25,6 +31,7 @@ Die Änderungen und die Gründe für die spezifische Umsetzung werden in den nä
 \end{table}
 
 \section{Auswahl und Abspeicherung der SOS-Strategie}
+\label{section:4.1}
 
 Wie im UML-Diagramm in Abbildung \ref{fig:pyresproofstate} gezeigt ist, gibt es bereits eine Klasse
 SearchParams, die für die Speicherung der angewandten Optimierungsstrategien zuständig ist. Die Klasse speichert einfache Optionen wie die Löschung von Tautologien als Wahrheitswert ab. Für komplexere Strategien wie die Heuristiken werden andere Objekte referenziert. Diese setzen eigene Funktionalität um und werden vom Programm aufgerufen.
@@ -40,6 +47,7 @@ Alternativ zu einem Platzhalter-Objekt könnte man die Referenz auch auf None se
 
 Aus diesem Grund wurde sich für die Einführung des Platzhalter-Objekt entschieden.
 \section{Markierung des SOS}
+\label{section:4.2}
 
 Das SOS wird einmal vor Beginn der Beweissuche markiert, indem die Methode mark\_sos() aufgerufen wird. Die Methode bekommt die Klauselmenge als Eingabeargument übergeben und iteriert über jede der Klauseln. (siehe Listing \ref{listing:markSos})
 
@@ -85,6 +93,7 @@ class SosOnlyPosLit(SosStategy):
 
 
 \section{Implementierung beider Konzepte}
+\label{section:4.3}
 
 \paragraph{SOS-Konzept 1: Nicht-SOS zu processed hinzufügen}
 
@@ -127,4 +136,20 @@ Im Gegensatz zur Resolution und Faktorisierung enthält FreshVarCopy() keine neu
 
 
 \paragraph{Speicherung der Anzahl von SOS-Klauseln}
-Zur Umsetzung der SOS-Strategien ist es nicht nötig, die momentane Anzahl von SOS-Klausel einer Klauselmenge zu speichern. Die Speicherung vereinfacht aber den Code zur Auswahl der nächsten Klausel.
+Zur Umsetzung der SOS-Strategien ist es nicht nötig, die momentane Anzahl von SOS-Klauseln einer Klauselmenge zu speichern. Die Speicherung vereinfacht aber den Code zur Auswahl der nächsten Klausel, da einfach überprüft werden kann ob es SOS- oder Nicht-SOS-Klauseln in der Klauselmenge gibt (siehe Abbildung \ref{fig:selectnext})
+
+Im ersten Schritt wird festgelegt, ob die nächste Klausel im SOS liegen soll oder nicht. Gibt es keine SOS-Klauseln in der Klauselmenge, dann wird dieser Wert auf falsch gesetzt und gibt es keine Nicht-SOS-Klauseln, dann wird der Wert zwangsweise auf wahr gesetzt. Auf diese Weise ist gewährleistet, dass es immer mindestens eine Klausel gibt, die den SOS-Zustand erfüllt. 
+
+Wenn es sowohl SOS- als auch Nicht-SOS-Klauseln gibt, dann wird die Methode should\_apply() aufgerufen, die den SOS-Zustand für die nächste Klausel bestimmt. Die Funktionsweise dieser Methode wurde bereits in Sektion \ref{section:4.3} erläutert.
+
+In einem zweiten Schritt wird über alle Klauseln der Klauselmenge iteriert. Die Methode sucht diejenige Klausel, die den optimalen Wert nach angewandten Heuristik hat und berücksichtigt nur Klauseln, die den SOS-Zustand aus dem ersten Schritt erfüllen. Die ausgewählte Klausel wird zurückgegeben.
+
+Findet die Methode keine passende Klausel, gibt sie None zurück. Dieser Fall komm nur dann vor, wenn die Klauselmenge leer ist. In der Praxis kann dieses Szenario nicht eintreten, da vor dem Verarbeiten einer Klausel überprüft wird, ob es noch unverarbeitete Klauseln gibt. Sollte die Klauselmenge leer sein, gilt das Problem als erfüllbar und es werden keine Klauseln mehr verarbeitet.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/Lucid/SelectNext}
+	\caption{Aktivitätsdiagramm für die Auswahl der nächsten Klausel}
+	\label{fig:selectnext}
+\end{figure}
+
