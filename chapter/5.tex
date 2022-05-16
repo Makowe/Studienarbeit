@@ -2,8 +2,58 @@
 
 \chapter{Validierung}
 
+\section{Vorgehensweise}
+	\subsection{Nutzung von Starexec und TPTP}
+		Zur Validierung der Arbeit werden Performancetests durchgeführt, die die Effizienz verschiedener Strategien vergleichbar machen.	Die Beweissuche wird auf der Hardware von Starexec durchgeführt, um eine möglichst konstante Rechenleistung zu haben. Wie in Sektion \ref{section:2StarexecTPTP} beschrieben, setzt sich ein Job aus einer Menge von Beweiser-Konfigurationen und einer Menge von Problemen zusammen. 
+		
+		Der verwendete Beweiser ist eine ZIP-Datei mit den Python-Dateien von PyRes. Er enthält die fertige Implementierung der SOS-Strategien. Konfigurationen sind ebenfalls in der ZIP-Datei enthalten und werden durch ein Text-Datei spezifiziert. Die Datei enthält den Befehl zum Ausführen von PyRes mit angegebenen Eingabeparametern. Diese Parameter geben vor, welche Optimierungen durchgeführt werden, beispielsweise Literalselektion, SOS-Strategie, SOS-Ratio usw.
+		
+		Die Probleme, auf die die Beweissuche angewandt wird, kommen von TPTP, einem Benchmark, der sich aus etwa 24000 Problemdateien zusammensetzt (siehe Sektion \ref{section:2StarexecTPTP}.
+		
+		Bei der Konfiguration eines Starexec-Jobs kann eine	maximale Rechenzeit angegeben werden, die ein Paar aus Problem und Konfiguration zugewiesen bekommt. Findet PyRes innerhalb dieser Zeit keine Lösung für das Problem, wird die Suche abgebrochen. Für alle Jobs sollte die maximale Rechenzeit gleich festgelegt sein, um die Starexec-Ergebnisse mehrerer Jobs vergleichbar zu machen. Der Standard-Wert bei Starexec liegt bei 300 Sekunden, der genaue Wert wurde für diese Arbeit auf 20 Sekunden herabgesetzt.
+		
+		Eine geringere Rechenzeit führt zwar zu weniger gelösten Problemen, aber die Jobs nehmen weniger Zeit in Anspruch. Da die Anzahl der gelösten Probleme in Abhängigkeit zur Zeit weniger als linear zunimmt, kann man davon ausgehen, dass es nur wenig Beweise gibt, die nach 20 Sekunden noch gefunden werden. Aus diesem Grund wurde der Vorteil der schnelleren Berechnungszeit höher gewichtet.
+	
+	\subsection{Zu analysierende Konfigurationen}
+	
+		Es gibt verschiedene Konfigurationen, für die es möglich ist, die Performance zu analysieren (siehe Tabelle \ref{table:possibleConfigs}). 
+	
+		\begin{table}[h]
+			\centering
+			\begin{tabular}{|c|c|c|c|c|c|}
+				\hline
+				& & \multicolumn{2}{c|}{SOS-Konzept 1} & \multicolumn{2}{c|}{SOS-Konzept 2} \\
+				& & \multicolumn{2}{c|}{(Nicht-SOS $\rightarrow$ processed)} & \multicolumn{2}{c|}{(Priorisierte Verarbeitung)}  \\
+				\cline{3-6}
+				& & keine Literalsel. & Literalsel. & keine Literalsel. & Literalsel. \\
+				\hline\hline
+				 \multirow{4}{*}{\rotatebox[origin=c]{90}{SOS-Strategie}} & NoSos & \checkmark & \checkmark & redundant & redundant \\
+				\cline{2-6}
+				& Conjecture & \checkmark & unvolls. & \checkmark & \checkmark \\
+				\cline{2-6}
+				& OnlyPosLit & \checkmark & unvolls. & \checkmark & \checkmark \\
+				\cline{2-6}
+				& OnlyNegLit & \checkmark & unvolls. & \checkmark & \checkmark \\
+				\hline
+			\end{tabular}
+			\label{table:possibleConfigs}
+			\caption{Mögliche Konfigurationen für Performancetests. Unvollständige und redundante Konfigurationen werden nicht durchgeführt. Bei Konzept 2 kann die Konfiguration zusätzlich mit dem Verhältnis $R$ variiert werden.}
+		\end{table}
+
+	
+	\subsection{Zu analysierende Größen}
+	\subsection{Prüfung widersprüchlicher Ergebnisse}
+
+\section{Ergebnisse}
+	\subsection{Performancevergleich der SOS-Strategien}
+	\subsection{Vergleich der beiden SOS-Konzepte}
+	\subsection{SOS-Strategie mit anderen Optimierungen}
+	
+\section{Bewertung}
+
 Ergebnis Performance,
 eventuell Unit Tests,
 Erweiterungsmöglichkeiten,
 Kompatibilität mit anderen Erweiterungen (geordnete Resolution, Literalselektion),
 Verständlichkeit der Implementierung,
+

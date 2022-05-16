@@ -118,6 +118,9 @@ Ist der Rückgabewert von should\_apply() wahr, dann wird extractBest() eine SOS
 Ein Spezialfall muss gesondert behandelt werden. Wird als nächstes eine SOS-Klausel erwartet und die Menge der unverarbeiteten Klauseln enthält nur Nicht-SOS-Klausel, dann werden erneut alle Klauseln durchlaufen und es wird explizit eine Nicht-SOS-Klausel gesucht. Äquivalent wird der Fall behandelt, dass eine Nicht-SOS-Klausel gesucht wird und nur noch SOS-Klauseln vorhanden sind.
 
 \section{weitere Implementierungen}
+
+Auch das 
+
 \paragraph{Vererbung des SOS-Zustands}
 Wie in der Konzeption beschrieben, wird eine abgeleitete Klausel zum SOS hinzugefügt, wenn mindestens eine der Eltern-Klauseln Teil des SOS ist. Die entsprechenden Anpassungen im Code sind sehr einfach (siehe Quellcode \ref{listing:InheritSos})
 \begin{lstlisting}[caption={Implementierung der Vererbung des SOS.Zustands an abgeleitee Klauseln}label={listing:InheritSos}]
