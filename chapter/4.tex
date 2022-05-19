@@ -2,7 +2,7 @@
 
 \chapter{Implementierung}
 
-Das Klassenkonzept aus Abbildung \ref{fig:sosstrategy0} wurde als Grundlage für die Umsetzung verwendet. Einige Einzelheiten wurden im Laufe der Implementierung angepasst, sodass das neue Klassendiagramm folgendermaßen aussieht. (siehe \ref{fig:sosstrategy1})
+Das Klassenkonzept aus Abbildung \ref{fig:sosstrategy0} wurde als Grundlage für die Umsetzung verwendet. Einige Einzelheiten wurden im Laufe der Implementierung angepasst, sodass das neue Klassendiagramm folgendermaßen aussieht. (siehe Abbildung \ref{fig:sosstrategy1})
 
 \begin{figure}[h]
 	\centering
@@ -118,8 +118,7 @@ Ist der Rückgabewert von should\_apply() wahr, dann wird extractBest() eine SOS
 Ein Spezialfall muss gesondert behandelt werden. Wird als nächstes eine SOS-Klausel erwartet und die Menge der unverarbeiteten Klauseln enthält nur Nicht-SOS-Klausel, dann werden erneut alle Klauseln durchlaufen und es wird explizit eine Nicht-SOS-Klausel gesucht. Äquivalent wird der Fall behandelt, dass eine Nicht-SOS-Klausel gesucht wird und nur noch SOS-Klauseln vorhanden sind.
 
 \section{weitere Implementierungen}
-
-Auch das 
+\label{section:weitereImpl}
 
 \paragraph{Vererbung des SOS-Zustands}
 Wie in der Konzeption beschrieben, wird eine abgeleitete Klausel zum SOS hinzugefügt, wenn mindestens eine der Eltern-Klauseln Teil des SOS ist. Die entsprechenden Anpassungen im Code sind sehr einfach (siehe Quellcode \ref{listing:InheritSos})
@@ -156,3 +155,18 @@ Findet die Methode keine passende Klausel, gibt sie None zurück. Dieser Fall ko
 	\label{fig:selectnext}
 \end{figure}
 
+\section{Zusammenfassung}
+Durch die Implementierung der SOS-Strategien hat sich das Klassendiagramm des ProofStates an mehreren Stellen verändert. (siehe Abbildung \ref{fig:pyresproofstatenew})
+
+Die erste große Veränderung ist das Hinzufügen der SOS-Klassen sowie das Hinzufügen der initSos() Methode. Die saturate() Methode wurde nur dahingehend verändert, dass sie die Methode initSos() einmal aufruft. 
+
+Die Veränderung der extractBest() Methode wurde stark angepasst, da sie den SOS-Zustand der Klauseln in die Auswahl einkalkulieren muss. (siehe Sektion \ref{section:weitereImpl})
+
+Weitere Implementierungen, die nicht im Klassendiagramm sichtbar sind, sind die Anpassungen Funktionsanpassungen zur Vererbung des SOS-Zustands und das Hinzufügen der Eingabeoptionen.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1\linewidth]{images/Lucid/PyResProofStateNew}
+	\caption[Veränderung des Proofstates durch die Implementierung]{Veränderung des Proofstates durch die Implementierung. Rote Inhalte wurden hinzugefügt, blaue verändert.}
+	\label{fig:pyresproofstatenew}
+\end{figure}

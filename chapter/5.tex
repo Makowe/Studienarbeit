@@ -15,9 +15,13 @@
 		Eine geringere Rechenzeit führt zwar zu weniger gelösten Problemen, aber die Jobs nehmen weniger Zeit in Anspruch. Da die Anzahl der gelösten Probleme in Abhängigkeit zur Zeit weniger als linear zunimmt, kann man davon ausgehen, dass es nur wenig Beweise gibt, die nach 20 Sekunden noch gefunden werden. Aus diesem Grund wurde der Vorteil der schnelleren Berechnungszeit höher gewichtet.
 	
 	\subsection{Zu analysierende Konfigurationen}
-	
-		Es gibt verschiedene Konfigurationen, für die es möglich ist, die Performance zu analysieren (siehe Tabelle \ref{table:possibleConfigs}). 
-	
+		Es wurden 3 SOS-Strategien implementiert und es gibt die Möglichkeit keine SOS-Strategie einzusetzen. Diese vier Möglichkeiten lassen sich mit Konzept 1 oder mit Konzept 2 kombinieren und können jeweils mit oder ohne Literalselektion durchgeführt werden. In der Theorie ergeben sich damit 16 Kombinationen, von denen nicht alle vollständig sind und es redundante Konfigurationen gibt. Folgende Tabelle zeigt eine Übersicht mit den möglichen Konfigurationen (siehe Tabelle \ref{table:possibleConfigs}). 		
+		
+		Wenn keine SOS-Strategie angegeben wird, dann erstellt PyRes standardmäßig ein Objekt der Klasse NoSos als Platzhalter (siehe Sektion \ref{section:4.1}). Für die Konfiguration ohne SOS sind Konzept 1 und 2 gleichbedeutend, da in beiden Fällen keine Klausel als Teil des SOS markiert wird und auch keine Klausel anfangs in die verarbeitete Klauselmenge einsortiert wird. Die Beweissuche ist mit und ohne Literalselektion vollständig. Die Ergebnisse dieser Konfigurationen werden als Referenzwerte für die spätere Validierung herangezogen.
+		
+		Die drei SOS-Strategien können mit beiden Konzepten kombiniert werden, allerdings ist Konzept 1 in Verbindung mit Literalselektion unvollständig. In Konzept 2 kann mit der Option "R" zusätzlich ein ganzzahliges Verhältnis angegeben werden, das die Verarbeitung von SOS und Nicht-SOS-Klauseln bestimmt. Für die Wahl dieses Wertes wurde sich für eine logarithmische Abstufung entschieden, da sie einen größeren Wertebereich abdeckt.
+		
+		
 		\begin{table}[h]
 			\centering
 			\begin{tabular}{|c|c|c|c|c|c|}
@@ -42,10 +46,32 @@
 
 	
 	\subsection{Zu analysierende Größen}
+	
+	Wenn PyRes ein Problem innerhalb der angegebenen Zeit lösen kann, gibt es den bewiesenen Status des Problems in einer Ergebnisdatei aus. Des weiteren werden Informationen über die Beweissuche ausgegeben, zum Beispiel die Anzahl der berechneten Resolventen und die Zeit, die für die Beweissuche benötigt wurde.
+	
+	Folgende Größen können zur Performance-Analyse herangezogen werden.
+	\begin{itemize}
+		\item Die Anzahl der insgesamt gelösten Probleme von allen etwa 24000 TPTP Problemen macht eine Aussage über die Effizienz einer Konfiguration. Zusätzlich kann zwischen dem Status der Probleme (Erfüllbarkeit / Unerfüllbarkeit) differenziert werden, da eine Konfiguration, die schneller einen Widerspruch findet, nicht zwangsweise schneller die Erfüllbarkeit belegt.
+		
+		\item Die benötigte Zeit der gelösten Probleme kann zur Analyse herangezogen werden. Es kann sowohl die durchschnitte Zeit aller gelösten Probleme betrachtet werden, als auch der Graph, der den Verlauf der gelösten Probleme in Abhängigkeit zu Zeit darstellt.
+		
+		Da es vorkommt, dass zwei Konfigurationen nicht exakt die gleichen Probleme lösen, kann der Vergleich zwischen den Rechenzeiten verfälscht werden. Eine effizientere Konfiguration könnte beispielsweise viele Probleme schneller lösen, als eine ineffizientere Konfiguration. Die effizientere Konfiguration würde auch schwierige Probleme lösen, die die ineffizientere nicht löst. Auf diese Weise wird die durchschnittlich benötigte Rechenzeit der effizienten Konfiguration durch die hohe Rechnezeit der schwierigeren Probleme nach unten gezogen.
+		
+		Eine Lösung dafür ist, nicht alle gelösten Probleme in die Analyse einfließen zu lassen, sondern nur die Schnittmenge der gelösten Probleme unter allen Konfigurationen.
+		
+		\item Neben der Rechenzeit können die anderen Ergebnisgrößen wie berechnete Resolventen, berechnete Faktoren berücksichtigt werden. Auch hier sollten zum Vergleich zweier Konfigurationen lediglich die Probleme betrachtet werden, die unter allen Konfigurationen gelöst werden. Es ist davon auszugehen, dass diese Größen stark mit der benötigten Rechenzeit korrelieren.
+		
+		\item Eine weitere Möglichkeit, zwei Konfigurationen zu vergleichen, ist, die Probleme im direkten Vergleich in Bezug zu setzen. Anstatt wie oben genannt, alle Rechenzeiten einer Konfiguration mit allen Rechenzeiten der anderen Konfigurationen zu vergleichen, werden für jedes Problem einzeln die Rechenzeiten verglichen. Somit kann für jedes einzelne Problem eine prozentualer Abweichung errechnet werden. Über alle Probleme kann dann ein Mittelwert gebildet werden. 
+	\end{itemize}
 	\subsection{Prüfung widersprüchlicher Ergebnisse}
+		Für alle StarExec-Ergebnisse kann geprüft werden, ob Widersprüche zwischen dem gefundenen Status und dem tatsächlichen Status vorliegen, da in jedem Problem der tatsächliche Status des Problems angegeben ist. ob  Ein Widerspruch liegt dann vor, wenn ein Problem in einer Konfiguration als unerfüllbar eingestuft wurde, aber in Wirklichkeit erfüllbar ist, oder vice versa. In solch einem Fall ist der Beweiser fehlerhaft, vorausgesetzt der angegebene tatsächliche Status ist korrekt. Alle Ergebnisse dieses Kapitels wurden geprüft und sind widerspruchsfrei. Das heißt jedoch nicht, dass die Implementierung keine Fehler enthält.
 
 \section{Ergebnisse}
 	\subsection{Performancevergleich der SOS-Strategien}
+	 	Als erstes wird SOS-Konzept 1 (Nicht-SOS $\rightarrow$ processed) analysiert. 
+			
+
+	
 	\subsection{Vergleich der beiden SOS-Konzepte}
 	\subsection{SOS-Strategie mit anderen Optimierungen}
 	
