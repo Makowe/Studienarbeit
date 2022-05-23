@@ -41,11 +41,9 @@ Die Klasse SearchParams wird so modifiziert, dass sie eine zusätzliche Referenz
 ./pyres-fof --set-of-support=Conjecture file.p
 \end{lstlisting}
 würde zum Beispiel dafür sorgen, dass eine Instanz der Klasse SosConjecture erstellt wird. 
-Wenn keine SOS-Strategie angewandt wird, zeigt die Referenz in den SearchParams auf ein Objekt vom Typ NoSos. Dieses Objekt ist als Platzhalter anzusehen. Es ist wie SOSConjecture, SosOnlyPosLit und SosOnlyNegLit von SosStrategy abgeleitet und implementiert alle Methoden. Die Methoden sind allerdings so geschrieben, dass sie beim Aufruf keine Auswirkung auf die Beweissuche haben. Somit wird keine SOS-Strategie angewandt.
+Wenn keine SOS-Strategie angewandt wird, zeigt die Referenz in den SearchParams auf ein Objekt vom Typ NoSos. Dieses Objekt ist als Platzhalter anzusehen. Die Klasse erbt wie SOSConjecture, SosOnlyPosLit und SosOnlyNegLit von SosStrategy und implementiert alle Methoden. Die Methoden sind allerdings so geschrieben, dass sie beim Aufruf keine Auswirkung auf die Beweissuche haben. Somit wird keine SOS-Strategie angewandt.
 
-Alternativ zu einem Platzhalter-Objekt könnte man die Referenz auch auf None setzen. Dies würde etwas Speicherplatz sparen, hätte jedoch den Nachteil, dass an jeder Stelle im Code, wo eine SOS-Methode aufgerufen wird, vorher geprüft werden müsste, ob das SOS-Objekt existiert. Anderfalls könnte es zu Laufzeitfehlern vergleichbar mit einer Nullpointer-Exception kommen. 
-
-Aus diesem Grund wurde sich für die Einführung des Platzhalter-Objekt entschieden.
+Alternativ zu einem Platzhalter-Objekt könnte man die Referenz auch auf None setzen. Dies würde etwas Speicherplatz sparen, hätte jedoch den Nachteil, dass an jeder Stelle im Code, wo eine SOS-Methode aufgerufen wird, vorher geprüft werden müsste, ob das SOS-Objekt existiert. Andernfalls könnte es zu Laufzeitfehlern vergleichbar mit einer Nullpointer-Exception in C kommen. Aus diesem Grund wurde sich für die Einführung des Platzhalter-Objekt entschieden.
 \section{Markierung des SOS}
 \label{section:4.2}
 
@@ -99,30 +97,34 @@ class SosOnlyPosLit(SosStategy):
 
 Wie im Kapitel Konzeption beschrieben, müssen alle Klauseln, die nicht zum SOS gehören zu den verarbeiteten Klauseln hinzugefügt werden. Diese Aktion muss nach Markierung des SOS und vor Beginn der Beweissuche durchgeführt werden. Zur Übersicht wird eine Methode init\_sos() hinzugefügt, die erst das SOS markiert und danach die Nicht-SOS-Klauseln als verarbeitet festlegt.
 
-\paragraph{SOS-Konzept 2: SOS und Nicht-SOS mit unterschiedlicher Priorität verarbeiten}
+\paragraph{SOS-Konzept 2: SOS-Klauseln mit höherer Priorität verarbeiten}
 
-Das Verhältnis $r$ mit dem SOS- und Nicht-SOS-Klauseln verarbeitet werden, ist in der Variable ratio der SOS-Klasse abgespeichert. Dieses Verhältnis kann vom Benutzer als Eingabegröße ausgewählt werden (siehe \ref{listing:UserSelectRatio}). Zeile 1 legt kein $r$ fest wodurch automatisch das erste Konzept gewählt wird. Der tatsächliche Wert der Variablen ratio ist dann 0. Zeile 2 setzt ratio auf 3. Zeile 3 ist die Kurzschreibweise für Zeile 2
+Das Verhältnis $r$ mit dem SOS- und Nicht-SOS-Klauseln verarbeitet werden, ist in der Variable ratio der SOS-Klasse abgespeichert. Dieses Verhältnis kann vom Benutzer als Eingabegröße ausgewählt werden (siehe Listing \ref{listing:UserSelectRatio}). 
 
-\begin{lstlisting}[label={listing:UserSelectRatio}]
-./pyres-fof --set-of-support=Conjecture file.p
-./pyres-fof --set-of-support=Conjecture --sos-ratio=3 file.p
+Zeile 1 legt kein $r$ fest, wodurch PyRes automatisch das erste Konzept anwendet. Der tatsächliche Wert der Variablen ratio ist dann 0. 
+
+Zeile 2 setzt ratio auf 3. Zeile 3 ist die Kurzschreibweise für Zeile 2.
+
+\begin{lstlisting}[label={listing:UserSelectRatio}, caption={Befehle zum Aufrufen von PyRes}]
+./pyres-fof --sos=Conjecture file.p
+./pyres-fof --sos=Conjecture --sos-ratio=3 file.p
 ./pyres-fof -OConjecture -R3 file.p
 \end{lstlisting}
 
-Der gewählte Wert von $r$ fließt in die Beweissuche mit ein, indem die Methode extractBest() angepasst wird. Bisher floss in die Auswahl der nächsten Klausel lediglich die gewählte Heuristik-Strategie ein, welche eine Klausel anhand von Warteschlangenposition und Symbolanzahl auswählt. 
+Der gewählte Wert von $r$ fließt in die Beweissuche mit ein, indem die Methode extractBest() angepasst wird. Bisher hing die Auswahl der nächsten Klausel lediglich von der gewählten Heuristik-Strategie ein.
 
 In die angepasste Methode soll zusätzlich die Information einfließen, welche Klauseln im SOS sind und ob als nächstes eine SOS- oder Nicht-SOS-Klausel gewählt werden soll. Dies wird gemacht, indem von der SOS-Klasse die Methode should\_apply() aufgerufen wird. Sie gibt den Wahr oder Falsch zurück abhängig davon, ob die nächste Klausel im SOS liegen soll oder nicht. Die Implementierung dieser Methode erfolgt über eine interne Zählvariable current.
 
 Ist der Rückgabewert von should\_apply() wahr, dann wird extractBest() eine SOS-Klausel auswählen, andernfalls eine Nicht-SOS-Klausel. Welche SOS-Klausel genau ausgewählt wird, hängt dann von der angewandten Heuristik ab.
 
-Ein Spezialfall muss gesondert behandelt werden. Wird als nächstes eine SOS-Klausel erwartet und die Menge der unverarbeiteten Klauseln enthält nur Nicht-SOS-Klausel, dann werden erneut alle Klauseln durchlaufen und es wird explizit eine Nicht-SOS-Klausel gesucht. Äquivalent wird der Fall behandelt, dass eine Nicht-SOS-Klausel gesucht wird und nur noch SOS-Klauseln vorhanden sind.
+Zwei Spezialfälle müssen gesondert behandelt werden. Wird als nächstes eine SOS-Klausel erwartet und die Menge der unverarbeiteten Klauseln enthält nur Nicht-SOS-Klausel, dann werden erneut alle Klauseln durchlaufen und es wird explizit eine Nicht-SOS-Klausel gesucht. Äquivalent wird der Fall behandelt, dass eine Nicht-SOS-Klausel gesucht wird und nur noch SOS-Klauseln vorhanden sind.
 
 \section{weitere Implementierungen}
 \label{section:weitereImpl}
 
 \paragraph{Vererbung des SOS-Zustands}
-Wie in der Konzeption beschrieben, wird eine abgeleitete Klausel zum SOS hinzugefügt, wenn mindestens eine der Eltern-Klauseln Teil des SOS ist. Die entsprechenden Anpassungen im Code sind sehr einfach (siehe Quellcode \ref{listing:InheritSos})
-\begin{lstlisting}[caption={Implementierung der Vererbung des SOS.Zustands an abgeleitee Klauseln}label={listing:InheritSos}]
+Wie in der Konzeption beschrieben, wird eine abgeleitete Klausel zum SOS hinzugefügt, wenn mindestens eine der Eltern-Klauseln Teil des SOS ist. Die entsprechenden Anpassungen im Code sind sehr einfach (siehe Listing \ref{listing:InheritSos})
+\begin{lstlisting}[caption={Implementierung der Vererbung des SOS.Zustands an abgeleitee Klauseln}, label={listing:InheritSos}]
 def resolution(clause1, lit1, clause2, lit2):
 	...
 	res.part_of_sos = clause1.part_of_sos or clause2.part_of_sos
@@ -140,20 +142,22 @@ Im Gegensatz zur Resolution und Faktorisierung enthält FreshVarCopy() keine neu
 \paragraph{Speicherung der Anzahl von SOS-Klauseln}
 Zur Umsetzung der SOS-Strategien ist es nicht nötig, die momentane Anzahl von SOS-Klauseln einer Klauselmenge zu speichern. Die Speicherung vereinfacht aber den Code zur Auswahl der nächsten Klausel, da einfach überprüft werden kann ob es SOS- oder Nicht-SOS-Klauseln in der Klauselmenge gibt (siehe Abbildung \ref{fig:selectnext})
 
-Im ersten Schritt wird festgelegt, ob die nächste Klausel im SOS liegen soll oder nicht. Gibt es keine SOS-Klauseln in der Klauselmenge, dann wird dieser Wert auf falsch gesetzt und gibt es keine Nicht-SOS-Klauseln, dann wird der Wert zwangsweise auf wahr gesetzt. Auf diese Weise ist gewährleistet, dass es immer mindestens eine Klausel gibt, die den SOS-Zustand erfüllt. 
-
-Wenn es sowohl SOS- als auch Nicht-SOS-Klauseln gibt, dann wird die Methode should\_apply() aufgerufen, die den SOS-Zustand für die nächste Klausel bestimmt. Die Funktionsweise dieser Methode wurde bereits in Sektion \ref{section:4.3} erläutert.
-
-In einem zweiten Schritt wird über alle Klauseln der Klauselmenge iteriert. Die Methode sucht diejenige Klausel, die den optimalen Wert nach angewandten Heuristik hat und berücksichtigt nur Klauseln, die den SOS-Zustand aus dem ersten Schritt erfüllen. Die ausgewählte Klausel wird zurückgegeben.
-
-Findet die Methode keine passende Klausel, gibt sie None zurück. Dieser Fall komm nur dann vor, wenn die Klauselmenge leer ist. In der Praxis kann dieses Szenario nicht eintreten, da vor dem Verarbeiten einer Klausel überprüft wird, ob es noch unverarbeitete Klauseln gibt. Sollte die Klauselmenge leer sein, gilt das Problem als erfüllbar und es werden keine Klauseln mehr verarbeitet.
-
 \begin{figure}
 	\centering
 	\includegraphics[width=0.9\linewidth]{images/Lucid/SelectNext}
 	\caption{Aktivitätsdiagramm für die Auswahl der nächsten Klausel}
 	\label{fig:selectnext}
 \end{figure}
+
+Im ersten Schritt wird festgelegt, ob die nächste Klausel im SOS liegen soll oder nicht. Gibt es keine SOS-Klauseln in der Klauselmenge, dann wird dieser Wert auf falsch gesetzt und gibt es keine Nicht-SOS-Klauseln, dann wird der Wert zwangsweise auf wahr gesetzt. Auf diese Weise ist gewährleistet, dass es immer mindestens eine Klausel gibt, die den SOS-Zustand erfüllt. 
+
+Wenn es sowohl SOS- als auch Nicht-SOS-Klauseln gibt, dann wird die Methode should\_apply() aufgerufen, die den SOS-Zustand für die nächste Klausel bestimmt. (siehe \ref{section:4.3})
+
+In einem zweiten Schritt wird über alle Klauseln der Klauselmenge iteriert. Die Methode sucht diejenige Klausel, die den optimalen Wert nach angewandten Heuristik hat und berücksichtigt nur Klauseln, die den SOS-Zustand aus dem ersten Schritt erfüllen. Die ausgewählte Klausel wird zurückgegeben.
+
+Findet die Methode keine passende Klausel, gibt sie None zurück. Dieser Fall komm nur dann vor, wenn die Klauselmenge leer ist. In der Praxis kann dieses Szenario nicht eintreten, da vor dem Verarbeiten einer Klausel überprüft wird, ob es noch unverarbeitete Klauseln gibt. Sollte die Klauselmenge leer sein, gilt das Problem als erfüllbar und es werden keine Klauseln mehr verarbeitet.
+
+
 
 \section{Zusammenfassung}
 Durch die Implementierung der SOS-Strategien hat sich das Klassendiagramm des ProofStates an mehreren Stellen verändert. (siehe Abbildung \ref{fig:pyresproofstatenew})

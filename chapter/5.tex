@@ -17,7 +17,7 @@
 	\subsection{Zu analysierende Konfigurationen}
 		Es wurden 3 SOS-Strategien implementiert und es gibt die Möglichkeit keine SOS-Strategie einzusetzen. Diese vier Möglichkeiten lassen sich mit Konzept 1 oder mit Konzept 2 kombinieren und können jeweils mit oder ohne Literalselektion durchgeführt werden. In der Theorie ergeben sich damit 16 Kombinationen, von denen nicht alle vollständig sind und es redundante Konfigurationen gibt. Folgende Tabelle zeigt eine Übersicht mit den möglichen Konfigurationen (siehe Tabelle \ref{table:possibleConfigs}). 		
 		
-		Wenn keine SOS-Strategie angegeben wird, dann erstellt PyRes standardmäßig ein Objekt der Klasse NoSos als Platzhalter (siehe Sektion \ref{section:4.1}). Für die Konfiguration ohne SOS sind Konzept 1 und 2 gleichbedeutend, da in beiden Fällen keine Klausel als Teil des SOS markiert wird und auch keine Klausel anfangs in die verarbeitete Klauselmenge einsortiert wird. Die Beweissuche ist mit und ohne Literalselektion vollständig. Die Ergebnisse dieser Konfigurationen werden als Referenzwerte für die spätere Validierung herangezogen.
+		Wenn keine SOS-Strategie angegeben wird, dann erstellt PyRes standardmäßig ein Objekt der Klasse NoSos als Platzhalter (siehe Sektion \ref{section:4.1}). Für die Konfiguration ohne SOS sind Konzept 1 und 2 gleichbedeutend, da in beiden Fällen keine Klausel als Teil des SOS markiert wird und auch keine Klausel anfangs in die verarbeitete Klauselmenge einsortiert wird. Die Beweissuche ist mit und ohne Literalselektion vollständig.
 		
 		Die drei SOS-Strategien können mit beiden Konzepten kombiniert werden, allerdings ist Konzept 1 in Verbindung mit Literalselektion unvollständig. In Konzept 2 kann mit der Option "R" zusätzlich ein ganzzahliges Verhältnis angegeben werden, das die Verarbeitung von SOS und Nicht-SOS-Klauseln bestimmt. Für die Wahl dieses Wertes wurde sich für eine logarithmische Abstufung entschieden, da sie einen größeren Wertebereich abdeckt.
 		
@@ -59,24 +59,47 @@
 		
 		Eine Lösung dafür ist, nicht alle gelösten Probleme in die Analyse einfließen zu lassen, sondern nur die Schnittmenge der gelösten Probleme unter allen Konfigurationen.
 		
-		\item Neben der Rechenzeit können die anderen Ergebnisgrößen wie berechnete Resolventen, berechnete Faktoren berücksichtigt werden. Auch hier sollten zum Vergleich zweier Konfigurationen lediglich die Probleme betrachtet werden, die unter allen Konfigurationen gelöst werden. Es ist davon auszugehen, dass diese Größen stark mit der benötigten Rechenzeit korrelieren.
+		\item Neben der Rechenzeit können die anderen Ergebnisgrößen wie berechnete Resolventen, berechnete Faktoren berücksichtigt werden. Auch hier sollten zum Vergleich zweier Konfigurationen lediglich die Probleme betrachtet werden, die unter allen Konfigurationen gelöst werden.
 		
-		\item Eine weitere Möglichkeit, zwei Konfigurationen zu vergleichen, ist, die Probleme im direkten Vergleich in Bezug zu setzen. Anstatt wie oben genannt, alle Rechenzeiten einer Konfiguration mit allen Rechenzeiten der anderen Konfigurationen zu vergleichen, werden für jedes Problem einzeln die Rechenzeiten verglichen. Somit kann für jedes einzelne Problem eine prozentualer Abweichung errechnet werden. Über alle Probleme kann dann ein Mittelwert gebildet werden. 
+		\item Eine weitere Möglichkeit, zwei Konfigurationen zu vergleichen, ist, die Probleme im direkten Vergleich in Bezug zu setzen. Anstatt wie oben genannt, alle Rechenzeiten einer Konfiguration mit allen Rechenzeiten der anderen Konfigurationen zu vergleichen, werden für jedes Problem einzeln die Rechenzeiten verglichen. Somit kann für jedes einzelne Problem eine prozentualer Abweichung errechnet werden. Über alle Probleme kann dann ein Mittelwert gebildet werden.
 	\end{itemize}
+	Es ist davon auszugehen, dass die betrachteten Größen stark korrelieren. Eine 
 	\subsection{Prüfung widersprüchlicher Ergebnisse}
 		Für alle StarExec-Ergebnisse kann geprüft werden, ob Widersprüche zwischen dem gefundenen Status und dem tatsächlichen Status vorliegen, da in jedem Problem der tatsächliche Status des Problems angegeben ist. ob  Ein Widerspruch liegt dann vor, wenn ein Problem in einer Konfiguration als unerfüllbar eingestuft wurde, aber in Wirklichkeit erfüllbar ist, oder vice versa. In solch einem Fall ist der Beweiser fehlerhaft, vorausgesetzt der angegebene tatsächliche Status ist korrekt. Alle Ergebnisse dieses Kapitels wurden geprüft und sind widerspruchsfrei. Das heißt jedoch nicht, dass die Implementierung keine Fehler enthält.
 
 \section{Ergebnisse}
-	\subsection{Performancevergleich der SOS-Strategien}
-	 	Als erstes wird SOS-Konzept 1 (Nicht-SOS $\rightarrow$ processed) analysiert. 
-			
+	\subsection{Vergleich der SOS-Strategien}
+	 	Um die drei SOS-Strategien zu vergleichen, werden die Ergebnisse ohne SOS-Strategie als Referenzwerte herangezogen.
+	 	Es ist davon auszugehen, dass die Rangfolge der Strategien unter Konzept 1 und Konzept 2 gleich ist, da sich die Einteilung der Klauseln nicht unterscheidet und die Abarbeitung der Klauseln nur geringfügig angepasst wird. Aus diesem Grund wird vorerst nur Konzept 1 analysiert.
+	 	
+	 	Die Anzahl der gelösten Probleme deutet darauf hin, dass alle drei SOS-Strategien besser sind, als keine SOS-Strategie. 
+	 	Ein Grund dafür könnte sein, dass in jeder zugelassenen SOS-Strategie Kombinationen für die Resolution verboten werden, vorausgesetzt die Menge der Nicht-SOS-Klauseln enthält mehr als eine Klausel. Da Grundklauselmenge stets erfüllbar ist, tragen diese Kombinationen nichts zur Beweissuche bei.
+	 	
+	 	Mit Abstand am besten schneidet Strategie 1 ab, welche die negierte Vermutung in das SOS steckt. Eine Grund dafür könnte sein, dass der Beweis eher vom Ziel ausgeht und somit eher in Richtung des Widerspruchs geleitet wird. Meistens ist die Menge der Vermutungsklauseln geringer, als die Menge der Axiome. Somit wird ein großer Teil irrelevanter Kombinationen vermieden.
+		
+		Strategie 3 (OnlyPosLit) ordnet rein positive Klauseln dem SOS zu schneidet als zweitbestes ab und löst deutlich mehr Probleme als Strategie 2 (OnlyNegLit). Syntaktisch gesehen, sind beide Strategien gleichwertig, da sich die Erfüllbarkeit durch Negieren jedes Literals nicht verändert. Der Grund für die starken Unterschiede muss demnach auf der semantischen Ebene liegen und mit den Bedeutungen der Klauseln und zusammenhängen. 
+		
+		Eine Vermutung ist, dass Axiome tendenziell häufiger positiv formuliert werden und dadurch viele positiven Literale enthalten. Da Vermutungen negiert werden, um einen Widerspruch zu erzeugen, könnte es bei ihnen häufiger vorkommen, dass sie unter Strategie 3 ins SOS sortiert werden. Wie schon an Strategie 1 ersichtlich ist, bietet das Zuweisen der Vermutungen zum SOS einen signifikanten Vorteil.
 
 	
 	\subsection{Vergleich der beiden SOS-Konzepte}
 	\subsection{SOS-Strategie mit anderen Optimierungen}
-	
+		
 \section{Bewertung}
-
+	\subsection{Optimale Strategie}
+	Im TPTP Benchmark gibt es Probleme, die keine Vermutung enthalten, sondern nur Axiome. Auch in der Praxis kann es vorkommen, dass ein Problem nur aus gegebenen Klauseln besteht. Beim Formulieren eines Problems, könnte man beispielsweise erst alle Annahmen auf einen Widerspruch prüfen, bevor man die Vermutung einfügt.
+	
+	In solchen Fällen würde SOS-Strategie 1 keinen Vorteil bringen, da das SOS leer bleibt. Demnach könnte beim Vorhandensein eines Widerspruchs nicht die leere Klausel hergeleitet werden, wodurch die Strategie unvollständig ist. Dieser Sonderfall ist deshalb verboten, wie bereits in \ref{section:vollständigkeitSOS} vorausgesetzt wurde.
+	
+	Ein noch bessere Strategie ist deshalb, in gewöhnlichen Fällen, in denen es Vermutungen und Axiome gibt, Strategie 1 anzuwenden. Sollte es keine Vermutung geben, wird stattdessen Strategie 3 angewendet. Diese Strategie wurde in PyRes implementiert und auf StarExec getestet. Die Anzahl der gelösten Probleme übersteigt die Zahl von Strategie 1 und ist geringfügig besser.
+	
+	\subsection{weitere Verbesserungsmöglichkeiten}
+	Es gibt weitere Verbesserungsmöglichkeiten, die Effizienz des Beweisers weiter steigern könnten. Folgende Vorschläge wurden für diese Arbeit weder implementiert noch getestet, könnten aber für die Zukunft analysiert werden.
+	\begin{itemize}
+		\item Wenn es keine Vermutung gibt, und die Markierung des SOS anhand der positiven und negativen Literale stattfindet, könnte 
+	\end{itemize}
+		Wenn es keine Vermutung gibt, 
+	
 Ergebnis Performance,
 eventuell Unit Tests,
 Erweiterungsmöglichkeiten,
