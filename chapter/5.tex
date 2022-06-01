@@ -63,12 +63,15 @@
 		
 		\item Eine weitere Möglichkeit, zwei Konfigurationen zu vergleichen, ist, die Probleme im direkten Vergleich in Bezug zu setzen. Anstatt wie oben genannt, alle Rechenzeiten einer Konfiguration mit allen Rechenzeiten der anderen Konfigurationen zu vergleichen, werden für jedes Problem einzeln die Rechenzeiten verglichen. Somit kann für jedes einzelne Problem eine prozentualer Abweichung errechnet werden. Über alle Probleme kann dann ein Mittelwert gebildet werden.
 	\end{itemize}
-	Es ist davon auszugehen, dass die betrachteten Größen stark korrelieren. Eine 
+	Es ist davon auszugehen, dass die betrachteten Größen stark korrelieren. Eine Konfiguration, die mehr Probleme als eine andere löst, wird die meisten Probleme auch schneller lösen und mit weniger berechneten Resolventen.
+	
 	\subsection{Prüfung widersprüchlicher Ergebnisse}
-		Für alle StarExec-Ergebnisse kann geprüft werden, ob Widersprüche zwischen dem gefundenen Status und dem tatsächlichen Status vorliegen, da in jedem Problem der tatsächliche Status des Problems angegeben ist. ob  Ein Widerspruch liegt dann vor, wenn ein Problem in einer Konfiguration als unerfüllbar eingestuft wurde, aber in Wirklichkeit erfüllbar ist, oder vice versa. In solch einem Fall ist der Beweiser fehlerhaft, vorausgesetzt der angegebene tatsächliche Status ist korrekt. Alle Ergebnisse dieses Kapitels wurden geprüft und sind widerspruchsfrei. Das heißt jedoch nicht, dass die Implementierung keine Fehler enthält.
+		Für alle StarExec-Ergebnisse kann geprüft werden, ob Widersprüche zwischen dem gefundenen Status und dem tatsächlichen Status vorliegen, da in jedem Problem der tatsächliche Status des Problems angegeben ist. ob  Ein Widerspruch liegt dann vor, wenn ein Problem in einer Konfiguration als unerfüllbar eingestuft wurde, aber in Wirklichkeit erfüllbar ist, oder vice versa. In solch einem Fall ist der Beweiser fehlerhaft, vorausgesetzt der angegebene tatsächliche Status ist korrekt. Alle Ergebnisse dieses Kapitels wurden geprüft und sind widerspruchsfrei.
 
 \section{Ergebnisse}
 	\subsection{Vergleich der SOS-Strategien}
+		\paragraph{Vergleich nach Anzahl gelöster Probleme}
+		
 	 	Um die drei SOS-Strategien zu vergleichen, werden die Ergebnisse ohne SOS-Strategie als Referenzwerte herangezogen.
 	 	Es ist davon auszugehen, dass die Rangfolge der Strategien unter Konzept 1 und Konzept 2 gleich ist, da sich die Einteilung der Klauseln nicht unterscheidet und die Abarbeitung der Klauseln nur geringfügig angepasst wird. Aus diesem Grund wird vorerst nur Konzept 1 analysiert.
 	 	
@@ -80,6 +83,77 @@
 		Strategie 3 (OnlyPosLit) ordnet rein positive Klauseln dem SOS zu schneidet als zweitbestes ab und löst deutlich mehr Probleme als Strategie 2 (OnlyNegLit). Syntaktisch gesehen, sind beide Strategien gleichwertig, da sich die Erfüllbarkeit durch Negieren jedes Literals nicht verändert. Der Grund für die starken Unterschiede muss demnach auf der semantischen Ebene liegen und mit den Bedeutungen der Klauseln und zusammenhängen. 
 		
 		Eine Vermutung ist, dass Axiome tendenziell häufiger positiv formuliert werden und dadurch viele positiven Literale enthalten. Da Vermutungen negiert werden, um einen Widerspruch zu erzeugen, könnte es bei ihnen häufiger vorkommen, dass sie unter Strategie 3 ins SOS sortiert werden. Wie schon an Strategie 1 ersichtlich ist, bietet das Zuweisen der Vermutungen zum SOS einen signifikanten Vorteil.
+	
+		\paragraph{Vergleich der Schnittmengen zwischen den Strategien}
+	
+		Betrachtet man die Menge der gelösten Probleme und deren Schnittmengen, sieht man, dass es teilweise große Überlappungen zwischen den gelösten Problemen gibt. (siehe Tabelle \ref{table:geloestSchnittmenge}, Abbildung \ref{fig:venn2} und Abbildung \ref{fig:venn3} Fast alle Probleme, die ohne SOS gelöst wurden, wurden auch mit einer beliebigen SOS-Strategie gelöst. 
+		Von den 1676 Problemen, die ohne SOS gelöst wurden, löste SOS-Strategie 1 1620 Probleme. Nur 56 Probleme, also 3,3 \% konnten nicht von SOS-Strategie 1 gelöst werden. Dieses Ergebnis kann als positiv angesehen werden, da es nur wenig Fälle gibt, in denen SOS einen Nachteil bringt.
+	
+		Auch die Schnittmenge aller drei SOS-Strategien ist relativ hoch. Von den 1788 Probleme, die die schlechteste Strategie löst, werden 1633 Probleme von allen drei Strategien gelöst. (siehe Abbildung \ref{fig:venn3}, links) 
+		
+		Im mittleren Diagramm in Abbildung \ref{fig:venn3} werden nur diejenigen Probleme betrachtet, die auch ohne SOS gelöst wurden. Dies sind die tendenziell einfacheren Probleme. Anschaulich werden die drei Schnittmengen aus Abbildung \ref{fig:venn2} genommen und zu einem neuen Diagramm zusammengeführt. Man stellt fest, dass die Überlappung für dieses Diagramm noch größer wird. Die ist wenig überraschend, da bereits in Abbildung \ref{fig:venn2} zu sehen war, dass fast alle Probleme, die ohne SOS gelöst wurde, auch von den drei Strategien gelöst wird.
+		
+		Auf der rechten Seite von Abbildung \ref{fig:venn3} sind nur die Probleme dargestellt, die nicht von der Konfiguration ohne SOS gelöst wurden. Dies sind die tendenziell schwierigeren Probleme. Dieses Diagramm setzt sich also aus den drei rechten Teilmengen von Abbildung \ref{fig:venn2} zusammen.
+		Auffällig ist hier, dass die Überschneidung der Probleme wesentlich geringer ist. Daraus kann geschlussfolgert werden, dass es sinnvoll sein kann, das gleiche Problem mit unterschiedlichen SOS-Strategien zu kombinieren. Anstatt einem Problem eine Rechenzeit von $t$ zuzuweisen, könnte man die Beweissuche $n$ mal mit der Rechenzeit $t/n$ durchführen und dabei $n$ getrennte Strategien anwenden.
+	
+	
+		\begin{table}
+			\centering
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline
+				& NoSos & Conjecture & OnlyPosLit & OnlyNegLit \\ \hline
+				NoSos & \textbf{1676} & & & \\ \hline
+				Conjecture & 1614 & \textbf{2544} & & \\ \hline
+				OnlyPosLit & 1582 & 1697 & \textbf{1788} & \\ \hline
+				OnlyNegLit & 1600 & 1992 & 1666 & \textbf{2273} \\ \hline
+				
+			\end{tabular}
+			\label{table:geloestSchnittmenge}
+			\caption{Die Elemente der Hauptdiagonalen geben an, wie viele Probleme mit einer Strategie gelöst wurden. Die restlichen Elemente geben die Anzahl der Probleme an, die von beiden Strategien gelöst wurden.}
+		\end{table}
+	
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.3\linewidth]{images/Venn/venn2_sos1}
+			\includegraphics[width=0.3\linewidth]{images/Venn/venn2_sos2}
+			\includegraphics[width=0.3\linewidth]{images/Venn/venn2_sos3}
+			\caption{Die drei Venn-Diagramme zeigen jeweils die gelösten Probleme einer SOS-Strategie im Vergleich zur Konfiguration ohne SOS.
+			}
+			\label{fig:venn2}
+		\end{figure}
+		
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.3\linewidth]{images/Venn/venn3_both}
+			\includegraphics[width=0.3\linewidth]{images/Venn/venn3_solve}
+			\includegraphics[width=0.3\linewidth]{images/Venn/venn3_notsolve}
+			\caption{Die drei Venn-Diagramme zeigen die gelösten Probleme der drei SOS-Strategien im direkten Vergleich. Links sind alle gelösten Probleme zu sehen, in der Mitte nur die Probleme, die auch ohne SOS gelöst wurden und rechts nur die Probleme, die ohne SOS nicht gelöst wurden.
+			Diese Darstellungsform wurde gewählt, da es nicht möglich ist, ein Venn-Diagramm aus 4 Mengen zu erstellen.}
+			\label{fig:venn3}
+		\end{figure}
+		
+		\paragraph{Vergleich nach Rechenzeit}
+		Betrachtet man die 1620 Probleme, die sowohl ohne SOS als auch mit Strategie 1 gelöst wurden, und berechnet die durchschnittliche Rechenzeit, kommt man ohne SOS auf 1,8 Sekunden und mit SOS-Strategie 1 auf 0,9 Sekunden. Die durchschnittliche Rechenzeit kann als grober Richtwert verwendet werden, um zwei Konfigurationen zu vergleichen. Da der Zusammenhang zwischen gelösten Problemen und der Zeit nicht linear ist, kann aber nicht geschlussfolgert werden, dass eine Konfiguration mit SOS-Strategie 1 ein Problem im Mittel doppelt so schnell löst wie eine Konfiguration ohne SOS.
+		
+		Stattdessen wird für jedes Problem, das für beide Konfigurationen gelöst wurde, der Quotient der Rechenzeiten berechnet. Ein Wert von 0.5 bedeutet, dass die Konfiguration mit Strategie 1 doppelt so schnell war als die ohne SOS. Ein Wert von 2 bedeutet, dass die Berechnung ohne SOS doppelt so schnell war. Diese Größen werden logarithmiert, um die Berechnung des Durchschnitts zu ermöglichen. Würde man die Logarithmierung nicht vornehmen, würden die Werte 0,5 um 2 beim mitteln nicht 1 ergeben sondern 0,75. Die logarithmierten Größen werden gemittelt, anschließend wird die Logarithmierung durch die Exponentialfunktion rückgängig gemacht.
+		
+		Auf diese Weise stellt man fest, dass die Konfiguration mit SOS-Strategie 1 für ein Problem durchschnittlich nur 60 \% der Zeit benötigt, im Vergleich zu keiner SOS-Strategie. Strategie 2 benötigt 90 \% der Zeit und 
+		Strategie 3 69 \% der Zeit.
+		
+		
+		Der Zusammenhang ist auch in Abbildung \ref{fig:directcompare} erkennbar. Jeder Datenpunkt ist ein Problem. Die x- bzw. y-Position zeigt die benötigte Zeit für jeweils eine der beiden Konfigurationen. Konnte ein Problem unter einer Konfiguration nicht gelöst werden, wird der Datenpunkt außerhalb der schwarzen Umrandung platziert.
+		
+		
+		
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.45\linewidth]{images/Diagram/directCompare1_2}
+			\includegraphics[width=0.45\linewidth]{images/Diagram/directCompare2_3}
+			\caption{Benötigte Rechenzeit nach Problemen. Links: Vergleich zwischen NoSOS und Strategie 1, Rechts: Vergleich zwischen Strategie 2 und Strategie 3. Probleme außerhalb des großen Quadrats wurden entweder von einem oder von beiden Konfigurationen nicht gelöst.}
+			\label{fig:directcompare}
+		\end{figure}
+	
+
 
 	
 	\subsection{Vergleich der beiden SOS-Konzepte}
@@ -89,20 +163,13 @@
 	\subsection{Optimale Strategie}
 	Im TPTP Benchmark gibt es Probleme, die keine Vermutung enthalten, sondern nur Axiome. Auch in der Praxis kann es vorkommen, dass ein Problem nur aus gegebenen Klauseln besteht. Beim Formulieren eines Problems, könnte man beispielsweise erst alle Annahmen auf einen Widerspruch prüfen, bevor man die Vermutung einfügt.
 	
-	In solchen Fällen würde SOS-Strategie 1 keinen Vorteil bringen, da das SOS leer bleibt. Demnach könnte beim Vorhandensein eines Widerspruchs nicht die leere Klausel hergeleitet werden, wodurch die Strategie unvollständig ist. Dieser Sonderfall ist deshalb verboten, wie bereits in \ref{section:vollständigkeitSOS} vorausgesetzt wurde.
+	In solchen Fällen würde SOS-Strategie 1 keinen Vorteil bringen, da das SOS leer bleibt. Demnach könnte beim Vorhandensein eines Widerspruchs nicht die leere Klausel hergeleitet werden, wodurch die Strategie unvollständig ist. Dieser Sonderfall ist deshalb verboten, wie bereits in Sektion \ref{section:vollständigkeitSOS} vorausgesetzt wurde.
 	
-	Ein noch bessere Strategie ist deshalb, in gewöhnlichen Fällen, in denen es Vermutungen und Axiome gibt, Strategie 1 anzuwenden. Sollte es keine Vermutung geben, wird stattdessen Strategie 3 angewendet. Diese Strategie wurde in PyRes implementiert und auf StarExec getestet. Die Anzahl der gelösten Probleme übersteigt die Zahl von Strategie 1 und ist geringfügig besser.
+	Ein noch bessere Strategie ist deshalb, in gewöhnlichen Fällen, in denen es Vermutungen und Axiome gibt, Strategie 1 anzuwenden. Sollte es keine Vermutung geben, wird stattdessen Strategie 3 angewendet. Diese Strategie wurde in PyRes implementiert und auf StarExec getestet. Die Anzahl der gelösten Probleme übersteigt die Zahl von Strategie 1 und ist somit geringfügig besser.
 	
 	\subsection{weitere Verbesserungsmöglichkeiten}
-	Es gibt weitere Verbesserungsmöglichkeiten, die Effizienz des Beweisers weiter steigern könnten. Folgende Vorschläge wurden für diese Arbeit weder implementiert noch getestet, könnten aber für die Zukunft analysiert werden.
+	Es gibt weitere Verbesserungsmöglichkeiten, die die Effizienz des Beweisers weiter steigern könnten. Folgende Vorschläge wurden für diese Arbeit weder implementiert noch getestet, könnten aber für die Zukunft betrachtet werden.
 	\begin{itemize}
 		\item Wenn es keine Vermutung gibt, und die Markierung des SOS anhand der positiven und negativen Literale stattfindet, könnte 
 	\end{itemize}
-		Wenn es keine Vermutung gibt, 
-	
-Ergebnis Performance,
-eventuell Unit Tests,
-Erweiterungsmöglichkeiten,
-Kompatibilität mit anderen Erweiterungen (geordnete Resolution, Literalselektion),
-Verständlichkeit der Implementierung,
 
