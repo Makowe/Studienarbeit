@@ -26,11 +26,15 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Die drei Venn-Diagramme zeigen jeweils die gelösten Probleme einer SOS-Strategie im Vergleich zur Konfiguration ohne SOS. \relax }}{41}{figure.caption.42}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Anzahl der gelösten Probleme nach der Zeit für die vier betrachteten Konfigurationen. Links: alle gelösten Probleme, Rechts: erfüllbare gelöste Probleme, Rot: kein SOS, Grün: Vermutung als SOS, Orange: rein positive Literale als SOS, Blau: rein negative Literale als SOS\relax }}{39}{figure.caption.40}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Die drei Venn-Diagramme zeigen die gelösten Probleme der drei SOS-Strategien im direkten Vergleich. Links sind alle gelösten Probleme zu sehen, in der Mitte nur die Probleme, die auch ohne SOS gelöst wurden und rechts nur die Probleme, die ohne SOS nicht gelöst wurden. Diese Darstellungsform wurde gewählt, da es nicht möglich ist, ein Venn-Diagramm aus 4 Mengen zu erstellen.\relax }}{41}{figure.caption.43}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Die drei Venn-Diagramme zeigen jeweils die gelösten Probleme einer SOS-Strategie im Vergleich zur Konfiguration ohne SOS. \relax }}{42}{figure.caption.43}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Benötigte Rechenzeit nach Problemen. Links: Vergleich zwischen NoSOS und Strategie 1, Rechts: Vergleich zwischen Strategie 2 und Strategie 3. Probleme außerhalb des großen Quadrats wurden entweder von einem oder von beiden Konfigurationen nicht gelöst.\relax }}{43}{figure.caption.45}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Die drei Venn-Diagramme zeigen die gelösten Probleme der drei SOS-Strategien im direkten Vergleich. Links sind alle gelösten Probleme zu sehen, in der Mitte nur die Probleme, die auch ohne SOS gelöst wurden und rechts nur die Probleme, die ohne SOS nicht gelöst wurden. Diese Darstellungsform wurde gewählt, da es nicht möglich ist, ein Venn-Diagramm aus 4 Mengen zu erstellen.\relax }}{42}{figure.caption.44}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Benötigte Rechenzeit nach Problemen. Links: Vergleich zwischen NoSOS und Strategie 1, Rechts: Vergleich zwischen Strategie 2 und Strategie 3. Probleme, die von einem oder von beiden Konfigurationen nicht gelöst wurden, sind außerhalb des großen Quadrats dargestellt, um das Ergebnis nicht zu verfälschen.\relax }}{43}{figure.caption.46}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Performance von Konzept 2 in Abhängigkeit von r}}{45}{figure.caption.47}%
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
