@@ -70,6 +70,7 @@
 
 \section{Ergebnisse}
 	\subsection{Vergleich der SOS-Strategien}
+	\label{section:vglSOS}
 		\paragraph{Vergleich nach Anzahl gelöster Probleme}
 		
 	 	Um die drei SOS-Strategien zu vergleichen, werden die Ergebnisse ohne SOS-Strategie als Referenzwerte herangezogen.
@@ -152,7 +153,6 @@
 		
 		Der Zusammenhang ist auch in Abbildung \ref{fig:directcompare} erkennbar. Jeder Datenpunkt ist ein Problem. Die x- bzw. y-Position zeigt die benötigte Zeit für jeweils eine der beiden Konfigurationen. Konnte ein Problem unter einer Konfiguration nicht gelöst werden, wird der Datenpunkt außerhalb der schwarzen Umrandung platziert. Im linken Diagramm lässt sich erkennen, dass fast jedes Problem, das von beiden Konfigurationen gelöst wurde, mit SOS-Strategie 1 schneller gelöst werden konnte.
 		
-		
 		\begin{figure}
 			\centering
 			\includegraphics[width=0.45\linewidth]{images/Diagram/directCompare1_2}
@@ -160,16 +160,55 @@
 			\caption{Benötigte Rechenzeit nach Problemen. Links: Vergleich zwischen NoSOS und Strategie 1, Rechts: Vergleich zwischen Strategie 2 und Strategie 3. Probleme, die von einem oder von beiden Konfigurationen nicht gelöst wurden, sind außerhalb des großen Quadrats dargestellt, um das Ergebnis nicht zu verfälschen.}
 			\label{fig:directcompare}
 		\end{figure}
+
+		\paragraph{Betrachtung von Horn-Klauseln}
+		Alle TPTP-Probleme enthalten in der .p-Datei verschiedene Tags, die Aussagen über die Eigenschaften des Problems machen. Einer dieser Tags ist die Information, ob eine Problem als Hornklauselmenge vorliegt oder nicht. Im Folgenden wird analysiert, ob die Effizienz von SOS davon abhängig ist, ob das Problem in Hornform vorliegt.
+	
+		Eine Hornformel ist eine prädikatenlogische Formel der Form
+		$$A_1 \wedge A_2 \wedge \ldots \wedge A_n \rightarrow B$$
+		$A_1$ bis $A_n$ sowie $B$ sind prädikatenlogische Atome und lassen sich in Klauselnormalform folgendermaßen darstellen.
+		$$\{\neg A_1, \neg A_2, \ldots, \neg A_n, B\}$$
+		Das Atom $B$ ist nicht zwingend notwendig und auch die Atome $A_1$ bis $A_n$ müssen nicht vorhanden sein. Allgemein ist eine Klausel eine Hornklausel, wenn sie maximal ein positives Literal enthält. \cite{Makowsky1987horn}
+		Eine Klauselmenge ist genau dann eine Hornklauselmenge, wenn jede Klausel eine Hornklausel ist. Hornklauseln gelten in der Literatur als sehr elegant, da es viele Algorithmen gibt, mit denen Hornklauseln einfach und schnell verarbeitet werden können. \cite{Wild2017horn}
+	
+		Tabelle \ref{tab:Horn} zeigt, wie viele der Probleme in Hornform bzw. nicht in Hornform von den verschiedenen SOS-Strategien gelöst werden.
+		Auffällig ist erstens, dass von den Hornproblemen ein viel größerer Anteil gelöst wird. Diese Tatsache ist unabhängig von der SOS-Strategie und ist deshalb nur auf die besseren Eigenschaften von Hornklauseln zurückzuführen.
+		
+		Zweitens fällt auf, dass die Anzahl der gelösten Probleme bei den Problemen in Hornform deutlich näher zusammenliegen, als bei den Problemen ohne Hornform. In beiden Fällen schlägt jede der drei SOS-Strategien die Konfiguration ohne SOS, doch der Unterschied ist in der rechten Spalte deutlich stärker vertreten. Ein Grund dafür könnte sein, dass die Probleme in Hornform einfacher zu lösen sind und SOS deshalb keinen so starken Vorteil bringt.
+		\begin{table}
+			\centering
+			\begin{tabular}{|c|c|c|}
+				\hline
+				&Hornform & nicht Hornform \\
+				\hline
+				Anzahl Probleme & 1291 & 3949 \\
+				\hline\hline
+				NoSos & 402 & 288 \\
+				\hline
+				Conjecture & 498 & 647 \\
+				\hline
+				OnlyPosLit & 435 & 326 \\
+				\hline
+				OnlyNegLit & 526 & 486 \\
+				\hline\hline
+				Von allen gelöst & 379 & 246 \\ \hline
+			\end{tabular}
+		\caption{gelöste Probleme der SOS-Strategien geteilt in Horn- und Nicht-Horn-Probleme}
+		\label{tab:Horn}
+		\end{table}
+
 	
 	\subsection{Vergleich der beiden SOS-Konzepte}
-	In der vorherigen Sektion konnte gezeigt werden, dass SOS-Strategien im Vergleich zu keiner SOS-Strategie einen Vorteil in der Effizienz bringen. Ein Nachteil ist, dass das bisher betrachtete Konzept 1, welches strikt vorgeht und nur SOS-Klauseln verarbeitet, nicht mit Literalselektion und geordneter Resolution kompatibel ist. Aus diesem Grund wurde ein zweites Konzept implementiert, welches in wählbaren Abständen $r$ Nicht-SOS-Klauseln verarbeitet. Dadurch bleibt die Vollständigkeit auch mit anderen Optimierungsstrategien vollständig.
+	\label{sec:sos2}
+	In der vorherigen Sektion konnte gezeigt werden, dass SOS-Strategien im Vergleich zur Beweissuche ohne SOS-Strategie einen Vorteil in der Effizienz bringen. Ein Nachteil ist, dass das bisher betrachtete Konzept 1, welches strikt vorgeht und nur SOS-Klauseln verarbeitet, nicht mit Literalselektion und geordneter Resolution kompatibel ist. Aus diesem Grund wurde ein zweites Konzept implementiert, welches in wählbaren Abständen $r$ Nicht-SOS-Klauseln verarbeitet. Dadurch bleibt die Vollständigkeit auch mit anderen Optimierungsstrategien vollständig.
 	
 	Der direkte Vergleich zwischen SOS-Konzept 1 und 2 wurde lediglich in Kombination mit SOS-Strategie 1 vorgenommen, da diese Strategie, wie bereits herausgefunden wurde, am effizientesten ist.
 	
-	Auf StarExec wurden Tests mit 10 Konfigurationen durchgeführt. Der $r$-Wert wurde zwischen 1 und 64 variiert. Ein Wert von 1 bedeutet, dass nach jeder SOS-Klausel eine Nicht-SOS-Klausel verarbeitet wird. Ein Wert von 64 bedeutet, dass erst 64 SOS-Klauseln verarbeitet werden und danach eine Nicht-SOS-Klausel. Das tatsächliche Verhältnis kann abweichen, da beim Nicht-Vorhandensein einer SOS-Klausel als nächstes eine Nicht-SOS-Klausel verarbeitet wird.
+	Auf StarExec wurden Tests mit 10 Konfigurationen durchgeführt. Der Wert $r$ wurde zwischen 1 und 64 variiert. Ein Wert von 1 bedeutet, dass nach jeder SOS-Klausel eine Nicht-SOS-Klausel verarbeitet wird. Ein Wert von 64 bedeutet, dass erst 64 SOS-Klauseln verarbeitet werden und danach eine Nicht-SOS-Klausel. Das tatsächliche Verhältnis kann abweichen, da beim Nicht-Vorhandensein einer SOS-Klausel als nächstes eine Nicht-SOS-Klausel verarbeitet wird.
 	
 	Es ist erkennbar, dass die Effizienz für große und kleine Werte von $r$ etwas nach unten geht. Das Optimum liegt etwa im Bereich zwischen 2 und 4. Anzumerken ist, dass der Verlauf keine genaue Optimumskurve ergibt. Ein Grund dafür könnte sein, dass die Datenbasis zu gering ist und deshalb Abweichungen zustande kommen. Ein weiterer Grund könnte sein, dass für die Klauselauswahl nicht nur SOS entscheidend ist, sondern auch die angewandte Heuristik-Strategie. Die eingesetzte Strategie PickGiven5 wendet genau wie SOS ein Verhältnis an, das die Klauselauswahl beeinflusst. Je nachdem, wie die beiden Verhältnisse gewählt sind, könnte es zu Interferenzen kommen, die die Performance steigern oder mindern.
 	
+	Der maximale Wert an gelösten Klauseln konnte mit einem Wert von 4 für $r$ erzielt werden. Der Beweiser konnte mit dieser Konfiguration 2080 Probleme lösen. Mit Konzept 1 konnte ein Höchstwert von 2544 gelösten Probleme erreicht werden. Ohne weitere Optimierungen schneidet also Konzept 1 besser ab, als Konzept 2. In Konzept 2 steckt jedoch noch mehr Potenzial, da es mit negativer Literalselektion kombiniert werden kann. Die Ergebnisse dazu werden in der nächsten Sektion diskutiert.
 	\begin{figure}
 		\centering
 		\includegraphics[width=0.45\linewidth]{images/Diagram/RWert}
@@ -179,21 +218,50 @@
 	\end{figure}
 	
 	
-	\subsection{SOS-Strategie mit anderen Optimierungen}
-	1 Seite
+	\subsection{SOS-Strategie mit negativer Literalselektion}
+	Wie gezeigt, schneidet SOS-Konzept 2 ohne weitere Optimierungen schlechter ab, als Konzept 1. Setzt man allerdings zusätzlich Literalselektion ein, werden mehr Probleme gelöst als mit Konzept 1.
+	Für einen Wert für $r$ von 3, löst PyRes insgesamt 2880 Probleme. Dies ist der höchste Wert, die in dieser Arbeit erzielt wurde. 
+	
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			& \multicolumn{2}{c|}{SOS-Konzept 1} & \multicolumn{2}{c|}{SOS-Konzept 2} \\
+			& \multicolumn{2}{c|}{(Nicht-SOS $\rightarrow$ processed)} & \multicolumn{2}{c|}{(Priorisierte Verarbeitung)}  \\
+			\hline
+			& keine Literalsel. & Literalsel. & keine Literalsel. & Literalsel. \\
+			\hline\hline
+			NoSos & 1676 & 2566 & redundant & redundant \\
+			\hline
+			Conjecture & 2544 & unvolls. & 2080 (r=4) & 2880 (r=3) \\
+			\hline
+		\end{tabular}
+		\label{table:resultConfigs}
+		\caption{gelöste Probleme bestimmten Konfigurationen. Bei SOS-Konzept 2 wurde jeweils die Konfiguration mit dem Wert $r$ ausgewählt, bei der die meisten Probleme gelöst wurden.}
+	\end{table}
+	
 		
 \section{Bewertung}
 	\subsection{Nutzen von SOS}
+	In den vorherigen Sektionen wurde die Performance verschiedener Konfigurationen mit SOS-Strategien analysiert. Im Folgenden werden die wichtigsten Ergebnisse zusammengefasst.
+	
+	Alle drei SOS-Strategie sind effizienter als eine Konfiguration ohne SOS-Strategie. Am besten schneidet Strategie 1 ab, welche die Vermutung als SOS wählt. 
+	
+	Von den beiden implementierten Konzepten schneidet Konzept 1 zwar besser ab. Konzept 2 kann jedoch mit Literalselektion kombiniert werden. Eine Konfiguration, die SOS-Strategie 1 mit SOS-Konzept 2, einem Wert für $r$ von 3 und negativer Literalselektion kombiniert, ist die beste Konfiguration, die für diese Arbeit getestet wurde.
+	
 	\subsection{Optimale Strategie}
-	Im TPTP Benchmark gibt es Probleme, die keine Vermutung enthalten, sondern nur Axiome. Auch in der Praxis kann es vorkommen, dass ein Problem nur aus gegebenen Klauseln besteht. Beim Formulieren eines Problems, könnte man beispielsweise erst alle Annahmen auf einen Widerspruch prüfen, bevor man die Vermutung einfügt.
+	Im TPTP Benchmark gibt es einige Probleme, die keine Vermutung enthalten, sondern nur Axiome. Auch in der Praxis kann es vorkommen, dass ein Problem nur aus gegebenen Klauseln besteht. Beim Formulieren eines Problems, könnte man beispielsweise erst alle Annahmen auf einen Widerspruch prüfen, bevor man die Vermutung einfügt.
 	
 	In solchen Fällen würde SOS-Strategie 1 keinen Vorteil bringen, da das SOS leer bleibt. Demnach könnte beim Vorhandensein eines Widerspruchs nicht die leere Klausel hergeleitet werden, wodurch die Strategie unvollständig ist. Dieser Sonderfall ist deshalb verboten, wie bereits in Sektion \ref{section:vollständigkeitSOS} vorausgesetzt wurde.
 	
-	Ein noch bessere Strategie ist deshalb, in gewöhnlichen Fällen, in denen es Vermutungen und Axiome gibt, Strategie 1 anzuwenden. Sollte es keine Vermutung geben, wird stattdessen Strategie 3 angewendet. Diese Strategie wurde in PyRes implementiert und auf StarExec getestet. Die Anzahl der gelösten Probleme übersteigt die Zahl von Strategie 1 und ist somit geringfügig besser.
+	Ein noch bessere Strategie ist deshalb, in gewöhnlichen Fällen, in denen es Vermutungen und Axiome gibt, Strategie 1 anzuwenden. Sollte es keine Vermutung geben, wird stattdessen Strategie 3 angewendet. Aufgrund der geringen Anzahl an Problemen, die keine Vermutungen beinhalten, konnte nicht gezeigt werden, dass diese Strategie tatsächlich besser ist, als Strategie 1.
 	
 	\subsection{zukünftige Verbesserungsmöglichkeiten}
-	Es gibt weitere Verbesserungsmöglichkeiten, die die Effizienz des Beweisers weiter steigern könnten. Folgende Vorschläge wurden für diese Arbeit weder implementiert noch getestet, könnten aber für die Zukunft betrachtet werden.
+	Es gibt weitere Verbesserungsmöglichkeiten, die die Effizienz des Beweisers weiter steigern könnten. Folgende Vorschläge wurden für diese Arbeit weder implementiert noch getestet, könnten aber für die Zukunft genauer betrachtet werden.
 	\begin{itemize}
-		\item Wenn es keine Vermutung gibt, und die Markierung des SOS anhand der positiven und negativen Literale stattfindet, könnte 
+		\item Anstatt den Beweiser nur mit einer SOS-Strategie arbeiten zu lassen, könnte man mehrere Konfigurationen mit unterschiedlichen Strategien parallel laufen lassen. Wie in Sektion \ref{section:vglSOS} bereits analysiert wurde, überschneiden sich die Mengen der gelösten Probleme nicht vollständig. Die Wahrscheinlichkeit, ein Problem zu lösen, könnte somit steigen, wenn mehrere Strategien angewandt werden.
+		Unterstützt wird dieses Vorgehen von der Tatsache, dass die Probleme mit zunehmender Zeit immer unwahrscheinlicher gelöst werden. (siehe Abbildung \ref{fig:timecomapre}) Anstatt also eine Konfiguration über 20 Sekunden durchzuführen, könnte man zwei Konfigurationen über 10 Sekunden durchführen.
+		\item Wird PyRes sowohl mit SOS-Konzept 2 als auch mit Heuristiken durchgeführt, gibt es zwei voneinander unabhängige Verhältnisse, in denen Klauseln abgearbeitet werden. Der Wert $r$ der SOS-Strategie gibt das Verhältnis vor, in dem SOS-Klauseln und Nicht-SOS-Klauseln verarbeitet werden. Der Wert der Heuristik gibt an, in welchem Verhältnis die Klauseln nach verschiedenen Eigenschaften ausgewählt werden. In Sektion \ref{sec:sos2} wurde bereits beschrieben, dass diese beiden Zahlenwerte Interferenzen bilden könnten, die sich möglicherweise auf die Performance auswirken. Eine Idee ist deshalb, den Algorithmus zur Klauselauswahl so anzupassen, dass die beiden Werte nicht unabhängig voneinander in die Klauselauswahl einfließen, sondern gemeinsam. Es könnte beispielsweise eine neue Kostenfunktion implementiert werden, in die der SOS-Status, die Länge der Klausel und die Reihenfolge der Klauseln einfließt.
+		\item Das Verhältnis $r$ bleibt die gesamte Beweissuche über konstant, obwohl sich die Zusammensetzung der unverarbeiteten Klauseln stark verändern kann. Am Anfang der Beweissuche gibt es verhältnismäßig viele Nicht-SOS-Klauseln. Im Laufe der Beweissuche kommen immer mehr SOS-Klauseln dazu, wodurch sich die Zusammensetzung verschiebt. Grund dafür ist, dass der SOS-Status dominant vererbt wird, also bereits eine Eltern-Klausel im SOS genügt, dass die neue Klausel auch zum SOS gehört. Möglicherweise ist es sinnvoll, das Verhältnis der Klauselverarbeitung an die Zusammensetzung anzupassen, sodass am Anfang der Beweissuche mehr Nicht-SOS-Klauseln verarbeitet werden.
 	\end{itemize}
 

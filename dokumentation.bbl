@@ -128,6 +128,37 @@
     \field{year}{2009}
   \endentry
 
+  \entry{Makowsky1987horn}{article}{}
+    \name{author}{1}{}{%
+      {{hash=MJ}{%
+         family={Makowsky},
+         familyi={M\bibinitperiod},
+         given={J.A.},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MJ1}
+    \strng{fullhash}{MJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \verb{doi}
+    \verb https://doi.org/10.1016/0022-0000(87)90027-4
+    \endverb
+    \field{issn}{0022-0000}
+    \field{number}{2}
+    \field{pages}{266\bibrangedash 292}
+    \field{title}{Why horn formulas matter in computer science: Initial
+  structures and generic examples}
+    \verb{url}
+    \verb https://www.sciencedirect.com/science/article/pii/0022000087900274
+    \endverb
+    \field{volume}{34}
+    \field{journaltitle}{Journal of Computer and System Sciences}
+    \field{year}{1987}
+  \endentry
+
   \entry{nalon2016resolution}{inproceedings}{}
     \name{author}{3}{}{%
       {{hash=NC}{%
@@ -293,6 +324,38 @@
     \field{title}{Progress towards effective automated reasoning with world
   knowledge}
     \field{year}{2010}
+  \endentry
+
+  \entry{Wild2017horn}{article}{}
+    \name{author}{1}{}{%
+      {{hash=WM}{%
+         family={Wild},
+         familyi={W\bibinitperiod},
+         given={Marcel},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WM1}
+    \strng{fullhash}{WM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.tcs.2016.03.018
+    \endverb
+    \field{issn}{0304-3975}
+    \field{note}{Horn formulas, directed hypergraphs, lattices and closure
+  systems: related formalism and application}
+    \field{pages}{264\bibrangedash 292}
+    \field{title}{The joy of implications, aka pure Horn formulas: Mainly a
+  survey}
+    \verb{url}
+    \verb https://www.sciencedirect.com/science/article/pii/S0304397516002206
+    \endverb
+    \field{volume}{658}
+    \field{journaltitle}{Theoretical Computer Science}
+    \field{year}{2017}
   \endentry
 
   \entry{WillkommIntel}{misc}{}
